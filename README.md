@@ -22,7 +22,7 @@ For the first exercise, show the results of the election per state (Bundesland) 
 * Seaborn
     
     
-## hints
+## Implementation hints
 
 Load the data using pandas and show the table in the notebook:
 
