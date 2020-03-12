@@ -1,4 +1,5 @@
 # Static Charts with Python
+* https://tuwel.tuwien.ac.at/course/view.php?id=21535
 
 The goal of this exercise is to get into some first contact with Python, Pandas data frames, and the many opportunities how to quickly generate static charts from data frames.
 
