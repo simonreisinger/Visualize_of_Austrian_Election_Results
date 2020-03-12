@@ -20,6 +20,9 @@ For the first exercise, show the results of the election per state (Bundesland) 
 * Matplotlib
 * Pandas visualizations based on Matplotlib  
 * Seaborn
+
+## Resources 
+Shape: https://www.eea.europa.eu/data-and-maps/data/eea-reference-grids-2/gis-files/austria-shapefile
     
     
 ## Implementation hints
