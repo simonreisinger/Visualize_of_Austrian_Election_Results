@@ -8,7 +8,7 @@ For the first exercise, show the results of the election per state (Bundesland) 
 * Parallel coordinates with parties or states (Bundesländer) as axes
 * Grouped bar charts, grouped by parties or states
 * Pie charts for each state
-* Radviz of states
+* Radviz of states: https://pandas.pydata.org/docs/reference/api/pandas.plotting.radviz.html
 * Scatterplot matrix showing the party share over the states or the percentage in the states for the parties
 * Principal components of the states (using PCA) in a 2D scatterplot
 
