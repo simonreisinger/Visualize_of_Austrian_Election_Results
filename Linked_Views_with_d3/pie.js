@@ -5,24 +5,15 @@ let data = null
 
 function pie(electionData) {
 
-    const object = { a: 5, b: 6, c: 7  };
-    const xxx = (({ a, c }) => ({ a, c }))(object);
-    console.log(xxx); // { a: 5, c: 7 }
-
-
-    console.log(electionData)
-    console.log(Object.keys(colors));
     var parties = Object.assign({},  Object.keys(colors))
-    console.log(parties);
-
-
 
     data = electionData["total"];
-    console.log(data)
-    const picked = ((parties) => (parties ))(data);
-    console.log(picked)
+    delete data.votes
 
-    console.log("PIE");
+    // Create dummy data
+    console.log(data);
+    //data = {ÖVP: 9, SPÖ: 20, FPÖ:30, NEOS:8, JETZT:12};
+    //console.log(data);
 
     // set the dimensions and margins of the graph
     var margin = 40;
@@ -39,22 +30,11 @@ function pie(electionData) {
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 
-// Create dummy data
-    console.log(data);
-    //var data = {ÖVP: 9, SPÖ: 20, FPÖ:30, NEOS:8, JETZT:12}
-
-
-    //const picked = (({ a, c }) => ({ a, c }))(object);
-
-    console.log(data);
-
-// Compute the position of each group on the pie:
-    var pie = d3.pie().value(function(d) {return d.value; });
+    // Compute the position of each group on the pie:
+    var pie = d3.pie().value(function(d) {return d.value.percantage; });
     var data_ready = pie(d3.entries(data));
 
     console.log(data_ready);
-
-
 
 
     // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.

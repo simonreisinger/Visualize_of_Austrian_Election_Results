@@ -36,9 +36,14 @@ function init_x()
 
                 // Sum up total votes per party
                 electionData["total"] = {};
-                electionData["total"]["votes"] = 0;
-                for (var i = 2; i < parties.length; i++) {
-                    electionData["total"][parties[i].toString() + "_abs"] = 0;
+
+                //electionData["total"]["votes"] = 0;
+                for (var i = 1; i < parties.length; i++) {
+                    electionData["total"][parties[i].toString()] = {
+                        name: parties[i].toString(),
+                        percantage: 100,
+                        abs: 0
+                    };
                 }
 
                 //move line by line
@@ -53,22 +58,24 @@ function init_x()
                         {
                             currentState = value.toString();
                             electionData[currentState] = {};
-                            //console.log(electionData["total"])
                         } else {
-                            electionData[currentState][parties[j].toString()] = value;
                             if (parties[j].toString() !== "votes"){
-                                electionData[currentState][parties[j].toString() + "_abs"] = Math.floor(electionData[currentState]["votes"]* value/100);
-                                electionData["total"][parties[j].toString() + "_abs"] += electionData[currentState][parties[j].toString() + "_abs"];
+                                electionData[currentState][parties[j].toString()] = {
+                                    name: parties[j].toString(),
+                                    percantage: value,
+                                    abs: Math.floor(electionData[currentState]["votes"].abs * value/100)
+                                };
+                                electionData["total"][parties[j].toString()].abs += electionData[currentState][parties[j].toString()].abs;
                             } else {
-                                electionData["total"]["votes"] += parseInt(value);
-                            }
+                                electionData["total"]["votes"].abs += parseInt(value);
+                                electionData[currentState][parties[j].toString()] = {percantage: 0, abs: value};
+                                }
                         }
                     }
                 }
                 for (var i = 2; i < parties.length; i++) {
-                    electionData["total"][parties[i].toString()] = 100 * electionData["total"][parties[i].toString() + "_abs"] / electionData["total"]["votes"];
+                    electionData["total"][parties[i].toString()].percantage = 100 * electionData["total"][parties[i].toString()].abs / electionData["total"]["votes"].abs;
                 }
-                console.log(electionData);
                 election_data = electionData;
 
                 // * synchronization between choropleth map and pie chart
