@@ -15,6 +15,60 @@ function pie(electionData) {
     //data = {ÖVP: 9, SPÖ: 20, FPÖ:30, NEOS:8, JETZT:12};
     //console.log(data);
 
+    var width = 300;
+    var height = 300;
+
+    var svg = d3.select("body").append("svg");
+    svg.attr("width", width)
+        .attr("height", height);
+
+    var dataset = [11, 13, 18, 25, 31];
+
+    var radius = width / 2;
+    var innerRadius = 0;
+    var arc = d3.arc()
+        .innerRadius(0)
+        .outerRadius(radius);
+
+    var pie = d3.pie();
+
+    var arcs = svg.selectAll("g.arc")
+        .data(pie(dataset))
+        .enter()
+        .append("g")
+        .attr("class", "arc")
+        .attr("transform", "translate(" + radius + ", " + radius + ")");
+
+//Draw arc paths
+    //var color = d3.scale.category10();
+
+    arcs.append("path")
+        .attr("fill", function (d, i) {
+            console.log(d);
+            return colors[i];
+        })
+        .attr("stroke", "white")
+        .attr("d", arc);
+
+
+    var newarc = d3.arc()
+        .innerRadius(2 * radius / 3)
+        .outerRadius(radius);
+
+    arcs.append("text")
+        .attr("transform", function (d) {
+            return "translate(" + newarc.centroid(d) + ")";
+        })
+        .attr("text-anchor", "middle")
+        .attr("fill", "white")
+        .text(function (d) {
+            return d.value + "%";
+        });
+
+
+
+
+    /*
     // set the dimensions and margins of the graph
     var margin = 40;
 
@@ -27,7 +81,7 @@ function pie(electionData) {
         .attr("width", width)
         .attr("height", height)
         .append("g")
-        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
 
 
     // Compute the position of each group on the pie:
