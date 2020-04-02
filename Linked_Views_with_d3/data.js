@@ -79,15 +79,22 @@ function init_x()
                     electionData["total"][parties[i].toString()].percantage = 100 * electionData["total"][parties[i].toString()].abs / electionData["total"]["votes"].abs;
                 }
                 election_data = electionData;
-                console.log(election_data)
+                console.log(election_data);
                 // * synchronization between choropleth map and pie chart
-                //choropleth();
-                pie(election_data);
+                choropleth(election_data["total"]);
+                pie(election_data["total"]);
 
             }
         }
     };
     rawFile.send(null);
+}
+
+
+function update(selectedState){
+
+    choropleth(election_data[selectedState]);
+    pie(election_data[selectedState]);
 }
 
 

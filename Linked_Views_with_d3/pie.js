@@ -1,25 +1,14 @@
 // D3 pie chart example: https://observablehq.com/@d3/pie-chart
-let width = 300;
-let height = 300;
-let data = null
+let width = 400;
+let height = 400;
 
-function pie(electionData) {
+function pie(data) {
     console.log("XXXXXX")
     var parties = Object.assign({},  Object.keys(colors))
-
-    data = electionData["total"];
     delete data.votes;
 
-    // Create dummy data
-    console.log(data);
-    //data = {ÖVP: 9, SPÖ: 20, FPÖ:30, NEOS:8, JETZT:12};
-    //console.log(data);
-
-    // set the dimensions and margins of the graph
-    var margin = 0;
-
     // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
-    var radius = Math.min(width, height) / 2 - margin;
+    var radius = Math.min(width, height) / 2;
 
     // append the svg object to the div called 'my_dataviz'
     var svg = d3.select("#svg_pie")
@@ -28,17 +17,12 @@ function pie(electionData) {
 
     svg.append("g")
         .attr("stroke", "white")
-    .selectAll("path")
-
-
+        .selectAll("path")
+        .join("path")
 
     // Compute the position of each group on the pie:
     let pie = d3.pie().value(function(d) {return d.value.percantage; });
     let data_ready = pie(d3.entries(data));
-
-    console.log(data_ready);
-
-    // Now I know that group A goes from 0 degrees to x degrees and so on.
 
     // shape helper to build arcs:
     var arcGenerator = d3.arc()
@@ -60,6 +44,8 @@ function pie(electionData) {
             .style("stroke-width", "0.5px")
             .style("opacity", 0.7)
 
+    var u = svg.selectAll("path")
+        .attr("stroke", "white")
 
     // Now add the annotation. Use the centroid method to get the best coordinates
     svg

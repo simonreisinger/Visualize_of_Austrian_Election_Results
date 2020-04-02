@@ -4,7 +4,7 @@ let geoJson = null;
 let choroG = null;
 
 
-function choropleth() {
+function choropleth(data) {
 
     // GeoJSON was retrieved from here: https://wahlen.strategieanalysen.at/geojson/
     // D3 choropleth examples: https://www.d3-graph-gallery.com/choropleth
@@ -29,5 +29,7 @@ function choropleth() {
             .attr('d', path)
             .attr("stroke", "black")
             .attr("fill", "white");
+
+        console.log(geoJson)
     });
 }
