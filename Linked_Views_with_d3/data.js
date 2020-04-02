@@ -18,7 +18,8 @@ let election_data = null
 
 function init_x()
 {
-    let file_location = "https://raw.githubusercontent.com/ippon1/Visualize_of_Austrian_Election_Results/master/Linked_Views_with_d3/NRW2019_Bundeslaender.csv"
+    //let file_location = "https://raw.githubusercontent.com/ippon1/Visualize_of_Austrian_Election_Results/master/Linked_Views_with_d3/NRW2019_Bundeslaender.csv";
+    let file_location = "http://localhost:8888/Static_Charts_with_Python/Linked_Views_with_d3/NRW2019_Bundeslaender.csv";
     var rawFile = new XMLHttpRequest();
     rawFile.open("GET", file_location, true);
     rawFile.onreadystatechange = function ()
@@ -69,7 +70,8 @@ function init_x()
                             } else {
                                 electionData["total"]["votes"].abs += parseInt(value);
                                 electionData[currentState][parties[j].toString()] = {percantage: 0, abs: value};
-                                }
+                            }
+
                         }
                     }
                 }
@@ -77,9 +79,9 @@ function init_x()
                     electionData["total"][parties[i].toString()].percantage = 100 * electionData["total"][parties[i].toString()].abs / electionData["total"]["votes"].abs;
                 }
                 election_data = electionData;
-
+                console.log(election_data)
                 // * synchronization between choropleth map and pie chart
-                choropleth();
+                //choropleth();
                 pie(election_data);
 
             }
