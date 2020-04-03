@@ -1,6 +1,7 @@
 // D3 pie chart example: https://observablehq.com/@d3/pie-chart
-let width = 400;
-let height = 400;
+let width = 150;
+let height = 150;
+var svg = null;
 
 function pie(data) {
     var parties = Object.assign({}, Object.keys(colors))
@@ -8,9 +9,11 @@ function pie(data) {
 
     // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
     var radius = Math.min(width, height) / 2;
-
+    if (svg !== null) {
+        d3.select("#svg_pie").select("svg").remove();
+    }
     // append the svg object to the div called 'my_dataviz'
-    var svg = d3.select("#svg_pie")
+    svg = d3.select("#svg_pie")
         .append("svg")
         .attr("viewBox", [-width / 2, -height / 2, width, height]);
 
@@ -46,17 +49,10 @@ function pie(data) {
         .attr("stroke", "black")
         .style("stroke-width", "0.5px")
         .on('mousemove', function (d) {
-            d3.select(this).attr("fill", function (d) {
-                updateMap(d.data.key);
-                return colors[d.data.key]
-            })
-
+            updateMap(d.data.key);
         })
         .on('mouseout', function (d) {
-            d3.select(this).attr("fill", function (d) {
-                updateMap("allParties");
-                return colors[d.data.key]
-            });
+            updateMap("allParties");
         });
 
     var u = svg.selectAll("path")
@@ -94,4 +90,10 @@ function pie(data) {
                     return Math.round(d.value)
                 }
             }))
+        .on('mousemove', function (d) {
+            updateMap(d.data.key);
+        })
+        .on('mouseout', function (d) {
+            updateMap("allParties");
+        });
 }

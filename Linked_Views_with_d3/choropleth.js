@@ -4,7 +4,7 @@ let geoJson = null;
 let choroG = null;
 let data = null;
 let map = null;
-let svg = null;
+let svg_Map = null;
 let projection = null;
 let path = null;
 
@@ -22,11 +22,11 @@ function choropleth(used_data) {
         path = d3.geoPath()
             .projection(projection);
 
-        svg = d3.select("#svg_choropleth")
+        svg_Map = d3.select("#svg_choropleth")
             .attr("width", choroWidth)
             .attr("height", choroHeight);
 
-        choroG = svg.append("g")
+        choroG = svg_Map.append("g")
             .selectAll('path')
             .data(geoJson.features)
             .enter().append('path')
@@ -53,13 +53,13 @@ function choropleth(used_data) {
 
 function updateChoropleth(party) {
     if (party === "allParties") {
-        svg.selectAll('path')
+        svg_Map.selectAll('path')
             .attr("opacity", 1.0)
             .attr("fill", function (d) {
                 return colors[data[d.properties.name].party.name]
             });
     } else {
-        svg.selectAll('path')
+        svg_Map.selectAll('path')
             .attr("opacity", function (d) {
                 return data[d.properties.name].percantage / 100.0;
             })
