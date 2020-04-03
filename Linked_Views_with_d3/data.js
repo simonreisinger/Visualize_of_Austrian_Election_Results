@@ -1,11 +1,11 @@
 let colors = {
-    "ÖVP":"#63C3D0",
-    "SPÖ":"#ce000c",
-    "FPÖ":"#0056A2",
-    "NEOS":"#E3257B",
-    "JETZT":"#ADADAD",
-    "GRÜNE":"#88B626",
-    "SONST.":"#222"
+    "ÖVP": "#63C3D0",
+    "SPÖ": "#ce000c",
+    "FPÖ": "#0056A2",
+    "NEOS": "#E3257B",
+    "JETZT": "#ADADAD",
+    "GRÜNE": "#88B626",
+    "SONST.": "#222"
 };
 let election_data = null
 
@@ -16,18 +16,14 @@ let election_data = null
 // (check the correctness of your computation here: https://www.bmi.gv.at/412/Nationalratswahlen/Nationalratswahl_2019/ )
 
 
-function init_x()
-{
+function init_x() {
     //let file_location = "https://raw.githubusercontent.com/ippon1/Visualize_of_Austrian_Election_Results/master/Linked_Views_with_d3/NRW2019_Bundeslaender.csv";
     let file_location = "http://localhost:8888/Static_Charts_with_Python/Linked_Views_with_d3/NRW2019_Bundeslaender.csv";
     var rawFile = new XMLHttpRequest();
     rawFile.open("GET", file_location, true);
-    rawFile.onreadystatechange = function ()
-    {
-        if(rawFile.readyState === 4)
-        {
-            if(rawFile.status === 200 || rawFile.status == 0)
-            {
+    rawFile.onreadystatechange = function () {
+        if (rawFile.readyState === 4) {
+            if (rawFile.status === 200 || rawFile.status == 0) {
                 var allText = rawFile.responseText;
                 var rows = allText.split("\r\n");
 
@@ -60,11 +56,11 @@ function init_x()
                             currentState = value.toString();
                             electionData[currentState] = {};
                         } else {
-                            if (parties[j].toString() !== "votes"){
+                            if (parties[j].toString() !== "votes") {
                                 electionData[currentState][parties[j].toString()] = {
                                     name: parties[j].toString(),
                                     percantage: value,
-                                    abs: Math.floor(electionData[currentState]["votes"].abs * value/100)
+                                    abs: Math.floor(electionData[currentState]["votes"].abs * value / 100)
                                 };
                                 electionData["total"][parties[j].toString()].abs += electionData[currentState][parties[j].toString()].abs;
                             } else {
@@ -91,7 +87,7 @@ function init_x()
     rawFile.send(null);
 }
 
-function firstPassThePoll(){
+function firstPassThePoll() {
     let mostVotes = [];
     for (let selectedState in election_data) {
         mostVotes[selectedState] = {party: "", percantage: 0};
@@ -99,7 +95,10 @@ function firstPassThePoll(){
             if (election_data[selectedState].hasOwnProperty(property)) {
                 currentPartyPerc = parseFloat(election_data[selectedState][property].percantage);
                 if (currentPartyPerc >= mostVotes[selectedState].percantage) {
-                    mostVotes[selectedState] = {party: election_data[selectedState][property], percantage: currentPartyPerc}
+                    mostVotes[selectedState] = {
+                        party: election_data[selectedState][property],
+                        percantage: currentPartyPerc
+                    }
                 }
             }
         }
@@ -107,12 +106,15 @@ function firstPassThePoll(){
     return mostVotes
 }
 
-function updatePie(selectedState){
+function updatePie(selectedState) {
     console.log(selectedState);
-    //choropleth(election_data[selectedState]);
     pie(election_data[selectedState]);
 }
 
+function updateMap(party) {
+    console.log(party);
+    updateChoropleth(party);
+}
 
 init_x();
 

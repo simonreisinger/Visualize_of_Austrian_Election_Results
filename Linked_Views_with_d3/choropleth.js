@@ -43,7 +43,6 @@ function choropleth(used_data) {
                 d3.select(this).attr("fill", function (d) {
                     return "gray"
                 })
-
             })
             .on('mouseout', function (d) {
                 updatePie("total");
@@ -55,15 +54,28 @@ function choropleth(used_data) {
 
 }
 
-function update() {
-    console.log("update");
-    parties = "ÖVP";
-    svg.selectAll('path').attr("opacity", function (d) {
-        return data[d.properties.name].percantage / 100.0;
-    });
-
-    console.log(svg)
-
+function updateChoropleth(party) {
+    if (party === "allParties") {
+        console.log("allParties");
+        svg.selectAll('path')
+            .attr("opacity", 1.0)
+            .attr("fill", function (d) {
+                console.log();
+                return colors[data[d.properties.name].party.name]
+            });
+    } else {
+        svg.selectAll('path')
+            .attr("opacity", function (d) {
+                return data[d.properties.name].percantage / 100.0;
+            })
+            .attr("fill", function (d) {
+                if (data[d.properties.name].party.name === party) {
+                    return colors[data[d.properties.name].party.name];
+                } else {
+                    return "white"
+                }
+            });
+    }
 
 }
 

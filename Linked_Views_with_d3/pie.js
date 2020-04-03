@@ -3,7 +3,7 @@ let width = 400;
 let height = 400;
 
 function pie(data) {
-    var parties = Object.assign({},  Object.keys(colors))
+    var parties = Object.assign({}, Object.keys(colors))
     delete data.votes;
 
     // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
@@ -20,7 +20,9 @@ function pie(data) {
         .join("path");
 
     // Compute the position of each group on the pie:
-    let pie = d3.pie().value(function(d) {return d.value.percantage; });
+    let pie = d3.pie().value(function (d) {
+        return d.value.percantage;
+    });
     let data_ready = pie(d3.entries(data));
 
     // shape helper to build arcs:
@@ -29,18 +31,33 @@ function pie(data) {
         .outerRadius(radius);
 
     // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
-        svg
-            .selectAll('#svg_pie')
-            .data(data_ready)
-            .enter()
-            .append('path')
-            .attr('d', d3.arc()
-                .innerRadius(0)
-                .outerRadius(radius)
-            )
-            .attr('fill', function(d){ return colors[d.data.key] })
-            .attr("stroke", "black")
-            .style("stroke-width", "0.5px")
+    svg
+        .selectAll('#svg_pie')
+        .data(data_ready)
+        .enter()
+        .append('path')
+        .attr('d', d3.arc()
+            .innerRadius(0)
+            .outerRadius(radius)
+        )
+        .attr('fill', function (d) {
+            return colors[d.data.key]
+        })
+        .attr("stroke", "black")
+        .style("stroke-width", "0.5px")
+        .on('mousemove', function (d) {
+            d3.select(this).attr("fill", function (d) {
+                updateMap("ÖVP");
+                return colors[d.data.key]
+            })
+
+        })
+        .on('mouseout', function (d) {
+            d3.select(this).attr("fill", function (d) {
+                updateMap("allParties");
+                return colors[d.data.key]
+            });
+        });
 
     var u = svg.selectAll("path")
         .attr("stroke", "white");
@@ -51,8 +68,16 @@ function pie(data) {
         .data(data_ready)
         .enter()
         .append('text')
-        .text(function(d){ if( d.value > 3) {return d.data.key}else{return  d.data.key.charAt(0)}} )
-        .attr("transform", function(d) { return "translate(" + arcGenerator.centroid(d) + ")";  })
+        .text(function (d) {
+            if (d.value > 3) {
+                return d.data.key
+            } else {
+                return d.data.key.charAt(0)
+            }
+        })
+        .attr("transform", function (d) {
+            return "translate(" + arcGenerator.centroid(d) + ")";
+        })
         .style("text-anchor", "middle")
         .style("font-size", "10px")
         .attr("fill", "white")
@@ -62,5 +87,11 @@ function pie(data) {
             .attr("x", 0)
             .attr("y", "0.7em")
             .attr("fill", "black")
-            .text(function(d){ if( d.value > 3) {return Math.round(d.value * 10) / 10}else{return  Math.round(d.value)}}  ))
+            .text(function (d) {
+                if (d.value > 3) {
+                    return Math.round(d.value * 10) / 10
+                } else {
+                    return Math.round(d.value)
+                }
+            }))
 }
