@@ -5,6 +5,8 @@ let choroG = null;
 let data = null;
 let map = null;
 let svg = null;
+let projection = null;
+let path = null;
 
 function choropleth(used_data) {
     data = used_data;
@@ -15,12 +17,12 @@ function choropleth(used_data) {
 
     map = d3.json("https://users.cg.tuwien.ac.at/~waldner/oesterreich.json").then(function (_geoJson) {
         geoJson = _geoJson;
-        console.log(geoJson)
+        console.log(geoJson);
 
-        let projection = d3.geoMercator()
+        projection = d3.geoMercator()
             .fitExtent([[0, 0], [choroWidth, choroHeight]], geoJson);
 
-        let path = d3.geoPath()
+        path = d3.geoPath()
             .projection(projection);
 
         svg = d3.select("#svg_choropleth")
@@ -37,8 +39,6 @@ function choropleth(used_data) {
                 return colors[data[d.properties.name].party.name]
             })
             .on('mousemove', function (d) {
-                //console.log('mousemove');
-                //console.log(d.properties.name);
                 updatePie(d.properties.name);
                 d3.select(this).attr("fill", function (d) {
                     return "gray"
@@ -46,35 +46,32 @@ function choropleth(used_data) {
 
             })
             .on('mouseout', function (d) {
-                //console.log('mouseout');
-                //console.log(d.properties.name);
-                update("ÖVP")
-
-
-
-
-                //AKTIVIEREN
-            /*d3.select(this).attr("fill", function (d) {
-                return colors[data[d.properties.name].party.name]
-            });*/
-
+                updatePie("total");
+                d3.select(this).attr("fill", function (d) {
+                    return colors[data[d.properties.name].party.name]
+                });
             });
     });
 
 }
 
-function update(parties){
+function update() {
     console.log("update");
-    xx = svg.append("g")
-        .selectAll('path')
-        .attr("fill", "black");
+    parties = "ÖVP";
+    svg.selectAll('path').attr("opacity", function (d) {
+        return data[d.properties.name].percantage / 100.0;
+    });
+
     console.log(svg)
+
+
 }
 
-/*
-function update(option) {
-    svg.selectAll("path").transition()
-        .duration(750)
-        .attrTween("d", projectionTween(projection, projection = option.projection));
+function hexToRGB(hex, alpha) {
+    var r = parseInt(hex.slice(1, 3), 16),
+        g = parseInt(hex.slice(3, 5), 16),
+        b = parseInt(hex.slice(5, 7), 16);
+
+    return "rgba(" + r + ", " + g + ", " + b + ", " + alpha + ")";
 }
-*/
+
