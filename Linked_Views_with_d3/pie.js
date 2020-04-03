@@ -1,7 +1,7 @@
 // D3 pie chart example: https://observablehq.com/@d3/pie-chart
 let width = 150;
 let height = 150;
-var svg = null;
+var svg_pie = null;
 
 function pie(data) {
     var parties = Object.assign({}, Object.keys(colors))
@@ -9,15 +9,15 @@ function pie(data) {
 
     // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
     var radius = Math.min(width, height) / 2;
-    if (svg !== null) {
+    if (svg_pie !== null) {
         d3.select("#svg_pie").select("svg").remove();
     }
     // append the svg object to the div called 'my_dataviz'
-    svg = d3.select("#svg_pie")
+    svg_pie = d3.select("#svg_pie")
         .append("svg")
         .attr("viewBox", [-width / 2, -height / 2, width, height]);
 
-    svg.append("g")
+    svg_pie.append("g")
         .attr("stroke", "white")
         .selectAll("path")
         .join("path");
@@ -34,7 +34,7 @@ function pie(data) {
         .outerRadius(radius);
 
     // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
-    svg
+    svg_pie
         .selectAll('#svg_pie')
         .data(data_ready)
         .enter()
@@ -55,11 +55,11 @@ function pie(data) {
             updateMap("allParties");
         });
 
-    var u = svg.selectAll("path")
+    var u = svg_pie.selectAll("path")
         .attr("stroke", "white");
 
     // Now add the annotation. Use the centroid method to get the best coordinates
-    svg
+    svg_pie
         .selectAll('#svg_pie')
         .data(data_ready)
         .enter()
