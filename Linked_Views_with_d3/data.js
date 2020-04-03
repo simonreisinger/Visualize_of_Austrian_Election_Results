@@ -7,7 +7,7 @@ let colors = {
     "GRÜNE": "#88B626",
     "SONST.": "#222"
 };
-let election_data = null
+let election_data = null;
 
 // In this file, all the data handling should be done, for example:
 // * loading the CSV file
@@ -17,8 +17,8 @@ let election_data = null
 
 
 function init_x() {
-    //let file_location = "https://raw.githubusercontent.com/ippon1/Visualize_of_Austrian_Election_Results/master/Linked_Views_with_d3/NRW2019_Bundeslaender.csv";
-    let file_location = "http://localhost:8888/Static_Charts_with_Python/Linked_Views_with_d3/NRW2019_Bundeslaender.csv";
+    let file_location = "https://raw.githubusercontent.com/ippon1/Visualize_of_Austrian_Election_Results/master/Linked_Views_with_d3/NRW2019_Bundeslaender.csv";
+    //let file_location = "http://localhost:8888/Static_Charts_with_Python/Linked_Views_with_d3/NRW2019_Bundeslaender.csv";
     var rawFile = new XMLHttpRequest();
     rawFile.open("GET", file_location, true);
     rawFile.onreadystatechange = function () {
