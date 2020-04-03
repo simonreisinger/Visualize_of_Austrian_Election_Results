@@ -75,7 +75,6 @@ function init_x() {
                     electionData["total"][parties[i].toString()].percantage = 100 * electionData["total"][parties[i].toString()].abs / electionData["total"]["votes"].abs;
                 }
                 election_data = electionData;
-                console.log(election_data);
                 // * synchronization between choropleth map and pie chart
                 firstPassThePoll("Wien")
                 choropleth(firstPassThePoll());
@@ -107,12 +106,10 @@ function firstPassThePoll() {
 }
 
 function updatePie(selectedState) {
-    console.log(selectedState);
     pie(election_data[selectedState]);
 }
 
 function updateMap(party) {
-    console.log(party);
     updateChoropleth(party);
 }
 

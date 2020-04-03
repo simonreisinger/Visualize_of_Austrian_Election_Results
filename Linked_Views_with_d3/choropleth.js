@@ -10,14 +10,11 @@ let path = null;
 
 function choropleth(used_data) {
     data = used_data;
-    console.log(data);
     // GeoJSON was retrieved from here: https://wahlen.strategieanalysen.at/geojson/
     // D3 choropleth examples: https://www.d3-graph-gallery.com/choropleth
-    console.log(colors);
 
     map = d3.json("https://users.cg.tuwien.ac.at/~waldner/oesterreich.json").then(function (_geoJson) {
         geoJson = _geoJson;
-        console.log(geoJson);
 
         projection = d3.geoMercator()
             .fitExtent([[0, 0], [choroWidth, choroHeight]], geoJson);
@@ -56,11 +53,9 @@ function choropleth(used_data) {
 
 function updateChoropleth(party) {
     if (party === "allParties") {
-        console.log("allParties");
         svg.selectAll('path')
             .attr("opacity", 1.0)
             .attr("fill", function (d) {
-                console.log();
                 return colors[data[d.properties.name].party.name]
             });
     } else {
