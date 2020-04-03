@@ -4,7 +4,7 @@ let geoJson = null;
 let choroG = null;
 let data = null;
 let map = null;
-
+let svg = null;
 
 function choropleth(used_data) {
     data = used_data;
@@ -23,7 +23,7 @@ function choropleth(used_data) {
         let path = d3.geoPath()
             .projection(projection);
 
-        let svg = d3.select("#svg_choropleth")
+        svg = d3.select("#svg_choropleth")
             .attr("width", choroWidth)
             .attr("height", choroHeight);
 
@@ -39,7 +39,7 @@ function choropleth(used_data) {
             .on('mousemove', function (d) {
                 //console.log('mousemove');
                 //console.log(d.properties.name);
-                update(d.properties.name);
+                updatePie(d.properties.name);
                 d3.select(this).attr("fill", function (d) {
                     return "gray"
                 })
@@ -48,25 +48,33 @@ function choropleth(used_data) {
             .on('mouseout', function (d) {
                 //console.log('mouseout');
                 //console.log(d.properties.name);
-                update("total")
-                d3.select(this).attr("fill", function (d) {
-                    return colors[data[d.properties.name].party.name]
-                })
+                update("ÖVP")
+
+
+
+
+                //AKTIVIEREN
+            /*d3.select(this).attr("fill", function (d) {
+                return colors[data[d.properties.name].party.name]
+            });*/
 
             });
     });
-    update("ÖVP")
+
 }
+
 function update(parties){
     console.log("update");
-    console.log(parties);
-    let svg = d3.select("#svg_choropleth")
-        .attr("width", choroWidth)
-        .attr("height", choroHeight);
-
-    var xxxxx = svg.append("g")
+    xx = svg.append("g")
+        .selectAll('path')
         .attr("fill", "black");
-    console.log(xxxxx)
+    console.log(svg)
 }
 
-
+/*
+function update(option) {
+    svg.selectAll("path").transition()
+        .duration(750)
+        .attrTween("d", projectionTween(projection, projection = option.projection));
+}
+*/
