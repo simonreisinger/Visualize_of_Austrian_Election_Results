@@ -81,7 +81,8 @@ function init_x()
                 election_data = electionData;
                 console.log(election_data);
                 // * synchronization between choropleth map and pie chart
-                choropleth(election_data["total"]);
+                firstPassThePoll("Wien")
+                choropleth(firstPassThePoll());
                 pie(election_data["total"]);
 
             }
@@ -90,10 +91,25 @@ function init_x()
     rawFile.send(null);
 }
 
+function firstPassThePoll(){
+    let mostVotes = [];
+    for (let selectedState in election_data) {
+        mostVotes[selectedState] = {party: "", percantage: 0};
+        for (let property in election_data[selectedState]) {
+            if (election_data[selectedState].hasOwnProperty(property)) {
+                currentPartyPerc = parseFloat(election_data[selectedState][property].percantage);
+                if (currentPartyPerc >= mostVotes[selectedState].percantage) {
+                    mostVotes[selectedState] = {party: election_data[selectedState][property], percantage: currentPartyPerc}
+                }
+            }
+        }
+    }
+    return mostVotes
+}
 
-function update(selectedState){
-
-    choropleth(election_data[selectedState]);
+function updatePie(selectedState){
+    console.log(selectedState);
+    //choropleth(election_data[selectedState]);
     pie(election_data[selectedState]);
 }
 

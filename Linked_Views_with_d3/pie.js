@@ -3,7 +3,6 @@ let width = 400;
 let height = 400;
 
 function pie(data) {
-    console.log("XXXXXX")
     var parties = Object.assign({},  Object.keys(colors))
     delete data.votes;
 
@@ -18,7 +17,7 @@ function pie(data) {
     svg.append("g")
         .attr("stroke", "white")
         .selectAll("path")
-        .join("path")
+        .join("path");
 
     // Compute the position of each group on the pie:
     let pie = d3.pie().value(function(d) {return d.value.percantage; });
@@ -42,10 +41,10 @@ function pie(data) {
             .attr('fill', function(d){ return colors[d.data.key] })
             .attr("stroke", "black")
             .style("stroke-width", "0.5px")
-            .style("opacity", 0.7)
+            .style("opacity", 0.7);
 
     var u = svg.selectAll("path")
-        .attr("stroke", "white")
+        .attr("stroke", "white");
 
     // Now add the annotation. Use the centroid method to get the best coordinates
     svg
@@ -60,7 +59,7 @@ function pie(data) {
         .attr("fill", "white")
         .attr("y", "-0.4em")
         .attr("font-weight", "bold")
-        .call(text => text.filter(d => 2.0 > 0.25).append("tspan")
+        .call(text => text.append("tspan")
             .attr("x", 0)
             .attr("y", "0.7em")
             .attr("fill-opacity", 0.7)
