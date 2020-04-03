@@ -47,7 +47,7 @@ function pie(data) {
         .style("stroke-width", "0.5px")
         .on('mousemove', function (d) {
             d3.select(this).attr("fill", function (d) {
-                updateMap("ÖVP");
+                updateMap(d.data.key);
                 return colors[d.data.key]
             })
 
