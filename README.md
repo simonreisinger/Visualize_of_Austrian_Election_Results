@@ -4,8 +4,6 @@ This project was created for the Course [Informationsvisualisierung](https://www
 * https://tuwel.tuwien.ac.at/course/view.php?id=21535
 
 ## Linked Views with d3
-Visualization [here](https://ippon1.github.io/Visualize_of_Austrian_Election_Results/Static_Charts_with_Python)
-
 Visualization [here](https://ippon1.github.io/Visualize_of_Austrian_Election_Results/Linked_Views_with_d3)
 
 The goal of the second exercise is to create multiple coordinated views on web pages, where users can interactively explore the data.
@@ -49,6 +47,7 @@ Mind that we are using d3.v5, which is no longer compatible to the more wide-spr
 
 
 ## Static Charts with Python
+Visualization [here](https://ippon1.github.io/Visualize_of_Austrian_Election_Results/Static_Charts_with_Python)
 
 The goal of this exercise is to get into some first contact with Python, Pandas data frames, and the many opportunities how to quickly generate static charts from data frames.
 
