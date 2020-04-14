@@ -4,6 +4,8 @@ This project was created for the Course [Informationsvisualisierung](https://www
 * https://tuwel.tuwien.ac.at/course/view.php?id=21535
 
 ## Linked Views with d3
+Visualization: ippon1.github.com/Visualize_of_Austrian_Election_Results/Static_Charts_with_Python
+Visualization: https://ippon1.github.io/Visualize_of_Austrian_Election_Results/Linked_Views_with_d3
 The goal of the second exercise is to create multiple coordinated views on web pages, where users can interactively explore the data.
 
 In the second exercise, we will create a simple web page, where a map of Austria and a pie chart of the election results are shown. After loading the data from the provided CSV file, the exercise is split into the following tasks: 
