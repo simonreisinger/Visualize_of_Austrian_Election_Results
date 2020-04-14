@@ -37,6 +37,11 @@ There are numerous d3 implementations of standard charts out there. You can look
 
 Mind that we are using d3.v5, which is no longer compatible to the more wide-spread d3.v3 used for many online examples! 
 
+### TODOs
+* Du kannst das mit dem Feldnamen so handhaben wie du möchtest. Es soll nur eine kleine Stolperfalle sein, da solche Dinge bei echten Datensätzen sehr oft vorkommen.
+* Ich würde dir empfehlen das Intervall anzupassen, damit es für uns beim korrigieren eindeutiger sichtbar ist, dass du das implementiert hast. Aber auch hier gilt - solange wir sehen, dass du es implementiert hast sollte es passen, egal wie du es gemacht hast.
+* Wir entwicken mit WebStorm und öffnen über die IDE das HTML - dann wird im Hintergrund automatisch ein Server von der IDE erstellt. In dem Fall funktioniert das Daten laden dann ganz einfach mit der d3.csv(datei) Funktion. Aber sofern deine Abgabe bei uns läuft und die Daten richtig geladen werden passt das.
+* Die Reihenfolger der Parteien im Bar chart geben wir euch nicht vor und muss daher auch nicht immer gleich sein.
 
 
 ## Static Charts with Python
@@ -82,3 +87,9 @@ Depending on your chosen visualization, you might want to use the Austrian offic
     colors = ['#63C3D0', '#ce000c', '#0056A2', '#E3257B', '#ADADAD', '#88B626', '#333333']
     cm = LinearSegmentedColormap.from_list('austrianParties', colors, N=7)
 
+
+### TODOs
+as we assign the final points during the submission talks at the end of the semester you get short written feedback regarding Exercise 1 here:
+You provided some interpretation of the data for the bar charts, but we also want a description of the insights from the provided data one can gain from the pie charts.
+We will not deduct a point here if you correct this during the submission talk.
+Apart from that everything that was required was done.
