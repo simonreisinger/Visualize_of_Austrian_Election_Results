@@ -4,9 +4,9 @@ This project was created for the Course [Informationsvisualisierung](https://www
 * https://tuwel.tuwien.ac.at/course/view.php?id=21535
 
 ## Linked Views with d3
-Visualization: https://ippon1.github.io/Visualize_of_Austrian_Election_Results/Static_Charts_with_Python
+Visualization [here](https://ippon1.github.io/Visualize_of_Austrian_Election_Results/Static_Charts_with_Python)
 
-Visualization: https://ippon1.github.io/Visualize_of_Austrian_Election_Results/Linked_Views_with_d3
+Visualization [here](https://ippon1.github.io/Visualize_of_Austrian_Election_Results/Linked_Views_with_d3)
 
 The goal of the second exercise is to create multiple coordinated views on web pages, where users can interactively explore the data.
 
