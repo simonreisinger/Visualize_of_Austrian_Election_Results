@@ -17,7 +17,7 @@ function choropleth(used_data) {
         geoJson = _geoJson;
         for (let item in geoJson.features) {
             console.log(geoJson.features[item].properties.name);
-            geoJson.features[item].properties.name = geoJson.features[item].properties.name.replace("oe", "ö");
+            geoJson.features[item].properties.name = geoJson.features[item].properties.name.replace("oe", "ö").replace("ue", "ü").replace("ue", "ü");
             console.log(geoJson.features[item].properties.name);
         }
 
@@ -61,6 +61,8 @@ function updateChoropleth(party) {
         svg_Map.selectAll('path')
             .attr("opacity", 1.0)
             .attr("fill", function (d) {
+                console.log(d.properties.name);
+                console.log(data);
                 return colors[data[d.properties.name].party.name]
             });
     } else {
