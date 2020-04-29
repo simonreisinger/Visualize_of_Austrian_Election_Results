@@ -17,9 +17,8 @@ let election_data = null;
 
 
 function init_x() {
-    //let file_location = "https://raw.githubusercontent.com/ippon1/Visualize_of_Austrian_Election_Results/master/Linked_Views_with_d3/NRW2019_Bundeslaender.csv";
     let file_location = "./NRW2019_Bundeslaender.csv";
-    var rawFile = new XMLHttpRequest();
+    let rawFile = new XMLHttpRequest();
     rawFile.open("GET", file_location, true);
     rawFile.onreadystatechange = function () {
         if (rawFile.readyState === 4) {

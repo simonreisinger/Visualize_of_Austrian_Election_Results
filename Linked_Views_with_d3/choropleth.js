@@ -62,9 +62,28 @@ function updateChoropleth(party) {
                 return colors[data[d.properties.name].party.name]
             });
     } else {
+        let color = {};
+        var min = Infinity;
+        var max = -Infinity;
+        for (let item in data) {
+            if (item !== "total" && item !== "") {
+                //color.push({state: item, value: data[item].percantage})
+                color[item] = data[item].percantage;
+                if (min > data[item].percantage) {
+                    min = data[item].percantage;
+                }
+                if (max < data[item].percantage) {
+                    max = data[item].percantage;
+                }
+            }
+        }
+
+        let sqrtScale = d3.scaleSqrt().domain([min, max]).range([20, 80]);
+
         svg_Map.selectAll('path')
             .attr("opacity", function (d) {
-                return data[d.properties.name].percantage / 100.0;
+                //return data[d.properties.name].percantage / 100.0; // linear
+                return sqrtScale(data[d.properties.name].percantage)/100;
             })
             .attr("fill", function (d) {
                 if (data[d.properties.name].party.name === party) {
