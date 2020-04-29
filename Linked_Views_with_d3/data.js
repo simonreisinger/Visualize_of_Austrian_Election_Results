@@ -24,10 +24,10 @@ function init_x() {
     rawFile.onreadystatechange = function () {
         if (rawFile.readyState === 4) {
             if (rawFile.status === 200 || rawFile.status == 0) {
-                var allText = rawFile.responseText;
-                var rows = allText.split("\r\n");
+                let allText = rawFile.responseText;
+                let rows = allText.split("\r\n");
 
-                var electionData = {};
+                let electionData = {};
 
                 parties = rows[0].split(',');
 
@@ -35,7 +35,7 @@ function init_x() {
                 electionData["total"] = {};
 
                 //electionData["total"]["votes"] = 0;
-                for (var i = 1; i < parties.length; i++) {
+                for (let i = 1; i < parties.length; i++) {
                     electionData["total"][parties[i].toString()] = {
                         name: parties[i].toString(),
                         percantage: 100,
@@ -44,13 +44,13 @@ function init_x() {
                 }
 
                 //move line by line
-                for (var i = 1; i < rows.length; i++) {
+                for (let i = 1; i < rows.length; i++) {
                     //split by separator (,) and get the columns
-                    var cols = rows[i].split(',');
+                    let cols = rows[i].split(',');
                     //move column by column
-                    var currentState = "";
-                    for (var j = 0; j < cols.length; j++) {
-                        var value = cols[j];
+                    let currentState = "";
+                    for (let j = 0; j < cols.length; j++) {
+                        let value = cols[j];
                         if (j === 0) // Add New State
                         {
                             currentState = value.toString();
@@ -76,7 +76,7 @@ function init_x() {
                 }
                 election_data = electionData;
                 // * synchronization between choropleth map and pie chart
-                firstPassThePoll("Wien")
+                firstPassThePoll("Wien");
                 choropleth(firstPassThePoll());
                 pie(election_data["total"]);
 
