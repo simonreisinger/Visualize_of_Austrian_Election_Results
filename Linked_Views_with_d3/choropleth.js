@@ -15,6 +15,9 @@ function choropleth(used_data) {
 
     map = d3.json("https://users.cg.tuwien.ac.at/~waldner/oesterreich.json").then(function (_geoJson) {
         geoJson = _geoJson;
+        for (let item in geoJson.features) {
+            geoJson.features[item].properties.name = geoJson.features[item].properties.name.replace("oe", "ö");
+        }
 
         projection = d3.geoMercator()
             .fitExtent([[0, 0], [choroWidth, choroHeight]], geoJson);
