@@ -1,14 +1,37 @@
-# Visualize the results of the national election 2019 in Austria. 
-We will analyze and visualize the results of the national election 2019 in Austria. 
+# Visualize the results of the national election 2019 in Austria.
+We will analyze and visualize the results of the national election 2019 in Austria.
 This project was created for the Course [Informationsvisualisierung](https://www.cg.tuwien.ac.at/courses/InfoVis/ue.html) at [TU Wien](https://www.tuwien.at).
 * https://tuwel.tuwien.ac.at/course/view.php?id=21535
+
+## Data Cleaning & Interactive Bokeh Charts
+The goal of the third exercise is to learn some advanced data manipulation techniques with Pandas, simple machine learning using sci-kit learn, and interactive plots for Python using Bokeh.
+
+The exercise is split into two tasks:
+
+* Loading and transforming the data using Pandas, performing a PCA so that we can visualize the similarities between counties ("Gemeinden").
+* Visualizing the counties as a biplot, where x and y are the first two principal components, and the projected axes should show the influence of the parties. The following properties should be visualized:
+  * The size of the dot should represent the number of votes (i.e., the more votes, the larger the dots).
+  * The color of the dot should be given according to its state (i.e., all counties of a state should have the same color).
+  * Upon hover, the name, state (Bundesland), and number of votes should be revealed as a tooltip.
+  * The parties should be represented as "projected axes".
+
+  Useful Bokeh Tutorials:
+  * [Colored scatterplot](https://docs.bokeh.org/en/latest/docs/gallery/color_scatter.html)
+  * [Plotting with basic glyphs](https://docs.bokeh.org/en/latest/docs/user_guide/plotting.html)
+  * [Adding annotations, like arrows and text labels](https://docs.bokeh.org/en/latest/docs/user_guide/annotations.html)
+
+  Use pandas to load the file 'NRW19.csv'. This file was downloaded from [BMI](https://www.bmi.gv.at/412/Nationalratswahlen/Nationalratswahl_2019/) as xlsx File, and was slightly modified so that it can be loaded with Pandas as csv file.
+
+  Be aware: the csv file still contains German number formatting so that Pandas does not read and convert the numbers properly. Provide the correct parameters for [separators, decimals, and thousands](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.read_csv.html) so that Pandas parses the number values correctly.
+
+
 
 ## Linked Views with d3
 Visualization [here](https://ippon1.github.io/Visualize_of_Austrian_Election_Results/Linked_Views_with_d3)
 
 The goal of the second exercise is to create multiple coordinated views on web pages, where users can interactively explore the data.
 
-In the second exercise, we will create a simple web page, where a map of Austria and a pie chart of the election results are shown. After loading the data from the provided CSV file, the exercise is split into the following tasks: 
+In the second exercise, we will create a simple web page, where a map of Austria and a pie chart of the election results are shown. After loading the data from the provided CSV file, the exercise is split into the following tasks:
 
 * Fill the states in the map with the color of the party that reached the majority in this state. The colors are provided in data.js.
 * Compute the percentages of votes for entire Austria and show as pie chart. Use the svg_pie container for the pie chart.
@@ -16,7 +39,7 @@ In the second exercise, we will create a simple web page, where a map of Austria
  * By hovering over a state in the map, show the pie chart of the respective state, as well as the name of the selected state in the paragraph with ID state.
 * By hovering over a segment in the pie chart, show a choropleth map of the votes of the selected party for all states. This can be achieved by changing the opacity of the respective state depending on the percentage.
 
-Standard view: maximum results and pie chart for Austria: 
+Standard view: maximum results and pie chart for Austria:
 
     Standard view: maximum results and pie chart for Austria:
     d3 exercise: Austria view
@@ -37,7 +60,7 @@ There are numerous d3 implementations of standard charts out there. You can look
 * How to render GeoJSON using d3
 * US choropleth map
 
-Mind that we are using d3.v5, which is no longer compatible to the more wide-spread d3.v3 used for many online examples! 
+Mind that we are using d3.v5, which is no longer compatible to the more wide-spread d3.v3 used for many online examples!
 
 ### TODOs
 * Du kannst das mit dem Feldnamen so handhaben wie du möchtest. Es soll nur eine kleine Stolperfalle sein, da solche Dinge bei echten Datensätzen sehr oft vorkommen.
@@ -70,10 +93,10 @@ For the first exercise, show the results of the election per state (Bundesland) 
 * Pandas visualizations based on Matplotlib  
 * Seaborn
 
-### Resources 
+### Resources
 Shape: https://www.eea.europa.eu/data-and-maps/data/eea-reference-grids-2/gis-files/austria-shapefile
-    
-    
+
+
 ### Implementation hints
 
 Load the data using pandas and show the table in the notebook:
