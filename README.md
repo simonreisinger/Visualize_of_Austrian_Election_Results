@@ -66,11 +66,10 @@ There are numerous d3 implementations of standard charts out there. You can look
 Mind that we are using d3.v5, which is no longer compatible to the more wide-spread d3.v3 used for many online examples!
 
 ### TODOs
-* Du kannst das mit dem Feldnamen so handhaben wie du möchtest. Es soll nur eine kleine Stolperfalle sein, da solche Dinge bei echten Datensätzen sehr oft vorkommen.
-* Ich würde dir empfehlen das Intervall anzupassen, damit es für uns beim korrigieren eindeutiger sichtbar ist, dass du das implementiert hast. Aber auch hier gilt - solange wir sehen, dass du es implementiert hast sollte es passen, egal wie du es gemacht hast.
-* Wir entwicken mit WebStorm und öffnen über die IDE das HTML - dann wird im Hintergrund automatisch ein Server von der IDE erstellt. In dem Fall funktioniert das Daten laden dann ganz einfach mit der d3.csv(datei) Funktion. Aber sofern deine Abgabe bei uns läuft und die Daten richtig geladen werden passt das.
 * Die Reihenfolger der Parteien im Bar chart geben wir euch nicht vor und muss daher auch nicht immer gleich sein.
-
+* Choropleth map shows the correct result. File loading is not done via d3.csv but XMLHttPRequests (why?). Data preprocessing is a bit complicated. 
+* When linking the choropleth map with the pie chart, the pie chart is removed and redrawn for every hover operation instead of being updated. The shown values are correct! 
+* Here, the update is done correctly (removing and redrawing the choropleth map would be too slow anyway). Bonus points! 
 
 ## Static Charts with Python
 Visualization [here](https://ippon1.github.io/Visualize_of_Austrian_Election_Results/Static_Charts_with_Python)
