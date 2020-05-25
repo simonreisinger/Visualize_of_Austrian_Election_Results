@@ -67,9 +67,8 @@ Mind that we are using d3.v5, which is no longer compatible to the more wide-spr
 
 ### TODOs
 * Die Reihenfolger der Parteien im Bar chart geben wir euch nicht vor und muss daher auch nicht immer gleich sein.
-* Choropleth map shows the correct result. File loading is not done via d3.csv but XMLHttPRequests (why?). Data preprocessing is a bit complicated. 
-* When linking the choropleth map with the pie chart, the pie chart is removed and redrawn for every hover operation instead of being updated. The shown values are correct! 
-* Here, the update is done correctly (removing and redrawing the choropleth map would be too slow anyway). Bonus points! 
+* File loading is not done via d3.csv but XMLHttPRequests. Data preprocessing is a bit complicated. 
+* When linking the choropleth map with the pie chart, the pie chart is removed and redrawn for every hover operation instead of being updated.
 
 ## Static Charts with Python
 Visualization [here](https://ippon1.github.io/Visualize_of_Austrian_Election_Results/Static_Charts_with_Python)
