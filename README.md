@@ -66,7 +66,7 @@ There are numerous d3 implementations of standard charts out there. You can look
 Mind that we are using d3.v5, which is no longer compatible to the more wide-spread d3.v3 used for many online examples!
 
 ### TODOs
-* Die Reihenfolger der Parteien im Bar chart geben wir euch nicht vor und muss daher auch nicht immer gleich sein.
+* Keep the same order of parties (my idea)
 * File loading is not done via d3.csv but XMLHttPRequests. Data preprocessing is a bit complicated. 
 * When linking the choropleth map with the pie chart, the pie chart is removed and redrawn for every hover operation instead of being updated.
 
