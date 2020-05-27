@@ -6,7 +6,7 @@ This project was created for the Course [Informationsvisualisierung](https://www
 ## Using the First-past-the-post voting system for Austrian Elections
 
 ## Sources:
-* (GeoJSON-TopoJSON-Austria)[https://github.com/ginseng666/GeoJSON-TopoJSON-Austria]
+* [Verwaltungsgrenzen Österreich](https://data.opendataportal.at/dataset/geojson-daten-osterreich/resource/1a8718bb-18b1-47e1-b6a5-2af5190e087e)
 
 ### Disclaimer
 We are clear that the districts of Austria variy wide in size but we can not change this...
