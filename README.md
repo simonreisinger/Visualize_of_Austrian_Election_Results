@@ -3,6 +3,15 @@ We will analyze and visualize the results of the national election 2019 in Austr
 This project was created for the Course [Informationsvisualisierung](https://www.cg.tuwien.ac.at/courses/InfoVis/ue.html) at [TU Wien](https://www.tuwien.at).
 * https://tuwel.tuwien.ac.at/course/view.php?id=21535
 
+## Using the First-past-the-post voting system for Austrian Elections
+
+## Sources:
+* [Verwaltungsgrenzen Österreich](https://data.opendataportal.at/dataset/geojson-daten-osterreich/resource/1a8718bb-18b1-47e1-b6a5-2af5190e087e)
+
+### Disclaimer
+We are clear that the districts of Austria variy wide in size but we can not change this...
+
+
 ## Data Cleaning & Interactive Bokeh Charts
 Visualization [here](https://ippon1.github.io/Visualize_of_Austrian_Election_Results/Data_Cleaning)
 
