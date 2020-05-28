@@ -22,16 +22,15 @@ function init() {
     d3.dsv(";", file_location).then(function (_data) {
         let data = _data;
 
-        nationalResults = data.filter(function (value, index) {
+        nationalResults = data.filter(function (value) {
             return value.GKZ.slice(-5) === "00000";
-        });
-        counties = data.filter(function (value, index) {
+        })[0];
+        counties = data.filter(function (value) {
             let toBeAdded = value.GKZ.slice(-2) === "00";
             toBeAdded = toBeAdded && value.GKZ.slice(-4) !== "0000";
             toBeAdded = toBeAdded && /^\d+$/.test(value.GKZ.substring(1));
             return toBeAdded
         });
-        console.log(counties);
 
         counties = counties.map(function (value) {
             value.Gebietsname = value.Gebietsname.replace(" - ", "-");
@@ -41,13 +40,29 @@ function init() {
             value.Gebietsname = value.Gebietsname.replace(" Umgebung", "-Umgebung");
             value.Gebietsname = value.Gebietsname.replace("Innere", "Innere Stadt");
             let checkViennaBezirke = value.Gebietsname.split(',');
-            value.Gebietsname = checkViennaBezirke[checkViennaBezirke.length -1];
+            value.Gebietsname = checkViennaBezirke[checkViennaBezirke.length - 1];
 
             return value
         });
         let localWinner = firstPassThePoll(counties);
         choropleth(localWinner);
-        updatePieChart(localWinner);
+        let pieChartResults = firstPastThePostByParty(localWinner);
+        updatePieChart(pieChartResults, "#svg_pie_fptp");
+        let selectedParties = [];
+        let sumOfValidVotes = 0;
+        for (let p in colors) {
+            if (p !== "SONST." && p !== "JETZT") {
+                sumOfValidVotes += parseInt(nationalResults[p].replace(".", ""))
+            }
+        }
+
+        for (let p in colors) {
+            if (p !== "SONST." && p !== "JETZT") {
+                selectedParties[p] = parseInt(parseFloat(nationalResults[p].replace(/\./g, ""))/sumOfValidVotes * 183.0)
+            }
+        }
+
+        updatePieChart(selectedParties, "#svg_pie_pr");
     });
 }
 
@@ -57,7 +72,7 @@ function firstPassThePoll(dataset) {
         mostVotes[dataset[selectedState].Gebietsname] = {party: "", votes: 0};
         for (let parties in colors) {
             if (parties !== "SONST.") {
-                let currentPartyVotes = parseInt(dataset[selectedState][parties].replace('.', ''));
+                let currentPartyVotes = parseInt(dataset[selectedState][parties].replace(/\./g, ""));
                 if (currentPartyVotes >= mostVotes[dataset[selectedState].Gebietsname].votes) {
                     mostVotes[dataset[selectedState].Gebietsname] = {
                         party: parties,
@@ -70,16 +85,26 @@ function firstPassThePoll(dataset) {
     return mostVotes
 }
 
-function claculate()
+function firstPastThePostByParty(dataset) {
+    let mostVotes = [];
+    for (let party in colors) {
+        mostVotes[party] = 0;
+    }
 
-function updatePie(selectedState) {
-    //createPie(election_data[selectedState]);
-    //updatePieChart(election_data[selectedState]);
+    for (let county in dataset) {
+        mostVotes[dataset[county].party] += 1
+    }
 
-}
+    function receivedPeople(value) {
+        return mostVotes[value] > 0;
+    }
 
-function updateMap(party) {
-    updateChoropleth(party);
+    let xxxx = Object.keys(mostVotes).filter(receivedPeople);
+    let selectedParties = [];
+    for (xxx in xxxx) {
+        selectedParties[xxxx[xxx]] = mostVotes[xxxx[xxx]]
+    }
+    return selectedParties
 }
 
 init();
