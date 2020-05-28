@@ -16,13 +16,13 @@ let election_data = null;
 // (check the correctness of your computation here: https://www.bmi.gv.at/412/Nationalratswahlen/Nationalratswahl_2019/ )
 
 
-function init_x() {
+function init() {
     let file_location = "./NRW2019_Bundeslaender.csv";
     let rawFile = new XMLHttpRequest();
     rawFile.open("GET", file_location, true);
     rawFile.onreadystatechange = function () {
         if (rawFile.readyState === 4) {
-            if (rawFile.status === 200 || rawFile.status == 0) {
+            if (rawFile.status === 200 || rawFile.status === 0) {
                 let allText = rawFile.responseText;
                 let rows = allText.split("\r\n");
 
@@ -77,7 +77,7 @@ function init_x() {
                 // * synchronization between choropleth map and pie chart
                 firstPassThePoll("Wien");
                 choropleth(firstPassThePoll());
-                pie(election_data["total"]);
+                updatePie("total");
 
             }
         }
@@ -105,14 +105,16 @@ function firstPassThePoll() {
 }
 
 function updatePie(selectedState) {
-    pie(election_data[selectedState]);
+    //createPie(election_data[selectedState]);
+    updatePieChart(election_data[selectedState]);
+
 }
 
 function updateMap(party) {
     updateChoropleth(party);
 }
 
-init_x();
+init();
 
 
 
