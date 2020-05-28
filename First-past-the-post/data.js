@@ -26,12 +26,26 @@ function init() {
             return value.GKZ.slice(-5) === "00000";
         });
         counties = data.filter(function (value, index) {
-            // Ist Bundesland
             let toBeAdded = value.GKZ.slice(-2) === "00";
             toBeAdded = toBeAdded && value.GKZ.slice(-4) !== "0000";
             toBeAdded = toBeAdded && /^\d+$/.test(value.GKZ.substring(1));
             return toBeAdded
         });
+        console.log(counties);
+        counties = counties.map(function (value) {
+            //
+            value.Gebietsname = value.Gebietsname.replace(" - ", "-")
+            value.Gebietsname = value.Gebietsname.replace(" Stadt", "-Stadt")
+            value.Gebietsname = value.Gebietsname.replace(" Land", "-Land")
+            return value
+
+        });
+
+        function myFunction(num) {
+            return num * 10;
+        }
+
+
         console.log(counties);
         console.log(nationalResults);
 

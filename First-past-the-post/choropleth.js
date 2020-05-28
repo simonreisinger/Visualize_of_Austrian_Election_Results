@@ -7,7 +7,7 @@ let map = null;
 let svg_Map = null;
 let projection = null;
 let path = null;
-let URL = "./data/gemeinden_995_geo.json";
+let URL = "./data/bezirke_95_geo.json";
 
 
 function choropleth(used_data) {
@@ -37,6 +37,27 @@ function choropleth(used_data) {
             .enter().append('path')
             .attr('d', path)
             .attr("stroke", "black")
+            .attr("fill", function (d) {
+
+                console.log(d);
+                console.log(d.properties.name);
+                console.log(data[d.properties.name]);
+                let county_map = d.properties.name
+                console.log(county_map);
+                var county_dataset = county_map.replace("(Stadt)", "-Stadt");
+                county_dataset = county_dataset.replace(" Stadt", "-Stadt");
+                county_dataset = county_dataset.replace("(Land)", "-Land");
+                county_dataset = county_dataset.replace(" Land", "-Land");
+                console.log(county_dataset);
+                if (county_dataset === "Wien-Stadt"){
+                    return "white"
+                }
+                let currentColor = colors[data[county_dataset].party];
+                console.log(currentColor);
+
+                return currentColor;
+                //return "white"
+            })
     });
 
 }
