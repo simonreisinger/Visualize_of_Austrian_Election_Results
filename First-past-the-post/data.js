@@ -52,13 +52,16 @@ function init() {
         let sumOfValidVotes = 0;
         for (let p in colors) {
             if (p !== "SONST." && p !== "JETZT") {
-                sumOfValidVotes += parseInt(nationalResults[p].replace(".", ""))
+                sumOfValidVotes += parseInt(nationalResults[p].replace(/\./g, ""))
             }
         }
 
         for (let p in colors) {
             if (p !== "SONST." && p !== "JETZT") {
-                selectedParties[p] = parseInt(parseFloat(nationalResults[p].replace(/\./g, ""))/sumOfValidVotes * 183.0)
+                console.log(parseFloat(nationalResults[p].replace(/\./g, "")))
+                console.log(parseFloat(nationalResults[p].replace(/\./g, ""))/sumOfValidVotes)
+                console.log(parseFloat(nationalResults[p].replace(/\./g, ""))/sumOfValidVotes * 183.0)
+                selectedParties[p] = Math.round(parseFloat(nationalResults[p].replace(/\./g, ""))/sumOfValidVotes * 183.0)
             }
         }
 

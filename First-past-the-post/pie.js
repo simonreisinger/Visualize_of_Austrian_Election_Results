@@ -42,12 +42,12 @@ function updatePieChart(data, id) {
         })
         .attr("stroke", "black")
         .style("stroke-width", "0.5px")
-        .on('mousemove', function (d) {
-            updateMap(d.data.key);
-        })
-        .on('mouseout', function (d) {
-            updateMap("allParties");
-        });
+        //.on('mousemove', function (d) {
+    //    updateMap(d.data.key);
+        //  })
+    //.on('mouseout', function (d) {
+    //      updateMap("allParties");
+    //  });
 
     svg_pie[id].selectAll("path")
         .attr("stroke", "white");
