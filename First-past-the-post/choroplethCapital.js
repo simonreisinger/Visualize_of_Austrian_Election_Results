@@ -10,7 +10,7 @@ let path = null;
 let URL = "./data/bezirke_wien_gross_geo.json";
 
 
-function choroplethCountry(used_data) {
+function choroplethCapital(used_data) {
 
     data = used_data;
     // GeoJSON was retrieved from here: https://wahlen.strategieanalysen.at/geojson/
@@ -27,7 +27,7 @@ function choroplethCountry(used_data) {
         path = d3.geoPath()
             .projection(projection);
 
-        svg_Map = d3.select("#svg_choropleth_country")
+        svg_Map = d3.select("#svg_choropleth_capital")
             .attr("width", choroWidth)
             .attr("height", choroHeight);
 
@@ -38,70 +38,8 @@ function choroplethCountry(used_data) {
             .attr('d', path)
             .attr("stroke", "black")
             .attr("fill", function (d) {
-
-                console.log(d);
-                console.log(d.properties.name);
-                console.log(data[d.properties.name]);
-                let county_map = d.properties.name
-                console.log(county_map);
-                var county_dataset = county_map
-                let currentColor = colors[data[county_dataset].party];
-                console.log(currentColor);
-
-                return currentColor;
-                //return "white"
+                //return currentColor;
+                return "white"
             })
     });
-
 }
-
-function updateChoroplethCountry(party) {
-    if (party === "allParties") {
-        svg_Map.selectAll('path')
-            .attr("opacity", 1.0)
-            .attr("fill", function (d) {
-                return colors[data[d.properties.name].party.name]
-            });
-    } else {
-        let color = {};
-        var min = Infinity;
-        var max = -Infinity;
-        for (let item in data) {
-            if (item !== "total" && item !== "") {
-                //color.push({state: item, value: data[item].percantage})
-                color[item] = data[item].percantage;
-                if (min > data[item].percantage) {
-                    min = data[item].percantage;
-                }
-                if (max < data[item].percantage) {
-                    max = data[item].percantage;
-                }
-            }
-        }
-
-        let sqrtScale = d3.scaleSqrt().domain([min, max]).range([20, 80]);
-
-        svg_Map.selectAll('path')
-            .attr("opacity", function (d) {
-                //return data[d.properties.name].percantage / 100.0; // linear
-                return sqrtScale(data[d.properties.name].percantage) / 100;
-            })
-            .attr("fill", function (d) {
-                if (data[d.properties.name].party.name === party) {
-                    return colors[data[d.properties.name].party.name];
-                } else {
-                    return "white"
-                }
-            });
-    }
-
-}
-
-function hexToRGB(hex, alpha) {
-    var r = parseInt(hex.slice(1, 3), 16),
-        g = parseInt(hex.slice(3, 5), 16),
-        b = parseInt(hex.slice(5, 7), 16);
-
-    return "rgba(" + r + ", " + g + ", " + b + ", " + alpha + ")";
-}
-

@@ -32,27 +32,21 @@ function init() {
             return toBeAdded
         });
         console.log(counties);
+
         counties = counties.map(function (value) {
-            //
-            value.Gebietsname = value.Gebietsname.replace(" - ", "-")
-            value.Gebietsname = value.Gebietsname.replace(" Stadt", "-Stadt")
-            value.Gebietsname = value.Gebietsname.replace(" Land", "-Land")
+            value.Gebietsname = value.Gebietsname.replace(" - ", "-");
+            value.Gebietsname = value.Gebietsname.replace(" Stadt", "");
+            value.Gebietsname = value.Gebietsname.replace("-Stadt", "");
+            value.Gebietsname = value.Gebietsname.replace(" Land", "-Land");
+            value.Gebietsname = value.Gebietsname.replace(" Umgebung", "-Umgebung");
+            value.Gebietsname = value.Gebietsname.replace("Innere", "Innere Stadt");
+            let checkViennaBezirke = value.Gebietsname.split(',');
+            value.Gebietsname = checkViennaBezirke[checkViennaBezirke.length -1];
+
             return value
-
         });
-
-        function myFunction(num) {
-            return num * 10;
-        }
-
-
-        console.log(counties);
-        console.log(nationalResults);
-
-
-        choroplethCountry(firstPassThePoll(counties));
-        //updatePie("total");
-
+        let localWinner = firstPassThePoll(counties)
+        choroplethCountry(localWinner);
     });
 }
 

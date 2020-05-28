@@ -12,6 +12,9 @@ This project was created for the Course [Informationsvisualisierung](https://www
 ### Disclaimer
 We are clear that the districts of Austria variy wide in size but we can not change this...
 
+### TODOs
+* Multiple Years
+* add Wahlkarten
 
 ## Data Cleaning & Interactive Bokeh Charts
 Visualization [here](https://ippon1.github.io/Visualize_of_Austrian_Election_Results/Data_Cleaning)
@@ -77,7 +80,7 @@ Mind that we are using d3.v5, which is no longer compatible to the more wide-spr
 
 ### TODOs
 * Keep the same order of parties (my idea)
-* File loading is not done via d3.csv but XMLHttPRequests. Data preprocessing is a bit complicated. 
+* File loading is not done via d3.csv but XMLHttPRequests. Data preprocessing is a bit complicated.
 * When linking the choropleth map with the pie chart, the pie chart is removed and redrawn for every hover operation instead of being updated.
 
 ## Static Charts with Python
