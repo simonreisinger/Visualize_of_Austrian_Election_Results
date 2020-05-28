@@ -45,8 +45,9 @@ function init() {
 
             return value
         });
-        let localWinner = firstPassThePoll(counties)
+        let localWinner = firstPassThePoll(counties);
         choropleth(localWinner);
+        updatePieChart(localWinner);
     });
 }
 
@@ -68,6 +69,8 @@ function firstPassThePoll(dataset) {
     }
     return mostVotes
 }
+
+function claculate()
 
 function updatePie(selectedState) {
     //createPie(election_data[selectedState]);

@@ -41,7 +41,7 @@ function choropleth(used_data) {
             .attr("stroke", "black")
             .attr("fill", function (d) {
                 let county_map = d.properties.name;
-                var county_dataset = county_map.replace("(Stadt)", "-Stadt");
+                let county_dataset = county_map.replace("(Stadt)", "-Stadt");
                 county_dataset = county_dataset.replace(" Stadt", "");
                 county_dataset = county_dataset.replace("-Stadt", "");
                 county_dataset = county_dataset.replace("(Land)", "-Land");
@@ -49,8 +49,9 @@ function choropleth(used_data) {
                 county_dataset = county_dataset.replace(" Umgebung", "-Umgebung");
                 county_dataset = county_dataset.replace("Innere", "Innere Stadt");
                 county_dataset = county_dataset.replace("Klagenfurt am Wörthersee", "Klagenfurt");
-                console.log(county_dataset);
-                if (county_dataset === "Wien-Stadt"){ console.log("WIEEEN!");return "white"; }
+                if (county_dataset === "Wien-Stadt") {
+                    return "white";
+                }
                 return colors[data[county_dataset].party];
             })
     });
