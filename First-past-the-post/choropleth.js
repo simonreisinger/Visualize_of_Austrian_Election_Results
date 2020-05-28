@@ -10,7 +10,8 @@ let path = null;
 let URL = "./data/gemeinden_995_geo.json";
 
 
-    function choropleth(used_data) {
+function choropleth(used_data) {
+
     data = used_data;
     // GeoJSON was retrieved from here: https://wahlen.strategieanalysen.at/geojson/
     // D3 choropleth examples: https://www.d3-graph-gallery.com/choropleth

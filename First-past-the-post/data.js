@@ -7,7 +7,8 @@ let colors = {
     "GRÜNE": "#88B626",
     "SONST.": "#222"
 };
-let election_data = null;
+var counties = null;
+var nationalResults = null;
 
 // In this file, all the data handling should be done, for example:
 // * loading the CSV file
@@ -18,31 +19,47 @@ let election_data = null;
 
 function init() {
     let file_location = "./data/NRW19.csv";
-    d3.dsv(";", file_location).then(function(data) {
-        //console.log(data);
-        firstPassThePoll();
-        choropleth(firstPassThePoll());
-        updatePie("total");
+    d3.dsv(";", file_location).then(function (_data) {
+        let data = _data;
+
+        nationalResults = data.filter(function (value, index) {
+            return value.GKZ.slice(-5) === "00000";
+        });
+        counties = data.filter(function (value, index) {
+            // Ist Bundesland
+            let toBeAdded = value.GKZ.slice(-2) === "00";
+            toBeAdded = toBeAdded && value.GKZ.slice(-4) !== "0000";
+            toBeAdded = toBeAdded && /^\d+$/.test(value.GKZ.substring(1));
+            return toBeAdded
+        });
+        console.log(counties);
+        console.log(nationalResults);
+
+
+        choropleth(firstPassThePoll(counties));
+        //updatePie("total");
 
     });
 }
 
-function firstPassThePoll() {
+function firstPassThePoll(dataset) {
     let mostVotes = [];
-    /*for (let selectedState in election_data) {
-        mostVotes[selectedState] = {party: "", percantage: 0};
-        for (let property in election_data[selectedState]) {
-            if (election_data[selectedState].hasOwnProperty(property)) {
-                currentPartyPerc = parseFloat(election_data[selectedState][property].percantage);
-                if (currentPartyPerc >= mostVotes[selectedState].percantage) {
-                    mostVotes[selectedState] = {
-                        party: election_data[selectedState][property],
-                        percantage: currentPartyPerc
+    for (let selectedState in dataset) {
+        mostVotes[dataset[selectedState].Gebietsname] = {party: "", votes: 0};
+        for (let parties in colors) {
+            if (parties !== "SONST.") {
+                let currentPartyVotes = parseInt(dataset[selectedState][parties].replace('.', ''));
+                if (currentPartyVotes >= mostVotes[dataset[selectedState].Gebietsname].votes) {
+                    mostVotes[dataset[selectedState].Gebietsname] = {
+                        party: parties,
+                        votes: currentPartyVotes
                     }
                 }
             }
         }
-    }*/
+
+    }
+
     return mostVotes
 }
 
