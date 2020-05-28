@@ -46,7 +46,7 @@ function init() {
             return value
         });
         let localWinner = firstPassThePoll(counties)
-        choroplethCountry(localWinner);
+        choropleth(localWinner);
     });
 }
 

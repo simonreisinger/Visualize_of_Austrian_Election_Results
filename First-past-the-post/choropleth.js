@@ -3,14 +3,16 @@ let choroHeight = 400;
 let geoJson = null;
 let choroG = null;
 let data = null;
-let map = null;
 let svg_Map = null;
-let projection = null;
 let path = null;
+//let URL = "./data/bezirke_95_geo.json";
 let URL = "./data/bezirke_wien_gross_geo.json";
 
+let map = null;
+let projection = null;
 
-function choroplethCapital(used_data) {
+
+function choropleth(used_data) {
 
     data = used_data;
     // GeoJSON was retrieved from here: https://wahlen.strategieanalysen.at/geojson/
@@ -27,7 +29,7 @@ function choroplethCapital(used_data) {
         path = d3.geoPath()
             .projection(projection);
 
-        svg_Map = d3.select("#svg_choropleth_capital")
+        svg_Map = d3.select("#svg_choropleth")
             .attr("width", choroWidth)
             .attr("height", choroHeight);
 
@@ -38,8 +40,18 @@ function choroplethCapital(used_data) {
             .attr('d', path)
             .attr("stroke", "black")
             .attr("fill", function (d) {
-                //return currentColor;
-                return "white"
+                let county_map = d.properties.name;
+                var county_dataset = county_map.replace("(Stadt)", "-Stadt");
+                county_dataset = county_dataset.replace(" Stadt", "");
+                county_dataset = county_dataset.replace("-Stadt", "");
+                county_dataset = county_dataset.replace("(Land)", "-Land");
+                county_dataset = county_dataset.replace(" Land", "-Land");
+                county_dataset = county_dataset.replace(" Umgebung", "-Umgebung");
+                county_dataset = county_dataset.replace("Innere", "Innere Stadt");
+                county_dataset = county_dataset.replace("Klagenfurt am Wörthersee", "Klagenfurt");
+                console.log(county_dataset);
+                if (county_dataset === "Wien-Stadt"){ console.log("WIEEEN!");return "white"; }
+                return colors[data[county_dataset].party];
             })
     });
 }
