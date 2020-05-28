@@ -10,7 +10,7 @@ let path = null;
 let URL = "./data/bezirke_95_geo.json";
 
 
-function choropleth(used_data) {
+function choroplethCountry(used_data) {
 
     data = used_data;
     // GeoJSON was retrieved from here: https://wahlen.strategieanalysen.at/geojson/
@@ -27,7 +27,7 @@ function choropleth(used_data) {
         path = d3.geoPath()
             .projection(projection);
 
-        svg_Map = d3.select("#svg_choropleth")
+        svg_Map = d3.select("#svg_choropleth_country")
             .attr("width", choroWidth)
             .attr("height", choroHeight);
 
@@ -62,7 +62,7 @@ function choropleth(used_data) {
 
 }
 
-function updateChoropleth(party) {
+function updateChoroplethCountry(party) {
     if (party === "allParties") {
         svg_Map.selectAll('path')
             .attr("opacity", 1.0)

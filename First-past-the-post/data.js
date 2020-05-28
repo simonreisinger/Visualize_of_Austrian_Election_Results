@@ -50,7 +50,7 @@ function init() {
         console.log(nationalResults);
 
 
-        choropleth(firstPassThePoll(counties));
+        choroplethCountry(firstPassThePoll(counties));
         //updatePie("total");
 
     });
@@ -71,9 +71,7 @@ function firstPassThePoll(dataset) {
                 }
             }
         }
-
     }
-
     return mostVotes
 }
 
