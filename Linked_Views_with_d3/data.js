@@ -19,8 +19,6 @@ let election_data = null;
 function init() {
     let file_location = "./NRW2019_Bundeslaender.csv";
     d3.csv(file_location).then(function (data) {
-        console.log(data);
-
         let parties = Object.keys(data[0]);
 
         let electionData = {};
@@ -43,7 +41,6 @@ function init() {
         for (let i = 0; i < data.length; i++) {
             //split by separator (,) and get the columns
             let cols = data[i];
-            console.log(cols);
 
             //move column by column
             let currentState = "";
@@ -66,8 +63,6 @@ function init() {
                 }
             }
         }
-
-        console.log(electionData);
 
         for (let value of Object.keys(colors)) {
         //for (var i = 2; i < Object.keys(colors).length; i++) {
