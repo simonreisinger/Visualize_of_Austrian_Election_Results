@@ -83,7 +83,7 @@ function firstPassThePoll() {
         mostVotes[selectedState] = {party: "", percantage: 0};
         for (let property in election_data[selectedState]) {
             if (election_data[selectedState].hasOwnProperty(property)) {
-                currentPartyPerc = parseFloat(election_data[selectedState][property].percantage);
+                var currentPartyPerc = parseFloat(election_data[selectedState][property].percantage);
                 if (currentPartyPerc >= mostVotes[selectedState].percantage) {
                     mostVotes[selectedState] = {
                         party: election_data[selectedState][property],
