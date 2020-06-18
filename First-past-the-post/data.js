@@ -66,6 +66,11 @@ function init() {
         }
 
         updatePieChart(selectedParties, "#svg_pie_pr");
+
+        // Tooltip
+        tooltip = d3.select("body")
+            .append("div")
+            .attr("class", "tooltip");
     });
 }
 

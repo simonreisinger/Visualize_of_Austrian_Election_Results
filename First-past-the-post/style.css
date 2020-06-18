@@ -14,3 +14,13 @@ body {
     text-align: center;
 }
 
+div.tooltip {
+    position: absolute;
+    padding: 0.5em;
+    background-color: #000000AA;
+    color: white;
+    border: 1px;
+    border-radius: 2px;
+    opacity: 0;
+    pointer-events: none;
+}

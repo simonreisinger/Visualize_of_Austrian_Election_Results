@@ -1,7 +1,10 @@
 let choroWidth = 700;
 let choroHeight = 400;
 let geoJson = null;
-let choroG = null;
+
+
+let choroPath = null;
+
 let data = null;
 let svg_Map = null;
 let path = null;
@@ -9,7 +12,6 @@ let path = null;
 let URL = "./data/bezirke_wien_gross_geo.json";
 
 let map = null;
-let projection = null;
 
 
 function choropleth(used_data) {
@@ -20,21 +22,25 @@ function choropleth(used_data) {
     map = d3.json(URL).then(function (_geoJson) {
         geoJson = _geoJson;
         for (let item in geoJson.features) {
-            geoJson.features[item].properties.name = geoJson.features[item].properties.name.replace("oe", "ö").replace("ue", "ü").replace("ue", "ü");
+            geoJson.features[item].properties.name = geoJson.features[item].properties.name
+                .replace("oe", "ö")
+                .replace("ue", "ü")
+                .replace("ue", "ü"); // TODO: remove this line?
         }
 
-        projection = d3.geoMercator()
+        let projection = d3.geoMercator()
             .fitExtent([[0, 0], [choroWidth, choroHeight]], geoJson);
 
-        path = d3.geoPath()
+        let path = d3.geoPath()
             .projection(projection);
 
-        svg_Map = d3.select("#svg_choropleth")
+        let svg = d3.select("#svg_choropleth")
             .attr("width", choroWidth)
             .attr("height", choroHeight);
 
-        choroG = svg_Map.append("g")
-            .selectAll('path')
+        let choroG = svg.append("g");
+
+        choroPath = choroG.selectAll('path')
             .data(geoJson.features)
             .enter().append('path')
             .attr('d', path)
@@ -53,6 +59,35 @@ function choropleth(used_data) {
                     return "white";
                 }
                 return colors[data[county_dataset].party];
+            })
+            .attr("id", d => d.properties.name);
+
+        // Events
+        choroPath
+            .on("mousemove", function(d) {
+                let bundeslandName = d.properties.name;
+                let x = d3.event.pageX;
+                let y = d3.event.pageY;
+
+
+                tooltip.html(bundeslandName);
+                tooltip.style("opacity", 1)
+                    .style("left", x + "px")
+                    .style("top", y + "px");
+
+                choroPath
+                    .style("opacity", function(d) {
+                        return bundeslandName === d.properties.name ? 1 : 0.3;
+                    })
+
+                // TODO
+                //let data = bundeslandData[bundeslandName];
+                //updatePie(data, bundeslandName);
+            })
+            .on("mouseout", function(d) {
+                tooltip.style("opacity", 0);
+                choroPath.style("opacity", 1);
+                //resetPie(); TODO
             })
     });
 }
