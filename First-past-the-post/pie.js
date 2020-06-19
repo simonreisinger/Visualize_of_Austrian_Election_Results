@@ -6,7 +6,7 @@ var radius = 1;
 var arcGenerator;
 
 function updatePieChart(data, id) {
-    var parties = Object.assign({}, Object.keys(colors))
+    var parties = Object.assign({}, Object.keys(_partyColors))
     //delete data.votes;
 
     // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
@@ -38,7 +38,7 @@ function updatePieChart(data, id) {
         .attr('d', arcGenerator
         )
         .attr('fill', function (d) {
-            return colors[d.data.key]
+            return _partyColors[d.data.key]
         })
         .attr("stroke", "black")
         .style("stroke-width", "0.5px")

@@ -1,26 +1,15 @@
 let choroWidth = 700;
 let choroHeight = 400;
-let geoJson = null;
-
 
 let choroPath = null;
 
-let data = null;
-let svg_Map = null;
 let path = null;
-//let URL = "./data/bezirke_95_geo.json";
-let URL = "./data/bezirke_wien_gross_geo.json";
 
-let map = null;
+function choropleth(data, jsonUrl) {
 
-
-function choropleth(used_data) {
-
-    data = used_data;
-    // GeoJSON was retrieved from here: https://wahlen.strategieanalysen.at/geojson/
+    // GeoJSON was retrieved from here: https://wahlen.strategieanalysen.at/geojson/ // TODO was it?
     // D3 choropleth examples: https://www.d3-graph-gallery.com/choropleth
-    map = d3.json(URL).then(function (_geoJson) {
-        geoJson = _geoJson;
+    d3.json(jsonUrl).then(function (geoJson) {
         for (let item in geoJson.features) {
             geoJson.features[item].properties.name = geoJson.features[item].properties.name
                 .replace("oe", "ö")
@@ -46,19 +35,14 @@ function choropleth(used_data) {
             .attr('d', path)
             .attr("stroke", "black")
             .attr("fill", function (d) {
-                let county_map = d.properties.name;
-                let county_dataset = county_map.replace("(Stadt)", "-Stadt");
-                county_dataset = county_dataset.replace(" Stadt", "");
-                county_dataset = county_dataset.replace("-Stadt", "");
-                county_dataset = county_dataset.replace("(Land)", "-Land");
-                county_dataset = county_dataset.replace(" Land", "-Land");
-                county_dataset = county_dataset.replace(" Umgebung", "-Umgebung");
-                county_dataset = county_dataset.replace("Innere", "Innere Stadt");
-                county_dataset = county_dataset.replace("Klagenfurt am Wörthersee", "Klagenfurt");
-                if (county_dataset === "Wien-Stadt") {
-                    return "white";
+                let iso = d.properties.iso;
+                let region = data[iso];
+                if (DEBUG && region == null) {
+                    console.error("region " + d.properties.name + "  with iso " + d.properties.iso + " was null");
+                    region = { mostVotedParty: "SONST." };
                 }
-                return colors[data[county_dataset].party];
+                let color = data_getPartyColor(region.mostVotedParty)
+                return color;
             })
             .attr("id", d => d.properties.name);
 
@@ -89,5 +73,9 @@ function choropleth(used_data) {
                 choroPath.style("opacity", 1);
                 //resetPie(); TODO
             })
-    });
+    }); // End of d3.json(jsonUrl).then(function (geoJson) {...});
+}
+
+function choropleth_create(data) {
+
 }
