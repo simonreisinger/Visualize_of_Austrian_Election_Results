@@ -1,24 +1,15 @@
 // D3 pie chart example: https://observablehq.com/@d3/pie-chart
-let width = 150;
-let height = 150;
-var svg_pie = [];
-var radius = 1;
-var arcGenerator;
+let svg_pie = {};
 
-function updatePieChart(data, id) {
-    var parties = Object.assign({}, Object.keys(_partyColors))
-    //delete data.votes;
-
+function updatePieChart(data, id, width=150, height=150) {
     // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
-    radius = Math.min(width, height) / 2;
+    let radius = Math.min(width, height) / 2;
 
-    if (!svg_pie[id]) {
-        svg_pie[id] = d3.select(id).append("svg").attr("viewBox", [-width / 2, -height / 2, width, height]);
-        svg_pie[id].append("g")
-            .attr("stroke", "white")
-            .selectAll("path")
-            .join("path");
-    }
+    svg_pie[id] = d3.select(id).append("svg").attr("viewBox", [-width / 2, -height / 2, width, height]);
+    svg_pie[id].append("g")
+        .attr("stroke", "white")
+        .selectAll("path")
+        .join("path");
 
     // Compute the position of each group on the pie:
     let pie = d3.pie().value(function (d) {
@@ -27,7 +18,7 @@ function updatePieChart(data, id) {
     let data_ready = pie(d3.entries(data));
 
     // shape helper to build arcs:
-    arcGenerator = d3.arc().innerRadius(0).outerRadius(radius);
+    let arcGenerator = d3.arc().innerRadius(0).outerRadius(radius);
 
     // Build the pie chart: Basically, each part of the pie is a path that we build using the arc function.
     svg_pie[id]

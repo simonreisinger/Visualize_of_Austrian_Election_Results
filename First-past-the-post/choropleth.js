@@ -1,11 +1,12 @@
-let choroWidth = 700;
-let choroHeight = 400;
+function choropleth(data, id, jsonUrl, rect={width:700, height:400, x: 0, y:0}) {
 
-let choroPath = null;
+    let svg = d3.select(id)
+        .attr("width", rect.width)
+        .attr("height", rect.height)
+        .attr("x", rect.x)
+        .attr("y", rect.y);
 
-let path = null;
-
-function choropleth(data, jsonUrl) {
+    let choroG = svg.append("g");
 
     // GeoJSON was retrieved from here: https://wahlen.strategieanalysen.at/geojson/ // TODO was it?
     // D3 choropleth examples: https://www.d3-graph-gallery.com/choropleth
@@ -18,18 +19,12 @@ function choropleth(data, jsonUrl) {
         }
 
         let projection = d3.geoMercator()
-            .fitExtent([[0, 0], [choroWidth, choroHeight]], geoJson);
+            .fitExtent([[0, 0], [rect.width, rect.height]], geoJson);
 
         let path = d3.geoPath()
             .projection(projection);
 
-        let svg = d3.select("#svg_choropleth")
-            .attr("width", choroWidth)
-            .attr("height", choroHeight);
-
-        let choroG = svg.append("g");
-
-        choroPath = choroG.selectAll('path')
+        let choroPath = choroG.selectAll('path')
             .data(geoJson.features)
             .enter().append('path')
             .attr('d', path)
@@ -38,7 +33,7 @@ function choropleth(data, jsonUrl) {
                 let iso = d.properties.iso;
                 let region = data[iso];
                 if (DEBUG && region == null) {
-                    console.error("region " + d.properties.name + "  with iso " + d.properties.iso + " was null");
+                    console.log("region " + d.properties.name + " with iso " + d.properties.iso + " was null");
                     region = { mostVotedParty: "SONST." };
                 }
                 let color = data_getPartyColor(region.mostVotedParty)
@@ -54,15 +49,31 @@ function choropleth(data, jsonUrl) {
                 let x = d3.event.pageX;
                 let y = d3.event.pageY;
 
-                let region = data[iso]
-                if (region != null) {
-                    
-                };
-
-                tooltip.html(name);
                 tooltip.style("opacity", 1)
                     .style("left", x + "px")
                     .style("top", y + "px");
+                tooltipTitle.html(name);
+
+                let region = data[iso];
+                if (region == null) {
+                    tooltipBars.style("opacity", 0);
+                    tooltipText.style("opacity", 1);
+                    tooltipText.html("No data available");
+                } else {
+                    tooltipBars.style("opacity", 1);
+                    tooltipText.style("opacity", 0);
+
+                    let y = d3.scaleLinear().range([barHeight, 0])
+                        .domain([0, d3.max(partyNames, d => region.partiesAll[d])]);
+                    tooltipBars//.data(region.partiesMain)
+                        .transition().duration(100)
+                        .attr("y", function(d) {
+                            return y(region.partiesMain[d]);
+                        })
+                        .attr("height", function(d) {
+                            return barHeight - y(region.partiesMain[d]);
+                        });
+                }
 
                 choroPath
                     .style("opacity", function(d) {
@@ -85,6 +96,8 @@ function choropleth(data, jsonUrl) {
                 }
             })
     }); // End of d3.json(jsonUrl).then(function (geoJson) {...});
+
+    return choroG;
 }
 
 function choropleth_create(data) {
