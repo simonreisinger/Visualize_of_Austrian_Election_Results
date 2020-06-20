@@ -41,18 +41,49 @@ function choropleth(used_data) {
             .attr("stroke", "black")
             .attr("fill", function (d) {
                 let county_map = d.properties.name;
-                let county_dataset = county_map.replace("(Stadt)", "-Stadt");
-                county_dataset = county_dataset.replace(" Stadt", "");
-                county_dataset = county_dataset.replace("-Stadt", "");
-                county_dataset = county_dataset.replace("(Land)", "-Land");
-                county_dataset = county_dataset.replace(" Land", "-Land");
-                county_dataset = county_dataset.replace(" Umgebung", "-Umgebung");
-                county_dataset = county_dataset.replace("Innere", "Innere Stadt");
-                county_dataset = county_dataset.replace("Klagenfurt am Wörthersee", "Klagenfurt");
+                let county_dataset = makeCountyStringsUniform(county_map);
                 if (county_dataset === "Wien-Stadt") {
                     return "white";
                 }
                 return colors[data[county_dataset].party];
-            })
+            });
     });
+}
+
+function updateChoropleth(eletiontype) {
+    if (eletiontype === "Nationalrat") {
+        svg_Map.selectAll('path')
+            .attr("fill", function (d) {
+                let county_map = d.properties.name;
+                let county_dataset = makeCountyStringsUniform(county_map);
+                if (county_dataset === "Wien-Stadt") {
+                    return "white";
+                }
+                return colors[data[county_dataset].party];
+            });
+    } else if (eletiontype === "Governemnt") {
+        svg_Map.selectAll('path')
+            .attr("fill", function (d) {
+                let county_map = d.properties.name;
+                let county_dataset = makeCountyStringsUniform(county_map);
+                console.log(county_dataset)
+                let currentParty = WahlkreiseDataSet[wahlkreisNach[removeNonASCIICharacters(county_dataset)].Wahlkreis].party
+                if (county_dataset === "Wien-Stadt") {
+                    return "white";
+                }
+                return colors[currentParty];
+            });
+    }
+}
+
+function makeCountyStringsUniform(county_map) {
+    let county_dataset = county_map.replace("(Stadt)", "-Stadt");
+    county_dataset = county_dataset.replace(" Stadt", "-Stadt");
+    county_dataset = county_dataset.replace("-Stadt", "");
+    county_dataset = county_dataset.replace("(Land)", "-Land");
+    county_dataset = county_dataset.replace(" Land", "-Land");
+    county_dataset = county_dataset.replace(" Umgebung", "-Umgebung");
+    county_dataset = county_dataset.replace("Innere", "Innere Stadt");
+    county_dataset = county_dataset.replace("Klagenfurt am Wörthersee", "Klagenfurt");
+    return county_dataset;
 }

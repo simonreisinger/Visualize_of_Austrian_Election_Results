@@ -45,6 +45,8 @@ function init() {
             return value
         });
         let localWinner = firstPassThePoll(counties);
+        WahlkreiseDataSet = firstPassThePollWahlkreis(counties)
+        console.log(WahlkreiseDataSet)
         choropleth(localWinner);
         let pieChartResults = firstPastThePostByParty(localWinner);
         updatePieChart(pieChartResults, "#svg_pie_fptp");
@@ -58,10 +60,7 @@ function init() {
 
         for (let p in colors) {
             if (p !== "SONST." && p !== "JETZT") {
-                console.log(parseFloat(nationalResults[p].replace(/\./g, "")))
-                console.log(parseFloat(nationalResults[p].replace(/\./g, ""))/sumOfValidVotes)
-                console.log(parseFloat(nationalResults[p].replace(/\./g, ""))/sumOfValidVotes * 183.0)
-                selectedParties[p] = Math.round(parseFloat(nationalResults[p].replace(/\./g, ""))/sumOfValidVotes * 183.0)
+                selectedParties[p] = Math.round(parseFloat(nationalResults[p].replace(/\./g, "")) / sumOfValidVotes * 183.0)
             }
         }
 
@@ -70,23 +69,61 @@ function init() {
 }
 
 function firstPassThePoll(dataset) {
+    console.log(dataset)
+    console.log("---------------")
     let mostVotes = [];
     for (let selectedState in dataset) {
         mostVotes[dataset[selectedState].Gebietsname] = {party: "", votes: 0};
+        console.log(dataset[selectedState].Gebietsname)
+        console.log(dataset[selectedState])
         for (let parties in colors) {
             if (parties !== "SONST.") {
                 let currentPartyVotes = parseInt(dataset[selectedState][parties].replace(/\./g, ""));
+                console.log(currentPartyVotes)
                 if (currentPartyVotes >= mostVotes[dataset[selectedState].Gebietsname].votes) {
                     mostVotes[dataset[selectedState].Gebietsname] = {
                         party: parties,
                         votes: currentPartyVotes
                     }
+                    console.log(mostVotes)
                 }
             }
         }
     }
     return mostVotes
 }
+
+var WahlkreiseDataSet = [];
+
+function firstPassThePollWahlkreis(dataset) {
+    let mostVotes = [];
+    for (let selectedState in dataset) {
+        let wahlkreis = wahlkreisNach[removeNonASCIICharacters(dataset[selectedState].Gebietsname)].Wahlkreis
+        if (mostVotes[wahlkreis] === null || mostVotes[wahlkreis] === undefined) {
+            mostVotes[wahlkreis] = {};
+            mostVotes[wahlkreis].Gebietsname = wahlkreis;
+            for (let parties in colors) {
+                if (parties !== "SONST.") {
+                    let currentPartyVotes = dataset[selectedState][parties].replace(/\./g, "");
+                    mostVotes[wahlkreis][parties] = currentPartyVotes
+                }
+            }
+        } else {
+            for (let parties in colors) {
+                if (parties !== "SONST.") {
+                    let currentPartyVotes = parseInt(dataset[selectedState][parties].replace(/\./g, ""));
+                    mostVotes[wahlkreis][parties] = (parseInt(mostVotes[wahlkreis][parties]) + currentPartyVotes).toString();
+                }
+            }
+        }
+    }
+    return firstPassThePoll(mostVotes)
+}
+
+function removeNonASCIICharacters(words) {
+    return words.replace("ß", "ss").replace("ü", "ue").replace("ö", "oe").replace("ä", "ae")
+}
+
 
 function firstPastThePostByParty(dataset) {
     let mostVotes = [];
