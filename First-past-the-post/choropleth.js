@@ -1,89 +1,92 @@
 let choroWidth = 700;
 let choroHeight = 400;
-let geoJson = null;
-let choroG = null;
-let data = null;
-let svg_Map = null;
+
+let choroPath = null;
+
 let path = null;
-//let URL = "./data/bezirke_95_geo.json";
-let URL = "./data/bezirke_wien_gross_geo.json";
 
-let map = null;
-let projection = null;
+function choropleth(data, jsonUrl) {
 
-
-function choropleth(used_data) {
-
-    data = used_data;
-    // GeoJSON was retrieved from here: https://wahlen.strategieanalysen.at/geojson/
+    // GeoJSON was retrieved from here: https://wahlen.strategieanalysen.at/geojson/ // TODO was it?
     // D3 choropleth examples: https://www.d3-graph-gallery.com/choropleth
-    map = d3.json(URL).then(function (_geoJson) {
-        geoJson = _geoJson;
+    d3.json(jsonUrl).then(function (geoJson) {
         for (let item in geoJson.features) {
-            geoJson.features[item].properties.name = geoJson.features[item].properties.name.replace("oe", "ö").replace("ue", "ü").replace("ue", "ü");
+            geoJson.features[item].properties.name = geoJson.features[item].properties.name
+                .replace("oe", "ö")
+                .replace("ue", "ü")
+                .replace("ue", "ü"); // TODO: remove this line?
         }
 
-        projection = d3.geoMercator()
+        let projection = d3.geoMercator()
             .fitExtent([[0, 0], [choroWidth, choroHeight]], geoJson);
 
-        path = d3.geoPath()
+        let path = d3.geoPath()
             .projection(projection);
 
-        svg_Map = d3.select("#svg_choropleth")
+        let svg = d3.select("#svg_choropleth")
             .attr("width", choroWidth)
             .attr("height", choroHeight);
 
-        choroG = svg_Map.append("g")
-            .selectAll('path')
+        let choroG = svg.append("g");
+
+        choroPath = choroG.selectAll('path')
             .data(geoJson.features)
             .enter().append('path')
             .attr('d', path)
             .attr("stroke", "black")
             .attr("fill", function (d) {
-                let county_map = d.properties.name;
-                let county_dataset = makeCountyStringsUniform(county_map);
-                if (county_dataset === "Wien-Stadt") {
-                    return "white";
+                let iso = d.properties.iso;
+                let region = data[iso];
+                if (DEBUG && region == null) {
+                    console.error("region " + d.properties.name + "  with iso " + d.properties.iso + " was null");
+                    region = {mostVotedParty: "SONST."};
                 }
-                return colors[data[county_dataset].party];
-            });
-    });
+                let color = data_getPartyColor(region.mostVotedParty)
+                return color;
+            })
+            .attr("id", d => d.properties.name);
+
+        // Events
+        choroPath
+            .on("mousemove", function (d) {
+                let iso = d.properties.iso;
+                let name = d.properties.name;
+                let x = d3.event.pageX;
+                let y = d3.event.pageY;
+
+                let region = data[iso]
+                if (region != null) {
+
+                }
+                ;
+
+                tooltip.html(name);
+                tooltip.style("opacity", 1)
+                    .style("left", x + "px")
+                    .style("top", y + "px");
+
+                choroPath
+                    .style("opacity", function (d) {
+                        return iso === d.properties.iso ? 1 : 0.3;
+                    })
+
+                // TODO
+                //let data = bundeslandData[bundeslandName];
+                //updatePie(data, bundeslandName);
+            })
+            .on("mouseout", function (d) {
+                tooltip.style("opacity", 0);
+                choroPath.style("opacity", 1);
+                //resetPie(); TODO
+            })
+            .on("click", (d) => {
+                if (DEBUG) {
+                    console.log(d.properties);
+                    console.log(data[d.properties.iso]);
+                }
+            })
+    }); // End of d3.json(jsonUrl).then(function (geoJson) {...});
 }
 
-function updateChoropleth(eletiontype) {
-    if (eletiontype === "Nationalrat") {
-        svg_Map.selectAll('path')
-            .attr("fill", function (d) {
-                let county_map = d.properties.name;
-                let county_dataset = makeCountyStringsUniform(county_map);
-                if (county_dataset === "Wien-Stadt") {
-                    return "white";
-                }
-                return colors[data[county_dataset].party];
-            });
-    } else if (eletiontype === "Governemnt") {
-        svg_Map.selectAll('path')
-            .attr("fill", function (d) {
-                let county_map = d.properties.name;
-                let county_dataset = makeCountyStringsUniform(county_map);
-                console.log(county_dataset)
-                let currentParty = WahlkreiseDataSet[wahlkreisNach[removeNonASCIICharacters(county_dataset)].Wahlkreis].party
-                if (county_dataset === "Wien-Stadt") {
-                    return "white";
-                }
-                return colors[currentParty];
-            });
-    }
-}
-
-function makeCountyStringsUniform(county_map) {
-    let county_dataset = county_map.replace("(Stadt)", "-Stadt");
-    county_dataset = county_dataset.replace(" Stadt", "-Stadt");
-    county_dataset = county_dataset.replace("-Stadt", "");
-    county_dataset = county_dataset.replace("(Land)", "-Land");
-    county_dataset = county_dataset.replace(" Land", "-Land");
-    county_dataset = county_dataset.replace(" Umgebung", "-Umgebung");
-    county_dataset = county_dataset.replace("Innere", "Innere Stadt");
-    county_dataset = county_dataset.replace("Klagenfurt am Wörthersee", "Klagenfurt");
-    return county_dataset;
+function choropleth_create(data) {
 }
