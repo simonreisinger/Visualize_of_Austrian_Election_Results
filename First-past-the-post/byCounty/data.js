@@ -185,11 +185,9 @@ function clacPieData() {
         if (wkm[WahlkreiseDataSet[currentWahlkreis].party] === undefined || wkm[WahlkreiseDataSet[currentWahlkreis].party] === null) {
             wkm[WahlkreiseDataSet[currentWahlkreis].party] = 0;
         }
-        console.log(currentWahlkreis)
         for (var currentBezirk in WahlkreiseMandate) {
             if (currentBezirk === currentWahlkreis) {
                 wkm[WahlkreiseDataSet[currentWahlkreis].party] += WahlkreiseMandate[currentBezirk].Mandate;
-                console.log( WahlkreiseMandate[currentBezirk].Mandate + wkm[WahlkreiseDataSet[currentWahlkreis].party])
                 break;
             }
         }
