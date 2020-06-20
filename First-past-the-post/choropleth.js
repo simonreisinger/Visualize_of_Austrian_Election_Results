@@ -49,19 +49,24 @@ function choropleth(data, jsonUrl) {
         // Events
         choroPath
             .on("mousemove", function(d) {
-                let bundeslandName = d.properties.name;
+                let iso = d.properties.iso;
+                let name = d.properties.name;
                 let x = d3.event.pageX;
                 let y = d3.event.pageY;
 
+                let region = data[iso]
+                if (region != null) {
+                    
+                };
 
-                tooltip.html(bundeslandName);
+                tooltip.html(name);
                 tooltip.style("opacity", 1)
                     .style("left", x + "px")
                     .style("top", y + "px");
 
                 choroPath
                     .style("opacity", function(d) {
-                        return bundeslandName === d.properties.name ? 1 : 0.3;
+                        return iso === d.properties.iso ? 1 : 0.3;
                     })
 
                 // TODO
@@ -72,6 +77,12 @@ function choropleth(data, jsonUrl) {
                 tooltip.style("opacity", 0);
                 choroPath.style("opacity", 1);
                 //resetPie(); TODO
+            })
+            .on("click", (d) => {
+                if (DEBUG) {
+                    console.log(d.properties);
+                    console.log(data[d.properties.iso]);
+                }
             })
     }); // End of d3.json(jsonUrl).then(function (geoJson) {...});
 }

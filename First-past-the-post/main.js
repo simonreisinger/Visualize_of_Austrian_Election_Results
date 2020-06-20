@@ -3,12 +3,12 @@ let DEBUG = true;
 let tooltip = null;
 
 function main() {
-    // Tooltip
-    tooltip = d3.select("body")
-        .append("div")
-        .attr("class", "tooltip");
-
     d3.dsv(";", "./data/NRW19.csv").then(data => {
+
+        // Tooltip
+        tooltip = d3.select("body")
+            .append("div")
+            .attr("class", "tooltip");
 
         data = data_initialize(data);
 
