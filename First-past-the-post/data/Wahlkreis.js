@@ -126,3 +126,4 @@ var wahlkreisNach = {
     "Floridsdorf": {Wahlkreis: "Wien Nord", Number: "9G", Mandate: 6},
     "Donaustadt": {Wahlkreis: "Wien Nord", Number: "9G", Mandate: 6}
 }
+

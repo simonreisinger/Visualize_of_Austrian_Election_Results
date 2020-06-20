@@ -12,8 +12,9 @@ var nationalResults = null;
 var tooltip = null;
 
 var WahlkreiseDataSet = null;
-var WahlkreiseMandate = [];
-var pieChartResults = null
+var weightedResult = [];
+var pieChartResults = null;
+
 
 // In this file, all the data handling should be done, for example:
 // * loading the CSV file
@@ -53,7 +54,7 @@ function init() {
         choropleth(localWinner);
         pieChartResults = firstPastThePostByParty(localWinner);
         WahlkreiseDataSet = firstPassThePollWahlkreis(counties)
-        WahlkreiseMandate = clacPieData()
+        weightedResult = clacPieData()
 
         updatePieChart(pieChartResults, "#svg_pie_fptp");
         let selectedParties = [];
@@ -123,6 +124,9 @@ function firstPastThePostByParty(dataset) {
     return selectedParties
 }
 
+
+var WahlkreiseMandate = [];
+
 function firstPassThePollWahlkreis(dataset) {
     let mostVotes = [];
     for (let selectedState in dataset) {
@@ -130,6 +134,9 @@ function firstPassThePollWahlkreis(dataset) {
         if (mostVotes[wahlkreis] === null || mostVotes[wahlkreis] === undefined) {
             mostVotes[wahlkreis] = {};
             mostVotes[wahlkreis].Gebietsname = wahlkreis;
+            WahlkreiseMandate[wahlkreis] = {}
+            WahlkreiseMandate[wahlkreis].Gebietsname = wahlkreis;
+            WahlkreiseMandate[wahlkreis].Mandate = wahlkreisNach[removeNonASCIICharacters(dataset[selectedState].Gebietsname)].Mandate;
             for (let parties in colors) {
                 if (parties !== "SONST.") {
                     let currentPartyVotes = dataset[selectedState][parties].replace(/\./g, "");
@@ -152,14 +159,22 @@ function removeNonASCIICharacters(words) {
     return words.replace("ß", "ss").replace("ü", "ue").replace("ö", "oe").replace("ä", "ae")
 }
 
-var currentMode = "Nationalrat"; // "Governemnt"
+var modes = ["Nationalrat", "Government"]; // TODO make this dynamicly
+var currentMode = "Nationalrat"; //
+
+
+$(document).on('change', 'select', function () {
+    console.log($(this).find('option:selected').text())
+    changeMode($(this).find('option:selected').text());
+});
 
 function changeMode(mode) {
+    currentMode = mode;
     updateChoropleth(mode);
     if (mode === "Nationalrat") {
         updatePieChart(pieChartResults, "#svg_pie_fptp");
     } else {
-        updatePieChart(WahlkreiseMandate, "#svg_pie_fptp");
+        updatePieChart(weightedResult, "#svg_pie_fptp");
     }
 
 }
@@ -170,9 +185,11 @@ function clacPieData() {
         if (wkm[WahlkreiseDataSet[currentWahlkreis].party] === undefined || wkm[WahlkreiseDataSet[currentWahlkreis].party] === null) {
             wkm[WahlkreiseDataSet[currentWahlkreis].party] = 0;
         }
-        for (var currentBezirk in wahlkreisNach) {
-            if (removeNonASCIICharacters(wahlkreisNach[currentBezirk].Wahlkreis) === currentWahlkreis) {
-                wkm[WahlkreiseDataSet[currentWahlkreis].party] += wahlkreisNach[currentBezirk].Mandate;
+        console.log(currentWahlkreis)
+        for (var currentBezirk in WahlkreiseMandate) {
+            if (currentBezirk === currentWahlkreis) {
+                wkm[WahlkreiseDataSet[currentWahlkreis].party] += WahlkreiseMandate[currentBezirk].Mandate;
+                console.log( WahlkreiseMandate[currentBezirk].Mandate + wkm[WahlkreiseDataSet[currentWahlkreis].party])
                 break;
             }
         }

@@ -68,7 +68,6 @@ function choropleth(used_data) {
                 let x = d3.event.pageX;
                 let y = d3.event.pageY;
 
-
                 tooltip.html(bundeslandName);
                 tooltip.style("opacity", 1)
                     .style("left", x + "px")
@@ -104,7 +103,7 @@ function updateChoropleth(eletiontype) {
                 }
                 return colors[data[county_dataset].party];
             });
-    } else if (eletiontype === "Governemnt") {
+    } else if (eletiontype === "Government") {
         choroG.selectAll('path')
             .attr("fill", function (d) {
                 let county_map = d.properties.name;
