@@ -1,3 +1,4 @@
+let partyNames = ["ÖVP", "SPÖ", "FPÖ", "NEOS", "JETZT", "GRÜNE", "SONST."];
 let _partyColors = {
     "ÖVP": "#63C3D0",
     "SPÖ": "#ce000c",
@@ -32,10 +33,11 @@ function data_initialize(data) {
     let municipalities = data.filter(function (value) {
         let gkz = value.GKZ;
         let gkz_lastTwo = gkz.substring(4);
-        return gkz_lastTwo != "99"
-            && gkz_lastTwo != "00";
+        return gkz_lastTwo !== "99"
+            && gkz_lastTwo !== "00";
     });
-    municipalities = data_preprocess(municipalities);
+    municipalities = data_preprocessRegions(municipalities);
+    let municipalitiesReduced = data_reduce(municipalities);
 
     // National results
     let nationalResults = data.filter(function (value) {
@@ -60,7 +62,13 @@ function data_initialize(data) {
             }
         }
 
-    return { counties, municipalities, pieChartResults, selectedParties };
+    return {
+        counties,
+        municipalities,
+        municipalitiesReduced,
+        pieChartResults,
+        selectedParties
+    };
 }
 
 function firstPassThePoll(dataset) {
@@ -132,27 +140,37 @@ function data_formatVotes(votes) {
     return votes === "" ? 0 : parseInt(votes.replace(".",""));
 }
 
-function data_preprocess(manyRegions) {
+function data_preprocessRegions(manyRegions) {
     let data = {};
     for (region of manyRegions) {
         let value = {};
-        value.ÖVP = data_formatVotes(region.ÖVP);
-        value.SPÖ = data_formatVotes(region.SPÖ);
-        value.FPÖ = data_formatVotes(region.FPÖ);
-        value.NEOS = data_formatVotes(region.NEOS);
-        value.JETZT = data_formatVotes(region.JETZT);
-        value.GRÜNE = data_formatVotes(region.GRÜNE);
-        value.KPÖ = data_formatVotes(region.KPÖ);
-        value.WANDL = data_formatVotes(region.WANDL);
-        value.BZÖ = data_formatVotes(region.BZÖ);
-        value.BIER = data_formatVotes(region.BIER);
-        value.CPÖ = data_formatVotes(region.CPÖ);
-        value.GILT = data_formatVotes(region.GILT);
-        value.SLP = data_formatVotes(region.SLP);
-        value.invalid = data_formatVotes(region.Ungültige);
 
-        value.mostVotedParty = Object.keys(value).reduce(function (keyA, keyB) {
-            return value[keyA] > value[keyB] ? keyA : keyB;
+        let partiesMain = {};
+        partiesMain.ÖVP = data_formatVotes(region.ÖVP);
+        partiesMain.SPÖ = data_formatVotes(region.SPÖ);
+        partiesMain.FPÖ = data_formatVotes(region.FPÖ);
+        partiesMain.NEOS = data_formatVotes(region.NEOS);
+        partiesMain.JETZT = data_formatVotes(region.JETZT);
+        partiesMain.GRÜNE = data_formatVotes(region.GRÜNE);
+
+        let partiesOther = {};
+        partiesOther.KPÖ = data_formatVotes(region.KPÖ);
+        partiesOther.WANDL = data_formatVotes(region.WANDL);
+        partiesOther.BZÖ = data_formatVotes(region.BZÖ);
+        partiesOther.BIER = data_formatVotes(region.BIER);
+        partiesOther.CPÖ = data_formatVotes(region.CPÖ);
+        partiesOther.GILT = data_formatVotes(region.GILT);
+        partiesOther.SLP = data_formatVotes(region.SLP);
+        partiesOther.invalid = data_formatVotes(region["Ungültige"]);
+
+        value.partiesAll = Object.assign({}, partiesMain, partiesOther);
+
+        partiesMain["SONST."] = 0;
+        for (let key in partiesOther) partiesMain["SONST."] += partiesOther[key];
+        value.partiesMain = partiesMain;
+
+        value.mostVotedParty = Object.keys(Object.assign(value.partiesAll)).reduce(function (keyA, keyB) {
+            return value.partiesAll[keyA] > value.partiesAll[keyB] ? keyA : keyB;
         });
 
         value.iso = parseInt(region.GKZ.substring(1));
@@ -166,4 +184,21 @@ function data_preprocess(manyRegions) {
     if (DEBUG) console.log(Object.keys(data).length + " values in data array");
 
     return data;
+}
+
+function data_reduce(manyPreprocessedRegions) {
+    let mostVotedParty = {};
+
+    for (let partyName of partyNames) {
+        mostVotedParty[partyName] = 0;
+    }
+
+    for (let iso in manyPreprocessedRegions) {
+        let preprocessedRegion = manyPreprocessedRegions[iso];
+        mostVotedParty[preprocessedRegion.mostVotedParty]++;
+    }
+
+    return {
+        mostVotedParty: mostVotedParty
+    };
 }

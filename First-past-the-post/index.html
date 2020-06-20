@@ -10,9 +10,10 @@
     <script src="https://d3js.org/d3-fetch.v1.min.js"></script>
     <script src="https://d3js.org/topojson.v1.min.js"></script>
 
+    <script src="./data.js"></script>
     <script src="./choropleth.js"></script>
     <script src="./pie.js"></script>
-    <script src="./data.js"></script>
+    <script src="./bar.js"></script>
     <script src="./main.js"></script>
 </head>
 <body>
@@ -21,17 +22,19 @@
 <p>Simon Reisinger(01426220), Lucas Melo Welkovic (01429462)</p>
 
 <div class="container">
-    <svg id="svg_choropleth"></svg>
+    <div>
+        <svg id="svg_choropleth_municipalities"></svg>
+    </div>
 </div>
 
 <div class="container">
-    <p id="FPTP" style="min-width: 300px">First Past The Post</p>
-    <svg id="svg_pie_fptp"></svg>
-</div>
+    <div id="FPTPdiv">
+        <p id="FPTP" style="min-width: 300px">First Past The Post</p>
+    </div>
 
-<div class="container">
-    <p id="PR" style="min-width: 300px">Proportional Representation</p>
-    <svg id="svg_pie_pr"></svg>
+    <div id="PRdiv">
+        <p id="PR" style="min-width: 300px">Proportional Representation</p>
+    </div>
 </div>
 
 

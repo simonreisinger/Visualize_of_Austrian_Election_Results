@@ -1,11 +1,12 @@
-let choroWidth = 700;
-let choroHeight = 400;
+function choropleth(data, id, jsonUrl, rect={width:700, height:400, x: 0, y:0}) {
 
-let choroPath = null;
+    let svg = d3.select(id)
+        .attr("width", rect.width)
+        .attr("height", rect.height)
+        .attr("x", rect.x)
+        .attr("y", rect.y);
 
-let path = null;
-
-function choropleth(data, jsonUrl) {
+    let choroG = svg.append("g");
 
     // GeoJSON was retrieved from here: https://wahlen.strategieanalysen.at/geojson/ // TODO was it?
     // D3 choropleth examples: https://www.d3-graph-gallery.com/choropleth
@@ -18,18 +19,12 @@ function choropleth(data, jsonUrl) {
         }
 
         let projection = d3.geoMercator()
-            .fitExtent([[0, 0], [choroWidth, choroHeight]], geoJson);
+            .fitExtent([[0, 0], [rect.width, rect.height]], geoJson);
 
         let path = d3.geoPath()
             .projection(projection);
 
-        let svg = d3.select("#svg_choropleth")
-            .attr("width", choroWidth)
-            .attr("height", choroHeight);
-
-        let choroG = svg.append("g");
-
-        choroPath = choroG.selectAll('path')
+        let choroPath = choroG.selectAll('path')
             .data(geoJson.features)
             .enter().append('path')
             .attr('d', path)
@@ -67,17 +62,22 @@ function choropleth(data, jsonUrl) {
                 let name = d.properties.name;
                 let x = d3.event.pageX;
                 let y = d3.event.pageY;
-
-                let region = data[iso]
-                if (region != null) {
-
-                }
-                ;
-
-                tooltip.html(name);
                 tooltip.style("opacity", 1)
                     .style("left", x + "px")
                     .style("top", y + "px");
+                tooltipTitle.html(name);
+
+                let region = data[iso];
+                if (region == null) {
+                    tooltipBars.style("opacity", 0);
+                    tooltipText.style("opacity", 1);
+                    tooltipText.html("No data available");
+                } else {
+                    tooltipBars.style("opacity", 1);
+                    tooltipText.style("opacity", 0);
+
+                    bar_update(tooltipBars, null, tooltipBarChartArea, region.partiesAll);
+                }
 
                 choroPath
                     .style("opacity", function (d) {
@@ -100,6 +100,8 @@ function choropleth(data, jsonUrl) {
                 }
             })
     }); // End of d3.json(jsonUrl).then(function (geoJson) {...});
+
+    return choroG;
 }
 
 function choropleth_create(data) {
