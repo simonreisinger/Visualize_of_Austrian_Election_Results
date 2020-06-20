@@ -4,9 +4,10 @@ let tooltip = null;
 let tooltipTitle = null;
 let tooltipText = null;
 let tooltipBars = null;
+let tooltipLabels = null;
 
-let mainBarChartArea = {width: 300, height: 150}
-let tooltipBarChartArea = {width: 200, height: 150}
+let mainBarChartArea = {width: 400, height: 150}
+let tooltipBarChartArea = {width: 300, height: 150}
 
 function main() {
     d3.dsv(";", "./data/NRW19.csv").then(data => {
@@ -32,10 +33,12 @@ function main() {
             .attr("class", "tooltip");
         tooltipTitle = tooltip.append("div");
         tooltipText = tooltip.append("div");
-        tooltipBars = bar(null,
+        let tooltipBarElements = bar(null,
             "#bar_tooltip",
             tooltip.append("div"),
             tooltipBarChartArea);
+        tooltipBars = tooltipBarElements.bars;
+        tooltipLabels = tooltipBarElements.labels;
 
     });
 }

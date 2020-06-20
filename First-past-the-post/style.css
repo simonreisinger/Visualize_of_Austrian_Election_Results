@@ -12,6 +12,10 @@ body {
     padding: 10px;
     border: 0px solid black;
     text-align: center;
+    /*
+    border-radius: 1em;
+    background-color: #ddd;
+     */
 }
 
 .container > div {
@@ -29,12 +33,29 @@ body {
     background-color: #000000AA;
     color: white;
     border: 1px;
-    border-radius: 2px;
+    border-radius: 0.25em;
     opacity: 0;
     pointer-events: none;
 }
 
-.rightBarText {
+.barText {
     text-anchor: end;
     /*font-weight: bold;*/
+}
+
+.barLabel {
+    text-anchor: middle;
+    vertical-align: bottom;
+
+    /* Source: https://css-tricks.com/methods-contrasting-text-backgrounds/ */
+    /*filter: invert(1) grayscale(1) contrast(9) blur(5px);*/
+    /*filter: invert(1);*/
+    /*fill: white;*/
+
+    fill: black;
+    /*mix-blend-mode: difference;*/
+}
+
+#tooltip svg text {
+    fill: white
 }
