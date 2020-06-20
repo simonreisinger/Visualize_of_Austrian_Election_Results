@@ -63,16 +63,7 @@ function choropleth(data, id, jsonUrl, rect={width:700, height:400, x: 0, y:0}) 
                     tooltipBars.style("opacity", 1);
                     tooltipText.style("opacity", 0);
 
-                    let y = d3.scaleLinear().range([barHeight, 0])
-                        .domain([0, d3.max(partyNames, d => region.partiesAll[d])]);
-                    tooltipBars//.data(region.partiesMain)
-                        .transition().duration(100)
-                        .attr("y", function(d) {
-                            return y(region.partiesMain[d]);
-                        })
-                        .attr("height", function(d) {
-                            return barHeight - y(region.partiesMain[d]);
-                        });
+                    bar_update(tooltipBars, null, tooltipBarChartArea, region.partiesAll);
                 }
 
                 choroPath

@@ -33,3 +33,8 @@ body {
     opacity: 0;
     pointer-events: none;
 }
+
+.rightBarText {
+    text-anchor: end;
+    /*font-weight: bold;*/
+}

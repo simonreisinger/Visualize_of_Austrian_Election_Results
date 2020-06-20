@@ -33,10 +33,11 @@ function data_initialize(data) {
     let municipalities = data.filter(function (value) {
         let gkz = value.GKZ;
         let gkz_lastTwo = gkz.substring(4);
-        return gkz_lastTwo != "99"
-            && gkz_lastTwo != "00";
+        return gkz_lastTwo !== "99"
+            && gkz_lastTwo !== "00";
     });
     municipalities = data_preprocessRegions(municipalities);
+    let municipalitiesReduced = data_reduce(municipalities);
 
     // National results
     let nationalResults = data.filter(function (value) {
@@ -64,7 +65,13 @@ function data_initialize(data) {
             }
         }
 
-    return { counties, municipalities, pieChartResults, selectedParties };
+    return {
+        counties,
+        municipalities,
+        municipalitiesReduced,
+        pieChartResults,
+        selectedParties
+    };
 }
 
 function firstPassThePoll(dataset) {
@@ -150,7 +157,7 @@ function data_preprocessRegions(manyRegions) {
         value.partiesAll = Object.assign({}, partiesMain, partiesOther);
 
         partiesMain["SONST."] = 0;
-        for (key in partiesOther) partiesMain["SONST."] += partiesOther[key];
+        for (let key in partiesOther) partiesMain["SONST."] += partiesOther[key];
         value.partiesMain = partiesMain;
 
         value.mostVotedParty = Object.keys(Object.assign(value.partiesAll)).reduce(function (keyA, keyB) {
@@ -170,3 +177,19 @@ function data_preprocessRegions(manyRegions) {
     return data;
 }
 
+function data_reduce(manyPreprocessedRegions) {
+    let mostVotedParty = {};
+
+    for (let partyName of partyNames) {
+        mostVotedParty[partyName] = 0;
+    }
+
+    for (let iso in manyPreprocessedRegions) {
+        let preprocessedRegion = manyPreprocessedRegions[iso];
+        mostVotedParty[preprocessedRegion.mostVotedParty]++;
+    }
+
+    return {
+        mostVotedParty: mostVotedParty
+    };
+}
