@@ -37,7 +37,7 @@ function choropleth(used_data) {
             .attr("width", choroWidth)
             .attr("height", choroHeight);
 
-         choroG = svg.append("g");
+        choroG = svg.append("g");
 
         choroPath = choroG.selectAll('path')
             .data(geoJson.features)
@@ -94,7 +94,6 @@ function choropleth(used_data) {
 }
 
 function updateChoropleth(eletiontype) {
-    console.log(eletiontype)
     if (eletiontype === "Nationalrat") {
         choroG.selectAll('path')
             .attr("fill", function (d) {
@@ -106,12 +105,10 @@ function updateChoropleth(eletiontype) {
                 return colors[data[county_dataset].party];
             });
     } else if (eletiontype === "Governemnt") {
-        console.log(eletiontype)
         choroG.selectAll('path')
             .attr("fill", function (d) {
                 let county_map = d.properties.name;
                 let county_dataset = makeCountyStringsUniform(county_map);
-                console.log(county_dataset)
                 let currentParty = WahlkreiseDataSet[wahlkreisNach[removeNonASCIICharacters(county_dataset)].Wahlkreis].party
                 if (county_dataset === "Wien-Stadt") {
                     return "white";
