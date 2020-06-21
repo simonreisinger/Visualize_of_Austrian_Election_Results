@@ -19,18 +19,18 @@ function data_getPartyColor(party) {
 function data_initialize(data) {
     // Counties
     let counties = data.filter(function (value) {
-        if (DEBUG && value.GKZ == undefined) {
-            console.log("GKZ was undefined");
-        }
-        let toBeAdded = value.GKZ.slice(-2) === "00";
-        toBeAdded = toBeAdded && value.GKZ.slice(-4) !== "0000";
-        toBeAdded = toBeAdded && /^\d+$/.test(value.GKZ.substring(1));
-        return toBeAdded
+        let gkz = value.GKZ;
+        let gkz_last2 = gkz.substring(4);
+        let gkz_last4 = gkz.substring(2);
+        let gkz_3rd = gkz.substring(2,3);
+
+        return gkz_last2 === "00" && gkz_last4 !== "0000" && /[0-9]/.test(gkz_3rd);
     });
-    counties = counties.map(function (value) {
-        value.Gebietsname = data_parseGebietsname(value.Gebietsname);
-        return value
-    });
+    if (DEBUG && Object.keys(counties).length !== 116) {
+        let len = Object.keys(counties).length;
+        console.error("counties length was " + len + " but it should be 116");
+    }
+    counties = data_preprocessRegions(counties);
 
     // Municipalities (Gemeinde)
     let municipalities = data.filter(function (value) {
@@ -40,7 +40,6 @@ function data_initialize(data) {
             && gkz_lastTwo !== "00";
     });
     municipalities = data_preprocessRegions(municipalities);
-    let municipalitiesReduced = data_reduce(municipalities);
 
     return {
         counties,
