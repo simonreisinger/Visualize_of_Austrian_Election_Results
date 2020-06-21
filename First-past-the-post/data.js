@@ -194,18 +194,24 @@ function data_getVotesTotal(region) {
 
 function data_reduce(manyPreprocessedRegions) {
     let mostVotedParty = {};
+    let proportionalRepresentation = {};
 
     for (let partyName of partyNames) {
         mostVotedParty[partyName] = 0;
+        proportionalRepresentation[partyName] = 0;
     }
 
     for (let iso in manyPreprocessedRegions) {
         let preprocessedRegion = manyPreprocessedRegions[iso];
         mostVotedParty[preprocessedRegion.mostVotedParty]++;
+
+        // For each region (municipality or county or whatever)...
+        // compute proportional representation for this region and accumulate it
     }
 
     return {
-        mostVotedParty: mostVotedParty
+        mostVotedParty,
+        proportionalRepresentation
     };
 }
 
