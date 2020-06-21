@@ -10,6 +10,9 @@ let mainBarChartArea = {width: 400, height: 150}
 let tooltipBarChartArea = {width: 300, height: 150}
 
 function main() {
+
+    let yearDataMap = {};
+
     d3.dsv(";", "./data/NRW19.csv").then(data => {
 
         data = data_initialize(data);
@@ -40,6 +43,39 @@ function main() {
         tooltipBars = tooltipBarElements.bars;
         tooltipLabels = tooltipBarElements.labels;
 
+        let year = "2019";
+        main_addYear(year);
+        yearDataMap[year] = data;
+
+        let yearSelect = d3.select("#year_select");
+        yearSelect.on("change", function(d) {
+            let selectedYear = yearSelect.node().value;
+            main_updateData(yearDataMap[selectedYear]);
+        });
+
+        d3.dsv(";", "./data/NRW17.csv").then(data => {
+            let year = "2017";
+            main_addYear(year);
+            yearDataMap[year] = data;
+
+            d3.dsv(";", "./data/NRW13.csv").then(data => {
+                let year = "2013";
+                main_addYear(year);
+                yearDataMap[year] = data;
+            });
+        })
     });
+
+
 }
 main();
+
+function main_addYear(year) {
+    d3.select("#year_select").append("option")
+        .attr("value", year)
+        .html(year);
+}
+
+function main_updateData(newData) {
+    console.log("Your data has changed!")
+}

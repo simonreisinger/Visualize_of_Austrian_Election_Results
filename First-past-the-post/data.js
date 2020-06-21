@@ -137,7 +137,7 @@ function data_parseGebietsname(gebietsname) {
 }
 
 function data_formatVotes(votes) {
-    return votes === "" ? 0 : parseInt(votes.replace(".",""));
+    return votes == undefined ? null : (votes === "" ? 0 : parseInt(votes.replace(".","")));
 }
 
 function data_preprocessRegions(manyRegions) {
