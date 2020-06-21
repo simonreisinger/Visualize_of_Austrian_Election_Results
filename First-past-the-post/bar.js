@@ -1,10 +1,10 @@
-let bars = {};
+let bar_estimatedLabelHeight = 10;
 
 function bar(data, id, where, area={width: 200, height: 150}) {
 
     let x = d3.scaleBand()
         .range([0, area.width])
-        .padding(0.25)
+        .padding(0.15)
         .domain(partyNames.map(d => d));
 
     let svg = where.append("svg")
@@ -28,12 +28,10 @@ function bar(data, id, where, area={width: 200, height: 150}) {
         })
         .attr("width", d => x.bandwidth())
         .attr("y", function (d) {
-            if (data == null) return 0;
-            return y(data[d]);
+            return 0;
         })
         .attr("height", function (d) {
-            if (data == null) return area.height;
-            return area.height - y(data[d]);
+            return area.height;
         })
         .attr("fill", d => data_getPartyColor(d));
 
@@ -41,21 +39,54 @@ function bar(data, id, where, area={width: 200, height: 150}) {
         .attr("transform", "translate(0," + area.height + ")")
         .call(d3.axisBottom(x))
         .selectAll("text")
-        .attr("class", "rightBarText")
+        .attr("class", "barText")
         .attr("transform", "rotate(-45)");
 
-    return barG.selectAll(".bar");
+    let barLabels = barG.selectAll(".barLabel")
+        .data(partyNames)
+        .enter()
+        .append("text")
+        .attr("class", "barLabel")
+        .attr("x", function(d) {
+            return x(d) + (x.bandwidth() / 2);
+        })
+        .attr("width", d => x.bandwidth())
+        .attr("y", function(d) {
+            return area.height;
+        })
+    ;
+
+    if (data != null) {
+        bar_update(bars, barLabels, area, data);
+    }
+
+    return {
+        bars: barG.selectAll(".bar"),
+        labels : barG.selectAll(".barLabel")
+    };
 }
 
 function bar_update(bars, labels, area, newData) {
     let y = bar_createY(newData, area);
-    tooltipBars//.data(region.partiesMain)
-        .transition().duration(100)
+
+    bars.transition().duration(100)
         .attr("y", function(d) {
             return y(newData[d]);
         })
         .attr("height", function(d) {
             return area.height - y(newData[d]);
+        });
+
+    labels.html(function(d) {
+        return newData[d];
+    });
+
+    labels.transition().duration(100)
+        .attr("y", function(d) {
+            let ypos = y(newData[d]) - 5;
+            if (ypos - bar_estimatedLabelHeight < 0)
+                ypos = bar_estimatedLabelHeight + 5;
+            return ypos;
         });
 }
 
