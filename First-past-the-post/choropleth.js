@@ -1,6 +1,6 @@
 let choropleth_updateFuns = {};
 
-function choropleth(data, id, jsonUrl, rect={width:700, height:400, x: 0, y:0}) {
+function choropleth(data, year, id, jsonUrl, rect={width:700, height:400, x: 0, y:0}) {
 
     let svg = d3.select(id)
         .attr("width", rect.width)
@@ -33,12 +33,13 @@ function choropleth(data, id, jsonUrl, rect={width:700, height:400, x: 0, y:0}) 
             .attr("stroke", "black");
         //.attr("fill", d => choropleth_computeRegionColor(data_processIso(d.properties.iso)));
         //.attr("id", d => d.properties.name);
-        choropleth_updatePath(choroPath, data);
+        choropleth_updatePath(choroPath, data, year);
 
         // Events
         choroPath
             .on("mousemove", function (d) {
-                let iso = data_processIso(d.properties.iso);
+                let iso_activePath = d.properties.iso;
+                let iso = data_processIso(d.properties.iso, year);
                 let name = d.properties.name;
                 let x = d3.event.pageX;
                 let y = d3.event.pageY;
@@ -63,7 +64,7 @@ function choropleth(data, id, jsonUrl, rect={width:700, height:400, x: 0, y:0}) 
 
                 choroPath
                     .style("opacity", function (d) {
-                        return iso === d.properties.iso ? 1 : 0.3;
+                        return iso_activePath === d.properties.iso ? 1 : 0.3;
                     })
 
                 // TODO
@@ -82,17 +83,17 @@ function choropleth(data, id, jsonUrl, rect={width:700, height:400, x: 0, y:0}) 
                 }
             })
 
-        choropleth_updateFuns[id] = newData => choropleth_updatePath(choroPath, newData);
+        choropleth_updateFuns[id] = newData => choropleth_updatePath(choroPath, newData, year);
     }); // End of d3.json(jsonUrl).then(function (geoJson) {...});
 }
 
-function choropleth_updatePath(choroPath, newData) {
-    choroPath.attr("fill", d => choropleth_computeRegionColor(d, newData));
+function choropleth_updatePath(choroPath, newData, year) {
+    choroPath.attr("fill", d => choropleth_computeRegionColor(d, newData, year));
 }
 
-function choropleth_computeRegionColor(path, data) {
+function choropleth_computeRegionColor(path, data, year) {
     let iso = path.properties.iso;
-    iso = data_processIso(iso);
+    iso = data_processIso(iso, year);
     let region = data[iso];
     if (DEBUG && region == null) {
         console.error("region " + path.properties.name + "  with iso " + path.properties.iso + " was null");

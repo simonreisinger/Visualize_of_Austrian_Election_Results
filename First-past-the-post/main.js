@@ -15,9 +15,12 @@ function main() {
 
     d3.dsv(";", "./data/NRW19.csv").then(data => {
 
+        let year = "2019";
+
         data = data_initialize(data);
 
         choropleth(data.municipalities,
+            year,
             "#svg_choropleth_municipalities",
             "./data/gemeinden_wien_bezirke_gross_geo.json");
 
@@ -45,7 +48,6 @@ function main() {
         tooltipBars = tooltipBarElements.bars;
         tooltipLabels = tooltipBarElements.labels;
 
-        let year = "2019";
         main_addYear(year);
         yearDataMap[year] = data;
 
@@ -53,7 +55,7 @@ function main() {
         yearSelect.on("change", function(d) {
             let selectedYear = yearSelect.node().value;
             let data = yearDataMap[selectedYear];
-            main_updateData(data);
+            main_updateData(data, selectedYear);
         });
 
         d3.dsv(";", "./data/NRW17.csv").then(data => {
@@ -78,9 +80,9 @@ function main_addYear(year) {
         .html(year);
 }
 
-function main_updateData(newData) {
+function main_updateData(newData, year) {
     newData = newData.municipalities; // TODO change to counties
-    choropleth_updateFuns["#svg_choropleth_municipalities"](newData);
+    choropleth_updateFuns["#svg_choropleth_municipalities"](newData, year);
 }
 
 main();
