@@ -10,7 +10,7 @@ body {
     vertical-align:middle;
     height: 500px;
     padding: 10px;
-    border: 0px solid black;
+    border: 0 solid black;
     text-align: center;
     /*
     border-radius: 1em;
@@ -23,7 +23,7 @@ body {
     vertical-align:middle;
     padding: 0;
     margin: 0;
-    border: 0px solid black;
+    border: 0 solid black;
     text-align: center;
 }
 
@@ -38,6 +38,15 @@ body {
     opacity: 0;
     pointer-events: none;
     overflow: hidden;
+}
+
+#tooltipTitle {
+
+}
+
+#tooltipText {
+    font-size: 0.75em;
+    margin-bottom: 1em;
 }
 
 .barText {
@@ -70,4 +79,35 @@ body {
 #top_bar > * {
     margin-left: 0.5em;
     margin-right: 0.5em;
+}
+
+#DODdiv {
+    display: block;
+    width: 100%;
+    text-anchor: middle;
+
+    background-color: #eee;
+    border-radius: 1em;
+}
+
+#DODdiv > div {
+    text-align: center;
+    margin: 0.5em;
+}
+
+#DODdiv button {
+    float: right;
+    cursor: pointer;
+    background-color: #ccc;
+    border: 2px solid #ccc;
+    border-radius: 0.5em;
+    font-family: monospace;
+    font-weight: bold;
+    padding: 0 0.5em 0 0.5em;
+}
+
+#DODdiv button:hover {
+    background-color: #0002;
+    border: 2px solid black;
+    padding: 0 0.5em 0 0.5em;
 }

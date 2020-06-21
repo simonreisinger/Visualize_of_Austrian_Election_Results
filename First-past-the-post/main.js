@@ -3,6 +3,8 @@ let DEBUG = true;
 let tooltip = null;
 let tooltipTitle = null;
 let tooltipText = null;
+let tooltipBarChartDiv = null;
+let tooltipBarChartDivSecondary = null;
 let tooltipBars = null;
 let tooltipLabels = null;
 
@@ -49,11 +51,13 @@ function main() {
             .append("div")
             .attr("id", "tooltip")
             .attr("class", "tooltip");
-        tooltipTitle = tooltip.append("div");
-        tooltipText = tooltip.append("div");
+        tooltipTitle = tooltip.append("div").attr("id", "tooltipTitle");
+        tooltipText = tooltip.append("div").attr("id", "tooltipText");
+        tooltipBarChartDiv = tooltip.append("div");
+        tooltipBarChartDivSecondary = tooltip.append("div").style("display", "none");
         let tooltipBarElements = bar(null,
             "#bar_tooltip",
-            tooltip.append("div"),
+            tooltipBarChartDiv,
             tooltipBarChartArea);
         tooltipBars = tooltipBarElements.bars;
         tooltipLabels = tooltipBarElements.labels;

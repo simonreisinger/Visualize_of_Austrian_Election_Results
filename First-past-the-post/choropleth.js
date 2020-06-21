@@ -1,4 +1,5 @@
 let choropleth_updateFuns = {};
+let choropleth_lastShownRegion = null;
 
 function choropleth(data, year, id, jsonUrl, rect={width:700, height:400, x: 0, y:0}) {
 
@@ -49,14 +50,39 @@ function choropleth_updatePath(choroPath, newData, year) {
         .on("mouseout", function (d) {
             tooltip.style("opacity", 0);
             choroPath.style("opacity", 1);
-            //choroPath.style("stroke-width", 1);
-            //resetPie(); TODO
+            choropleth_lastShownRegion = null;
         })
         .on("click", (d) => {
-            if (DEBUG) {
-                console.log(d.properties);
-                console.log(data[d.properties.iso]);
+            let name = d.properties.name;
+
+            /*let mainDiv = d3.select("#DODdiv")
+                .style("display", null);
+            mainDiv.html(""); // Empty div
+
+            let div = mainDiv.append("div");
+
+            let spanText = div.append("span").html(name + " (" + year + ")");
+
+            let button = div.append("button")
+                .attr("type", "button")
+                .on("click", d => mainDiv.style("display", "none"))
+                .html("X");*/
+
+            let iso = data_processIso(d.properties.iso);
+            let region = newData[iso];
+            if (region == null) {
+                iso = d.properties.iso;
+                if (DEBUG) console.error("unable to show details for " + year + " region " + name + " with iso " + iso + " because region data was null");
+                return;
             }
+
+            let area = tooltipBarChartArea;
+            area.width = 700;
+            bar_fromDict(region.partiesAll, tooltipBarChartDivSecondary, area);
+
+            tooltipBarChartDiv.style("display", "none");
+            tooltipBarChartDivSecondary.style("display", null);
+            tooltipText.style("opacity", 0);
         });
 }
 
@@ -65,7 +91,7 @@ function choropleth_computeRegionColor(path, data, year) {
     iso = data_processIso(iso, year);
     let region = data[iso];
     if (DEBUG && region == null) {
-        console.error(year + " region " + path.properties.name + "  with iso " + path.properties.iso + " was null");
+        console.error("unable to compute region color for " + year + " region " + path.properties.name + "  with iso " + path.properties.iso + " because region data was null");
         region = {mostVotedParty: "SONST."};
     }
     let color = data_getPartyColor(region.mostVotedParty)
@@ -73,29 +99,39 @@ function choropleth_computeRegionColor(path, data, year) {
 }
 
 function choropleth_mousemoveFun(choroPath, d, data, year) {
+
     let iso_activePath = d.properties.iso;
     let iso = data_processIso(d.properties.iso, year);
-    let name = d.properties.name;
+
     let x = d3.event.pageX;
     let y = d3.event.pageY;
     tooltip.style("opacity", 1)
         .style("left", x + "px")
         .style("top", y + "px");
-    tooltipTitle.html(name);
 
     let region = data[iso];
     if (region == null) {
         tooltipBars.style("opacity", 0);
         tooltipLabels.style("opacity", 0);
-        tooltipText.style("opacity", 1);
         tooltipText.html("No data available");
-    } else {
+    } else if (region !== choropleth_lastShownRegion) {
         tooltipBars.style("opacity", 1);
         tooltipLabels.style("opacity", 1);
-        tooltipText.style("opacity", 0);
+        tooltipText.html("Click for more details");
 
         bar_update(tooltipBars, tooltipLabels, tooltipBarChartArea, region.partiesMain);
+    } else {
+        return;
     }
+
+    choropleth_lastShownRegion = region;
+
+    let name = d.properties.name;
+    tooltipTitle.html(name);
+
+    tooltipBarChartDiv.style("display", null);
+    tooltipBarChartDivSecondary.style("display", "none").html("");
+    tooltipText.style("opacity", 1);
 
     choroPath
         /*.style("stroke-width", function (d2) {

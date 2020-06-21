@@ -4,9 +4,12 @@ let _partyColors = {
     "SPÖ": "#ce000c",
     "FPÖ": "#0056A2",
     "NEOS": "#E3257B",
-    //"JETZT": "#ADADAD",
     "GRÜNE": "#88B626",
-    "SONST.": "#222"
+    "SONST.": "#222",
+
+    // Others
+    "JETZT": "#ADADAD",
+    "FRANK": "#F8D323"
 };
 function data_getPartyColor(party) {
     if (party in _partyColors) {
