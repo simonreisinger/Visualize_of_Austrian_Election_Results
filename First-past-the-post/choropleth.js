@@ -1,3 +1,5 @@
+let choropleth_updateFuns = {};
+
 function choropleth(data, id, jsonUrl, rect={width:700, height:400, x: 0, y:0}) {
 
     let svg = d3.select(id)
@@ -28,25 +30,15 @@ function choropleth(data, id, jsonUrl, rect={width:700, height:400, x: 0, y:0}) 
             .data(geoJson.features)
             .enter().append('path')
             .attr('d', path)
-            .attr("stroke", "black")
-            .attr("fill", function (d) {
-
-                let iso = data_processIso(d.properties.iso);
-
-                let region = data[iso];
-                if (DEBUG && region == null) {
-                    console.error("region " + d.properties.name + "  with iso " + d.properties.iso + " was null");
-                    region = {mostVotedParty: "SONST."};
-                }
-                let color = data_getPartyColor(region.mostVotedParty)
-                return color;
-            })
-            .attr("id", d => d.properties.name);
+            .attr("stroke", "black");
+        //.attr("fill", d => choropleth_computeRegionColor(data_processIso(d.properties.iso)));
+        //.attr("id", d => d.properties.name);
+        choropleth_updatePath(choroPath, data);
 
         // Events
         choroPath
             .on("mousemove", function (d) {
-                let iso = d.properties.iso;
+                let iso = data_processIso(d.properties.iso);
                 let name = d.properties.name;
                 let x = d3.event.pageX;
                 let y = d3.event.pageY;
@@ -89,10 +81,23 @@ function choropleth(data, id, jsonUrl, rect={width:700, height:400, x: 0, y:0}) 
                     console.log(data[d.properties.iso]);
                 }
             })
-    }); // End of d3.json(jsonUrl).then(function (geoJson) {...});
 
-    return choroG;
+        choropleth_updateFuns[id] = newData => choropleth_updatePath(choroPath, newData);
+    }); // End of d3.json(jsonUrl).then(function (geoJson) {...});
 }
 
-function choropleth_create(data) {
+function choropleth_updatePath(choroPath, newData) {
+    choroPath.attr("fill", d => choropleth_computeRegionColor(d, newData));
+}
+
+function choropleth_computeRegionColor(path, data) {
+    let iso = path.properties.iso;
+    iso = data_processIso(iso);
+    let region = data[iso];
+    if (DEBUG && region == null) {
+        console.error("region " + path.properties.name + "  with iso " + path.properties.iso + " was null");
+        region = {mostVotedParty: "SONST."};
+    }
+    let color = data_getPartyColor(region.mostVotedParty)
+    return color;
 }

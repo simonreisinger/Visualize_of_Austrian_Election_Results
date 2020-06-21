@@ -17,7 +17,9 @@ function main() {
 
         data = data_initialize(data);
 
-        let choroG = choropleth(data.municipalities, "#svg_choropleth_municipalities", "./data/gemeinden_wien_bezirke_gross_geo.json");
+        choropleth(data.municipalities,
+            "#svg_choropleth_municipalities",
+            "./data/gemeinden_wien_bezirke_gross_geo.json");
 
         let barFptpG = bar(data.municipalitiesReduced.mostVotedParty,
             "#svg_bar_fptp_municipalities",
@@ -50,25 +52,25 @@ function main() {
         let yearSelect = d3.select("#year_select");
         yearSelect.on("change", function(d) {
             let selectedYear = yearSelect.node().value;
-            main_updateData(yearDataMap[selectedYear]);
+            let data = yearDataMap[selectedYear];
+            main_updateData(data);
         });
 
         d3.dsv(";", "./data/NRW17.csv").then(data => {
+            data = data_initialize(data);
             let year = "2017";
             main_addYear(year);
             yearDataMap[year] = data;
 
             d3.dsv(";", "./data/NRW13.csv").then(data => {
+                data = data_initialize(data);
                 let year = "2013";
                 main_addYear(year);
                 yearDataMap[year] = data;
             });
         })
     });
-
-
 }
-main();
 
 function main_addYear(year) {
     d3.select("#year_select").append("option")
@@ -77,5 +79,8 @@ function main_addYear(year) {
 }
 
 function main_updateData(newData) {
-    console.log("Your data has changed!")
+    newData = newData.municipalities; // TODO change to counties
+    choropleth_updateFuns["#svg_choropleth_municipalities"](newData);
 }
+
+main();

@@ -1,10 +1,10 @@
-let partyNames = ["ÖVP", "SPÖ", "FPÖ", "NEOS", "JETZT", "GRÜNE", "SONST."];
+let partyNames = ["ÖVP", "SPÖ", "FPÖ", "NEOS", "GRÜNE", "SONST."];
 let _partyColors = {
     "ÖVP": "#63C3D0",
     "SPÖ": "#ce000c",
     "FPÖ": "#0056A2",
     "NEOS": "#E3257B",
-    "JETZT": "#ADADAD",
+    //"JETZT": "#ADADAD",
     "GRÜNE": "#88B626",
     "SONST.": "#222"
 };
@@ -19,6 +19,9 @@ function data_getPartyColor(party) {
 function data_initialize(data) {
     // Counties
     let counties = data.filter(function (value) {
+        if (DEBUG && value.GKZ == undefined) {
+            console.log("GKZ was undefined");
+        }
         let toBeAdded = value.GKZ.slice(-2) === "00";
         toBeAdded = toBeAdded && value.GKZ.slice(-4) !== "0000";
         toBeAdded = toBeAdded && /^\d+$/.test(value.GKZ.substring(1));
@@ -39,35 +42,10 @@ function data_initialize(data) {
     municipalities = data_preprocessRegions(municipalities);
     let municipalitiesReduced = data_reduce(municipalities);
 
-    // National results
-    let nationalResults = data.filter(function (value) {
-        return value.GKZ.slice(-5) === "00000";
-    })[0];
-
-    let localWinner = firstPassThePoll(counties);
-    //choropleth(localWinner);
-    let pieChartResults = firstPastThePostByParty(localWinner);
-    let selectedParties = [];
-    let sumOfValidVotes = 0;
-    for (let p in _partyColors) {
-        if (p !== "SONST." && p !== "JETZT") {
-            sumOfValidVotes += parseInt(nationalResults[p].replace(/\./g, ""))
-        }
-    }
-
-    if (DEBUG)
-        for (let p in _partyColors) {
-            if (p !== "SONST." && p !== "JETZT") {
-                selectedParties[p] = Math.round(parseFloat(nationalResults[p].replace(/\./g, "")) / sumOfValidVotes * 183.0)
-            }
-        }
-
     return {
         counties,
         municipalities,
         municipalitiesReduced,
-        pieChartResults,
-        selectedParties
     };
 }
 
@@ -76,9 +54,13 @@ function firstPassThePoll(dataset) {
     console.log("---------------")
     let mostVotes = [];
     for (let selectedState in dataset) {
+        selectedState = parseInt(selectedState);
         mostVotes[dataset[selectedState].Gebietsname] = {party: "", votes: 0};
         for (let parties in _partyColors) {
             if (parties !== "SONST.") {
+                if (DEBUG && dataset[selectedState][parties] == undefined) {
+                    console.log("parseInt(dataset[selectedState][parties] was undefined");
+                }
                 let currentPartyVotes = parseInt(dataset[selectedState][parties].replace(/\./g, ""));
                 console.log(currentPartyVotes)
                 if (currentPartyVotes >= mostVotes[dataset[selectedState].Gebietsname].votes) {
@@ -137,7 +119,7 @@ function data_parseGebietsname(gebietsname) {
 }
 
 function data_formatVotes(votes) {
-    return votes == undefined ? null : (votes === "" ? 0 : parseInt(votes.replace(".","")));
+    return votes === undefined ? null : (votes === "" ? 0 : parseInt(votes.replace(".","")));
 }
 
 function data_preprocessRegions(manyRegions) {
@@ -150,10 +132,10 @@ function data_preprocessRegions(manyRegions) {
         partiesMain.SPÖ = data_formatVotes(region.SPÖ);
         partiesMain.FPÖ = data_formatVotes(region.FPÖ);
         partiesMain.NEOS = data_formatVotes(region.NEOS);
-        partiesMain.JETZT = data_formatVotes(region.JETZT);
         partiesMain.GRÜNE = data_formatVotes(region.GRÜNE);
 
         let partiesOther = {};
+        partiesOther.JETZT = data_formatVotes(region.JETZT);
         partiesOther.KPÖ = data_formatVotes(region.KPÖ);
         partiesOther.WANDL = data_formatVotes(region.WANDL);
         partiesOther.BZÖ = data_formatVotes(region.BZÖ);
@@ -161,6 +143,15 @@ function data_preprocessRegions(manyRegions) {
         partiesOther.CPÖ = data_formatVotes(region.CPÖ);
         partiesOther.GILT = data_formatVotes(region.GILT);
         partiesOther.SLP = data_formatVotes(region.SLP);
+        partiesOther.PILZ = data_formatVotes(region.PILZ);
+        partiesOther.FLÖ = data_formatVotes(region.FLÖ);
+        partiesOther.WEIßE = data_formatVotes(region.WEIßE);
+        partiesOther.EUAUS = data_formatVotes(region.EUAUS);
+        partiesOther.M = data_formatVotes(region.M);
+        partiesOther.NBZ = data_formatVotes(region.NBZ);
+        partiesOther.ODP = data_formatVotes(region.ODP);
+        partiesOther.FRANK = data_formatVotes(region.FRANK);
+        partiesOther.PIRAT = data_formatVotes(region.PIRAT);
         partiesOther.invalid = data_formatVotes(region["Ungültige"]);
 
         value.partiesAll = Object.assign({}, partiesMain, partiesOther);
@@ -176,7 +167,16 @@ function data_preprocessRegions(manyRegions) {
         value.iso = parseInt(region.GKZ.substring(1));
         value.name = data_parseGebietsname(region.Gebietsname);
         //value.entitledToVote = parseInt(oldValue["Wahlbe-rechtigte"].replace(".",""));
-        value.votes = data_formatVotes(region.Stimmen);
+        value.votes = data_getVotesTotal(region);
+
+        if (DEBUG) {
+            let votesSum = 0;
+            for (let key in value.partiesAll) votesSum += value.partiesAll[key];
+            if (votesSum !== value.votes) {
+                //console.assert(votesSum === value.votes);
+                console.error("vote count " + votesSum + " was wrong (expected: " + value.votes + ")");
+            }
+        }
 
         data[value.iso] = value;
     }
@@ -184,6 +184,12 @@ function data_preprocessRegions(manyRegions) {
     if (DEBUG) console.log(Object.keys(data).length + " values in data array");
 
     return data;
+}
+
+function data_getVotesTotal(region) {
+    if (region.Stimmen !== undefined) return data_formatVotes(region.Stimmen);
+    if (region.Gültige !== undefined && region.Ungültige !== undefined)
+        return data_formatVotes(region.Gültige) + data_formatVotes(region.Ungültige);
 }
 
 function data_reduce(manyPreprocessedRegions) {
