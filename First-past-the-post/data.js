@@ -44,8 +44,7 @@ function data_initialize(data) {
 
     return {
         counties,
-        municipalities,
-        municipalitiesReduced,
+        municipalities
     };
 }
 
@@ -182,6 +181,8 @@ function data_preprocessRegions(manyRegions) {
     }
 
     if (DEBUG) console.log(Object.keys(data).length + " values in data array");
+
+    data.reduced = data_reduce(data);
 
     return data;
 }

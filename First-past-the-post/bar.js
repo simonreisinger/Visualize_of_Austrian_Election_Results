@@ -66,14 +66,20 @@ function bar(data, id, where, area={width: 200, height: 150}) {
     };
 }
 
-function bar_update(bars, labels, area, newData) {
+function bar_update(bars, labels, area, newData, duration=100) {
     let y = bar_createY(newData, area);
 
-    bars.transition().duration(100)
+    bars.transition().duration(duration)
         .attr("y", function(d) {
+            if (DEBUG && isNaN(y(newData[d]))) {
+                console.log("y(newData[d]) was NaN");
+            }
             return y(newData[d]);
         })
         .attr("height", function(d) {
+            if (DEBUG && isNaN(area.height - y(newData[d]))) {
+                console.log("area.height - y(newData[d]) was NaN");
+            }
             return area.height - y(newData[d]);
         });
 
@@ -81,11 +87,14 @@ function bar_update(bars, labels, area, newData) {
         return newData[d];
     });
 
-    labels.transition().duration(100)
+    labels.transition().duration(duration)
         .attr("y", function(d) {
             let ypos = y(newData[d]) - 5;
             if (ypos - bar_estimatedLabelHeight < 0)
                 ypos = bar_estimatedLabelHeight + 5;
+            if (DEBUG && isNaN(ypos)) {
+                console.log("ypos was NaN");
+            }
             return ypos;
         });
 }
