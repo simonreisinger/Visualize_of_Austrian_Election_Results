@@ -31,19 +31,16 @@ function choropleth(data, id, jsonUrl, rect={width:700, height:400, x: 0, y:0}) 
             .attr("stroke", "black")
             .attr("fill", function (d) {
                 var iso = d.properties.iso;
-                // Different ids
-                if (iso === 40819) {iso = 40835;}
-                if (iso === 41310) {iso = 41345;}
-                if (iso === 41625) {iso = 41628;}
                 // 3 Gemeinden zusammengelegt
                 // Mit 1. Jänner 2019 wurden die Gemeinden St. Stefan am Walde und Afiesl zur neuen Gemeinde St. Stefan-Afiesl fusioniert
                 if (iso === 41301 || iso === 41335)  {iso = 41346;}
                 // Mit 1. Jänner 2019 wurde die Gemeinde Ahorn nach Helfenberg eingemeindet
-                if (iso === 41302) {iso = 41345;}
+                if (iso === 41302 ||iso === 41310) {iso = 41345;}
                 // Mit 1. Jänner 2018 wurde die Gemeinde Schönegg Teil der Gemeinde Vorderweißenbach, das ehemalige Gemeindegebiet wurde damit Teil des Bezirks Urfahr-Umgebung
-                if (iso === 41340) {iso = 41628;}
+                if (iso === 41340 || iso === 41625) {iso = 41628;}
                 // Peuerbach mit den Nachbargemeinden Bruck-Waasen
-                if (iso === 40803) {iso = 40835;}
+                if (iso === 40819 ||iso === 40803) {iso = 40835;}
+
 
                 let region = data[iso];
                 if (DEBUG && region == null) {

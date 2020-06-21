@@ -2,7 +2,6 @@ let choroWidth = 700;
 let choroHeight = 400;
 let geoJson = null;
 
-
 let choroPath = null;
 
 let data = null;
