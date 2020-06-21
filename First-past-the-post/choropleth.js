@@ -36,7 +36,7 @@ function choropleth(data, year, id, jsonUrl, rect={width:700, height:400, x: 0, 
 
         choropleth_updatePath(choroPath, data, year);
 
-        choropleth_updateFuns[id] = newData => choropleth_updatePath(choroPath, newData, year);
+        choropleth_updateFuns[id] = (newData, year) => choropleth_updatePath(choroPath, newData, year);
     }); // End of d3.json(jsonUrl).then(function (geoJson) {...});
 }
 
@@ -65,7 +65,7 @@ function choropleth_computeRegionColor(path, data, year) {
     iso = data_processIso(iso, year);
     let region = data[iso];
     if (DEBUG && region == null) {
-        console.error("region " + path.properties.name + "  with iso " + path.properties.iso + " was null");
+        console.error(year + " region " + path.properties.name + "  with iso " + path.properties.iso + " was null");
         region = {mostVotedParty: "SONST."};
     }
     let color = data_getPartyColor(region.mostVotedParty)
