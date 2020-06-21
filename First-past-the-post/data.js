@@ -210,7 +210,9 @@ function data_reduce(manyPreprocessedRegions) {
 }
 
 function data_processIso(iso, year) {
-    if (year === "2019") {
+    if (year === "2013") {
+        //41308, 41330
+    } else if (year === "2019") {
         // 3 Gemeinden zusammengelegt
         // Mit 1. Jänner 2019 wurden die Gemeinden St. Stefan am Walde und Afiesl zur neuen Gemeinde St. Stefan-Afiesl fusioniert
         if (iso === 41301 || iso === 41335) iso = 41346;
