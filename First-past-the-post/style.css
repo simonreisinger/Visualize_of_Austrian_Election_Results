@@ -102,10 +102,6 @@ body {
 
 #top_bar > * {
     margin: auto 0.5em auto 0.5em;
-    display: inline;
-}
-
-#top_bar a {
 }
 
 #DODdiv {
@@ -139,9 +135,14 @@ body {
     padding: 0 0.5em 0 0.5em;
 }
 
-#parallel_coordinates_div {
+.pc_master_div {
+    display: flex;
+}
+
+.parallel_coordinates_div {
     text-align: center;
-    font-size: 2em;
+    font-size: 1.5em;
+    width: 50%;
 }
 
 .parallelSvg .tick text {

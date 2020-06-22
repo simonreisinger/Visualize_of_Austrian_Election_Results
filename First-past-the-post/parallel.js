@@ -1,6 +1,9 @@
-function parallel(yearToDataMap, id, where, height=300) {
+const PARALLEL_MODE_FPRP = 0; // First Past The Post
+const PARALLEL_MODE_PR = 1; // Proportional Representation
 
-    let parallelData = parallel_preprocess(yearToDataMap);
+function parallel(yearToDataMap, id, where, mode, area={width: 450, height: 200}) {
+
+    let parallelData = parallel_preprocess(yearToDataMap, mode);
     yearToDataMap = parallelData.data;
     let parties = parallelData.partyNames;
     let years = Object.keys(yearToDataMap);
@@ -8,10 +11,12 @@ function parallel(yearToDataMap, id, where, height=300) {
     // Source: https://www.d3-graph-gallery.com/graph/parallel_basic.html
 
     let margin = {top: 30, right: 10, bottom: 10, left: 10};
-    let rect = where.node().getBoundingClientRect();
+    //let rect = where.node().getBoundingClientRect();
 
-    let width = rect.width - margin.left - margin.right;
-    height = height - margin.top - margin.bottom;
+    let width = area.width - margin.left - margin.right;
+    let height = area.height - margin.top - margin.bottom;
+
+    if (DEBUG) console.log("width=" + width + " height=" + height);
 
     let parG = where
         .append("svg")
@@ -33,8 +38,14 @@ function parallel(yearToDataMap, id, where, height=300) {
 
     let x = d3.scalePoint()
         .range([0, width])
-        .padding(1) // TODO what does this do?
+        .padding(0.15)
         .domain(years);
+
+    if (DEBUG) {
+        console.log("x of 2013: " + x(2013));
+        console.log("x of 2017: " + x(2017));
+        console.log("x of 2019: " + x(2019));
+    }
 
     parG.selectAll(".parallelPath")
         .data(parties)
@@ -46,7 +57,7 @@ function parallel(yearToDataMap, id, where, height=300) {
                 let percentage = yearToDataMap[year][party];
                 let xx = x(year)
                 let yy = y(percentage);
-                if (isNaN(xx) || isNaN(yy)) {
+                if (DEBUG && (isNaN(xx) || isNaN(yy))) {
                     console.error("xx or yy was NaN");
                 }
                 return [xx, yy];
@@ -115,11 +126,19 @@ function parallel_getFirstAndLastYears(years) {
     return { first: first.toString(), last: last.toString() };
 }
 
-function parallel_preprocess(yearToDataMap) {
+function parallel_getDataFromMode(yearToDataMap, year, mode) {
+    switch (mode) {
+        case PARALLEL_MODE_FPRP: return yearToDataMap[year].percentages.mostVotedParty;
+        case PARALLEL_MODE_PR: return yearToDataMap[year].thisYearsResults;
+        default: console.error("unexpected mode " + mode); return null;
+    }
+}
+
+function parallel_preprocess(yearToDataMap, mode) {
     let partiesSet = new Set();
 
     for (let year in yearToDataMap) {
-        let data = yearToDataMap[year].percentages.mostVotedParty;
+        let data = parallel_getDataFromMode(yearToDataMap, year, mode);
         for (let partyName in data) {
             if (partyName === SONST) continue;
             partiesSet.add(partyName);
@@ -129,7 +148,7 @@ function parallel_preprocess(yearToDataMap) {
     let parData = {};
     for (let year in yearToDataMap) {
         parData[year] = {};
-        let data = yearToDataMap[year].percentages.mostVotedParty;
+        let data = parallel_getDataFromMode(yearToDataMap, year, mode);
         for (let partyName of partiesSet) {
             let votes = data[partyName];
             if (votes === undefined) votes = 0;

@@ -31,6 +31,8 @@ function data_getPartyColor(party) {
 }
 
 function data_initialize(data, year) {
+    data = data_encode(data, year);
+
     // Counties
     let counties = data_filterCounties(data);
     if (DEBUG && Object.keys(counties).length !== 116) {
@@ -554,6 +556,14 @@ function data_filterCounties(data) {
 
         return gkz_last2 === "00" && gkz_last4 !== "0000" && /[0-9]/.test(gkz_3rd);
     });
+}
+
+function data_encode(data, year) {
+    if (DEBUG && year < 2013) {
+        let stopHere = null;
+    }
+
+    return data;
 }
 
 /*function data_preprocessParties(manyPreprocessedRegions) {

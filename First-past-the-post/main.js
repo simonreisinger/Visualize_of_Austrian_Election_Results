@@ -103,7 +103,8 @@ function main() {
                 main_addYear(year);
                 yearDataMap[year] = data;
 
-                main_parallel(yearDataMap, "municipalities");
+                main_parallel(yearDataMap, "municipalities", "parallel_coordinates_fptp", "parallel_coordinates_fptp_div", PARALLEL_MODE_FPRP);
+                main_parallel(yearDataMap, "municipalities", "parallel_coordinates_pr", "parallel_coordinates_pr_div", PARALLEL_MODE_PR);
             });
         })
     });
@@ -163,23 +164,30 @@ function main_updateData(newData, yearDataMap, regionType, year, barPlots) {
     choropleth_updateFuns[id](newData, year);
     bar_update(barPlots[0].bars, barPlots[0].labels, mainBarChartArea, newData.reduced.mostVotedParty, 1000); // TODO
 
-    if (regionType !== lastRegionType) main_parallel(yearDataMap, key);
+    if (regionType !== lastRegionType) {
+        main_parallel(yearDataMap, key, "parallel_coordinates_fptp", "parallel_coordinates_fptp_div", PARALLEL_MODE_FPRP);
+        main_parallel(yearDataMap, key, "parallel_coordinates_pr", "parallel_coordinates_pr_div", PARALLEL_MODE_PR);
+    }
 
     lastRegionType = regionType;
 }
 
-function main_parallel(yearDataMap, key) {
-    let parallelId = "parallel_coordinates_fptp";
-    let par = d3.select("#" + parallelId);
+function main_parallel(yearDataMap, key, id, divId, mode) {
+    let par = d3.select("#" + id);
     par.remove();
 
-    let yearPartiesMunicipalitiesMap = {};
-    for (let year in yearDataMap) {
-        yearPartiesMunicipalitiesMap[year] = yearDataMap[year][key].reduced;
+    let yearPartiesMap;
+    if (mode == PARALLEL_MODE_FPRP) {
+        yearPartiesMap = {};
+        for (let year in yearDataMap) {
+            yearPartiesMap[year] = yearDataMap[year][key].reduced;
+        }
+    } else {
+        yearPartiesMap = yearDataMap;
     }
 
-    let parallelCoordinatesDiv = d3.select("#parallel_coordinates_div");
-    parallel(yearPartiesMunicipalitiesMap, parallelId, parallelCoordinatesDiv);
+    let parallelCoordinatesDiv = d3.select("#" + divId);
+    parallel(yearPartiesMap, id, parallelCoordinatesDiv, mode);
 }
 
 main();
