@@ -4,7 +4,7 @@ body {
     color: #222222;
     background-color: #fff;
 
-    margin-top: 4em;
+    margin-top: 5em;
     margin-bottom: 10em;
 }
 
@@ -86,9 +86,26 @@ body {
     width: 100%;
 }
 
+#top_bar h1 {
+    margin: 0;
+    padding: 0;
+    color: #eee;
+    font-size: 1.5em;
+}
+
+#top_bar p {
+    margin: 0;
+    padding: 0;
+    color: #ccc;
+    font-size: 1em;
+}
+
 #top_bar > * {
-    margin-left: 0.5em;
-    margin-right: 0.5em;
+    margin: auto 0.5em auto 0.5em;
+    display: inline;
+}
+
+#top_bar a {
 }
 
 #DODdiv {
