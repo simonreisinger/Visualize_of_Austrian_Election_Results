@@ -17,7 +17,7 @@ function choropleth(data, year, id, jsonUrl, rect = {width: 700, height: 400, x:
             geoJson.features[item].properties.name = geoJson.features[item].properties.name
                 .replace("oe", "ö")
                 .replace("ue", "ü")
-                .replace("ue", "ü"); // TODO: remove this line?
+                .replace("ue", "ü");
         }
 
         let projection = d3.geoMercator()
@@ -97,11 +97,11 @@ function choropleth_computeRegionColor(path, data, year, id) {
     }
     var color = "white"
     if (id === "#svg_choropleth_wahlkreise"){
-
+        let county_dataset = data_parseGebietsname(region.name);
+        color = data_getPartyColor(WahlkreiseDataSet[year][wahlkreisNach[removeNonASCIICharacters(county_dataset)].Wahlkreis].party)
     } else {
         color = data_getPartyColor(region.mostVotedParty);
     }
-
     return color;
 }
 

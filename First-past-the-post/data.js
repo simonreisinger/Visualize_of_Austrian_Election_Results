@@ -36,6 +36,8 @@ function data_initialize(data, year) {
 
         return gkz_last2 === "00" && gkz_last4 !== "0000" && /[0-9]/.test(gkz_3rd);
     });
+    let countiesXX = counties;
+
     if (DEBUG && Object.keys(counties).length !== 116) {
         let len = Object.keys(counties).length;
         console.error("counties length was " + len + " but it should be 116");
@@ -50,13 +52,18 @@ function data_initialize(data, year) {
             && gkz_lastTwo !== "00";
     });
     municipalities = data_preprocessRegions(municipalities);
+    let lol = countiesXX.map(function (value) {
+        value.Gebietsname = data_parseGebietsname(value.Gebietsname);
+        return value;
+    });
 
+    WahlkreiseDataSet[year] = firstPassThePostWahlkreis(lol, year)
+    clacBarData(year); // TODO edit here
 
     var nationalResults = data.filter(function (value) {
         return value.GKZ.slice(-5) === "00000";
     })[0];
     let thisYearsResults = getPRResults(nationalResults, year) // TODO
-
 
     return {
         counties,
@@ -71,88 +78,32 @@ function getPRResults(nationalResults, year) {
     let sumOfValidVotes = 0;
     for (let p in _partyColors) {
         if (NRParties[year].includes(p)) {
-            console.log(p)
-            console.log(nationalResults[p])
-            console.log(nationalResults)
             sumOfValidVotes += parseInt(nationalResults[p].replace(/\./g, ""))
         }
     }
 
     for (let p in _partyColors) {
         if (NRParties[year].includes(p)) {
-            console.log(p)
             if (!partyNames.includes(p)) {
                 if (selectedParties["SONST."] === null || selectedParties["SONST."] === undefined) {
                     selectedParties["SONST."] = 0
                 }
                 selectedParties["SONST."] += Math.round(parseFloat(nationalResults[p].replace(/\./g, "")) / sumOfValidVotes * 183.0)
-                console.log(p)
-                console.log(selectedParties["SONST."])
             } else {
-                console.log("else: p")
-                console.log(p)
                 selectedParties[p] = Math.round(parseFloat(nationalResults[p].replace(/\./g, "")) / sumOfValidVotes * 183.0)
             }
-        } else if (p === "SONST." || p === "GRÜNE"){
+        } else if (p === "SONST." || p === "GRÜNE") {
             selectedParties[p] = 0;
         }
     }
     return selectedParties;
 }
 
-function firstPassThePost(dataset) {
-    let mostVotes = [];
-    for (let selectedState in dataset) {
-        selectedState = parseInt(selectedState);
-        mostVotes[dataset[selectedState].Gebietsname] = {party: "", votes: 0};
-        for (let parties in _partyColors) {
-            if (parties !== "SONST.") {
-                if (DEBUG && dataset[selectedState][parties] == undefined) {
-                    console.log("parseInt(dataset[selectedState][parties] was undefined");
-                }
-                let currentPartyVotes = parseInt(dataset[selectedState][parties].replace(/\./g, ""));
-                console.log(currentPartyVotes)
-                if (currentPartyVotes >= mostVotes[dataset[selectedState].Gebietsname].votes) {
-                    mostVotes[dataset[selectedState].Gebietsname] = {
-                        party: parties,
-                        votes: currentPartyVotes
-                    }
-                    console.log(mostVotes)
-                }
-            }
-        }
-    }
-    return mostVotes
-}
-
-var WahlkreiseDataSet = [];
-
-
 function removeNonASCIICharacters(words) {
+    if (words === null ||words === undefined){
+        return words;
+    }
     return words.replace("ß", "ss").replace("ü", "ue").replace("ö", "oe").replace("ä", "ae")
-}
-
-
-function firstPastThePostByParty(dataset) {
-    let mostVotes = [];
-    for (let party in _partyColors) {
-        mostVotes[party] = 0;
-    }
-
-    for (let county in dataset) {
-        mostVotes[dataset[county].party] += 1
-    }
-
-    function receivedPeople(value) {
-        return mostVotes[value] > 0;
-    }
-
-    let xxxx = Object.keys(mostVotes).filter(receivedPeople);
-    let selectedParties = [];
-    for (xxx in xxxx) {
-        selectedParties[xxxx[xxx]] = mostVotes[xxxx[xxx]]
-    }
-    return selectedParties
 }
 
 function data_parseGebietsname(gebietsname) {
@@ -160,7 +111,9 @@ function data_parseGebietsname(gebietsname) {
         .replace(" - ", "-")
         .replace(" Stadt", "")
         .replace("-Stadt", "")
+        .replace("(Stadt)", "")
         .replace(" Land", "-Land")
+        .replace("(Land)", "")
         .replace(" Umgebung", "-Umgebung")
         .replace("Innere", "Innere Stadt");
     name = name.split(",")
@@ -441,48 +394,20 @@ function data_processIso(iso, year) {
     return iso;
 }
 
-var WahlkreiseDataSet = null;
+var WahlkreiseMandate = [];
+var WahlkreiseDataSet = [];
 var weightedResult = [];
 var pieChartResults = null;
 
-function firstPassThePollWahlkreis(dataset) {
-    let mostVotes = [];
-    for (let selectedState in dataset) {
-        let wahlkreis = wahlkreisNach[removeNonASCIICharacters(dataset[selectedState].Gebietsname)].Wahlkreis
-        if (mostVotes[wahlkreis] === null || mostVotes[wahlkreis] === undefined) {
-            mostVotes[wahlkreis] = {};
-            mostVotes[wahlkreis].Gebietsname = wahlkreis;
-            WahlkreiseMandate[wahlkreis] = {}
-            WahlkreiseMandate[wahlkreis].Gebietsname = wahlkreis;
-            WahlkreiseMandate[wahlkreis].Mandate = wahlkreisNach[removeNonASCIICharacters(dataset[selectedState].Gebietsname)].Mandate;
-            for (let parties in colors) {
-                if (parties !== "SONST.") {
-                    let currentPartyVotes = dataset[selectedState][parties].replace(/\./g, "");
-                    mostVotes[wahlkreis][parties] = currentPartyVotes
-                }
-            }
-        } else {
-            for (let parties in colors) {
-                if (parties !== "SONST.") {
-                    let currentPartyVotes = parseInt(dataset[selectedState][parties].replace(/\./g, ""));
-                    mostVotes[wahlkreis][parties] = (parseInt(mostVotes[wahlkreis][parties]) + currentPartyVotes).toString();
-                }
-            }
-        }
-    }
-    return firstPassThePost(mostVotes)
-}
-
-
-function clacBarData() {
+function clacBarData(year) {
     var wkm = []
-    for (var currentWahlkreis in WahlkreiseDataSet) {
-        if (wkm[WahlkreiseDataSet[currentWahlkreis].party] === undefined || wkm[WahlkreiseDataSet[currentWahlkreis].party] === null) {
-            wkm[WahlkreiseDataSet[currentWahlkreis].party] = 0;
+    for (var currentWahlkreis in WahlkreiseDataSet[year]) {
+        if (wkm[WahlkreiseDataSet[year][currentWahlkreis].party] === undefined || wkm[WahlkreiseDataSet[year][currentWahlkreis].party] === null) {
+            wkm[WahlkreiseDataSet[year][currentWahlkreis].party] = 0;
         }
-        for (var currentBezirk in WahlkreiseMandate) {
+        for (var currentBezirk in WahlkreiseMandate[year]) {
             if (currentBezirk === currentWahlkreis) {
-                wkm[WahlkreiseDataSet[currentWahlkreis].party] += WahlkreiseMandate[currentBezirk].Mandate;
+                wkm[WahlkreiseDataSet[year][currentWahlkreis].party] += WahlkreiseMandate[year][currentBezirk].Mandate;
                 break;
             }
         }
@@ -490,4 +415,56 @@ function clacBarData() {
     return wkm;
 }
 
+function firstPassThePostWahlkreis(dataset, year) {
+    WahlkreiseMandate[year] = []
+    let mostVotes = [];
+    for (let selectedState in dataset) {
+        let xxxx = data_parseGebietsname(removeNonASCIICharacters(dataset[selectedState].Gebietsname))
+        if (xxxx === "Krems") xxxx = "Krems an der Donau"
+        if (xxxx === "Wien-Umgebung") xxxx = "Korneuburg"
+        let wahlkreis = wahlkreisNach[xxxx].Wahlkreis
+        if (mostVotes[wahlkreis] === null || mostVotes[wahlkreis] === undefined) {
+            mostVotes[wahlkreis] = {};
+            mostVotes[wahlkreis].Gebietsname = wahlkreis;
+            WahlkreiseMandate[year][wahlkreis] = {}
+            WahlkreiseMandate[year][wahlkreis].Gebietsname = wahlkreis;
+            WahlkreiseMandate[year][wahlkreis].Mandate = wahlkreisNach[removeNonASCIICharacters(dataset[selectedState].Gebietsname)].Mandate;
+            for (let parties in NRParties[year]) {
+                if (parties !== "SONST.") {
+                    let currentPartyVotes = dataset[selectedState][NRParties[year][parties]].replace(/\./g, "");
+                    mostVotes[wahlkreis][NRParties[year][parties]] = currentPartyVotes
+                }
+            }
+        } else {
+            for (let parties in NRParties[year]) {
+                if (parties !== "SONST.") {
+                    let currentPartyVotes = parseInt(dataset[selectedState][NRParties[year][parties]].replace(/\./g, ""));
+                    mostVotes[wahlkreis][NRParties[year][parties]] = (parseInt(mostVotes[wahlkreis][NRParties[year][parties]]) + currentPartyVotes).toString();
+                }
+            }
+        }
+    }
+    return firstPassThePost(mostVotes, year)
+}
 
+function firstPassThePost(dataset, year) {
+    let mostVotes = [];
+    for (let selectedState in dataset) {
+        mostVotes[dataset[selectedState].Gebietsname] = {party: "", votes: 0};
+        for (let parties in NRParties[year]) {
+            if (parties !== "SONST.") {
+                if (DEBUG && dataset[selectedState][NRParties[year][parties]] === undefined) {
+                    console.log("parseInt(dataset[selectedState][parties] was undefined");
+                }
+                let currentPartyVotes = parseInt(dataset[selectedState][NRParties[year][parties]].replace(/\./g, ""));
+                if (currentPartyVotes >= mostVotes[dataset[selectedState].Gebietsname].votes) {
+                    mostVotes[dataset[selectedState].Gebietsname] = {
+                        party: NRParties[year][parties],
+                        votes: currentPartyVotes
+                    }
+                }
+            }
+        }
+    }
+    return mostVotes
+}
