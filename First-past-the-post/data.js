@@ -100,7 +100,7 @@ function getPRResults(nationalResults, year) {
     return selectedParties;
 }
 
-function firstPassThePoll(dataset) {
+function firstPassThePost(dataset) {
     let mostVotes = [];
     for (let selectedState in dataset) {
         selectedState = parseInt(selectedState);
@@ -470,7 +470,7 @@ function firstPassThePollWahlkreis(dataset) {
             }
         }
     }
-    return firstPassThePoll(mostVotes)
+    return firstPassThePost(mostVotes)
 }
 
 
