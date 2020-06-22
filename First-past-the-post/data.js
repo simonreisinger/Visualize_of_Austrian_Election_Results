@@ -103,7 +103,7 @@ function getPRResults(nationalResults, year) {
 }
 
 function removeNonASCIICharacters(words) {
-    if (words === null ||words === undefined){
+    if (words === null || words === undefined) {
         return words;
     }
     return words.replace("ß", "ss").replace("ü", "ue").replace("ö", "oe").replace("ä", "ae")
@@ -404,6 +404,13 @@ var pieChartResults = null;
 
 function clacBarData(year) {
     var wkm = []
+    wkm["SONST."] = 0;
+    for (var i in NRParties[year]){
+        console.log(NRParties[year][i])
+        if (partyNames.includes(NRParties[year][i])){
+            wkm[NRParties[year][i]] = 0;
+        }
+    }
     for (var currentWahlkreis in WahlkreiseDataSet[year]) {
         if (wkm[WahlkreiseDataSet[year][currentWahlkreis].party] === undefined || wkm[WahlkreiseDataSet[year][currentWahlkreis].party] === null) {
             wkm[WahlkreiseDataSet[year][currentWahlkreis].party] = 0;
