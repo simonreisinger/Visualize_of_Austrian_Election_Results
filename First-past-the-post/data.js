@@ -405,6 +405,7 @@ var pieChartResults = null;
 function clacBarData(year) {
     var wkm = []
     wkm["SONST."] = 0;
+    wkm["GRÜNE"] = 0;
     for (var i in NRParties[year]){
         console.log(NRParties[year][i])
         if (partyNames.includes(NRParties[year][i])){
