@@ -16,6 +16,10 @@ body {
     text-justify: inter-word;
 }
 
+h3 {
+    margin-left: 1em;
+}
+
 .container {
     display: table-cell;
     vertical-align:middle;
