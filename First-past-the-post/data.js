@@ -32,19 +32,10 @@ function data_getPartyColor(party) {
 
 function data_initialize(data, year) {
     // Counties
-    let counties = data.filter(function (value) {
-        let gkz = value.GKZ;
-        let gkz_last2 = gkz.substring(4);
-        let gkz_last4 = gkz.substring(2);
-        let gkz_3rd = gkz.substring(2, 3);
-
-        return gkz_last2 === "00" && gkz_last4 !== "0000" && /[0-9]/.test(gkz_3rd);
-    });
-    let countiesXX = counties;
-
+    let counties = data_filterCounties(data);
     if (DEBUG && Object.keys(counties).length !== 116) {
         let len = Object.keys(counties).length;
-        console.error("counties length was " + len + " but it should be 116");
+        console.error(year + " counties length was " + len + " but it should be 116");
     }
     counties = data_preprocessRegions(counties);
 
@@ -56,6 +47,10 @@ function data_initialize(data, year) {
             && gkz_lastTwo !== "00";
     });
     municipalities = data_preprocessRegions(municipalities);
+
+
+
+    let countiesXX = data_filterCounties(data);
     let lol = countiesXX.map(function (value) {
         value.Gebietsname = data_parseGebietsname(value.Gebietsname);
         return value;
@@ -63,9 +58,10 @@ function data_initialize(data, year) {
 
     WahlkreiseDataSet[year] = firstPassThePostWahlkreis(lol, year)
     let mostVotedParty = clacBarData(year); // TODO edit here
-    var wahlkreis = counties;
-    wahlkreis.reduced = {};
-    wahlkreis.reduced.mostVotedParty = mostVotedParty
+    var wahlkreis = data_filterCounties(data);
+    wahlkreis = data_preprocessRegions(wahlkreis);
+    //wahlkreis.reduced = {};
+    wahlkreis.reduced.mostVotedParty = mostVotedParty;
 
     var nationalResults = data.filter(function (value) {
         return value.GKZ.slice(-5) === "00000";
@@ -116,6 +112,10 @@ function removeNonASCIICharacters(words) {
 }
 
 function data_parseGebietsname(gebietsname) {
+    if (DEBUG && gebietsname === undefined) {
+        console.error("gebietsname was undefined");
+        return "undefined";
+    }
     let name = gebietsname
         .replace(" - ", "-")
         .replace(" Stadt", "")
@@ -282,7 +282,7 @@ function data_reduceRegions(manyPreprocessedRegions) {
 }
 
 function data_processIso(iso, year) {
-    if (year === "2013") {
+    if (year === 2013) {
         if (iso === 62268) iso = 62213;
         // Rohrbach --> Rohrbach an der Lafnitz
         if (iso === 62277) iso = 62240;
@@ -443,7 +443,7 @@ function data_processIso(iso, year) {
         if (iso === 62268) iso = 62213;
 
 
-    } else if (year === "2019") {
+    } else if (year === 2019) {
         // 3 Gemeinden zusammengelegt
         // Mit 1. Jänner 2019 wurden die Gemeinden St. Stefan am Walde und Afiesl zur neuen Gemeinde St. Stefan-Afiesl fusioniert
         if (iso === 41301 || iso === 41335) iso = 41346;
@@ -543,6 +543,17 @@ function firstPassThePost(dataset, year) {
         }
     }
     return mostVotes
+}
+
+function data_filterCounties(data) {
+    return data.filter(function (value) {
+        let gkz = value.GKZ;
+        let gkz_last2 = gkz.substring(4);
+        let gkz_last4 = gkz.substring(2);
+        let gkz_3rd = gkz.substring(2, 3);
+
+        return gkz_last2 === "00" && gkz_last4 !== "0000" && /[0-9]/.test(gkz_3rd);
+    });
 }
 
 /*function data_preprocessParties(manyPreprocessedRegions) {

@@ -93,7 +93,7 @@ function choropleth_computeRegionColor(path, data, year, id) {
     let region = data[iso];
     if (DEBUG && region == null) {
         console.error("unable to compute region color for " + year + " region " + path.properties.name + "  with iso " + path.properties.iso + " because region data was null");
-        region = {mostVotedParty: "SONST."};
+        region = {mostVotedParty: SONST};
     }
     var color = "white"
     if (id === "#svg_choropleth_wahlkreise") {

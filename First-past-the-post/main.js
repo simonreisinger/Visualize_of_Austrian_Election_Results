@@ -11,6 +11,8 @@ let tooltipLabels = null;
 let mainBarChartArea = {width: 400, height: 150}
 let tooltipBarChartArea = {width: 300, height: 150}
 
+let lastRegionType = null;
+
 const REGION_TYPE_MUNICIPALITY = "Municipalities (Gemeinden)";
 const REGION_TYPE_COUNTY = "Counties (Bezirke)";
 const REGION_TYPE_WAHLKREISE = "Wahlkreise";
@@ -87,6 +89,8 @@ function main() {
         }
         regionSelect.on("change", () => main_selectionChangeFun(yearDataMap, barPlots));
 
+        lastRegionType = REGION_TYPE_MUNICIPALITY;
+
         d3.dsv(";", "./data/NRW17.csv").then(data => {
             let year = 2017;
             data = data_initialize(data, year);
@@ -99,12 +103,7 @@ function main() {
                 main_addYear(year);
                 yearDataMap[year] = data;
 
-                let yearPartiesMunicipalitiesMap = {};
-                for (let year in yearDataMap) {
-                    yearPartiesMunicipalitiesMap[year] = yearDataMap[year].municipalities.reduced;
-                }
-                let parallelCoordinatesDiv = d3.select("#parallel_coordinates_div");
-                parallel(yearPartiesMunicipalitiesMap, "#parallel_coordinates", parallelCoordinatesDiv);
+                main_parallel(yearDataMap, "municipalities");
             });
         })
     });
@@ -128,39 +127,59 @@ function main_updateData(newData, yearDataMap, regionType, year, barPlots) {
     bar_update(barPlots[1].bars, barPlots[1].labels, mainBarChartArea, newData.thisYearsResults, 1000); // TODO
 
     let id;
-    let yearDataMapOld = yearDataMap;
-    yearDataMap = {};
+    let key;
     switch (regionType) {
         case REGION_TYPE_MUNICIPALITY:
-            newData = newData.municipalities;
+            key = "municipalities";
             id = "#svg_choropleth_municipalities";
             d3.select("#svg_choropleth_counties").style("display", "none");
             d3.select("#svg_choropleth_municipalities").style("display", null);
             d3.select("#svg_choropleth_wahlkreise").style("display", "none");
-
             break;
+
         case REGION_TYPE_COUNTY:
-            newData = newData.counties;
+            key = "counties";
             id = "#svg_choropleth_counties";
             d3.select("#svg_choropleth_counties").style("display", null);
             d3.select("#svg_choropleth_municipalities").style("display", "none");
             d3.select("#svg_choropleth_wahlkreise").style("display", "none");
-
             break;
+
         case REGION_TYPE_WAHLKREISE:
-            newData = newData.wahlkreis; // TODO edit this line
+            key = "wahlkreis"; // TODO edit this line
             id = "#svg_choropleth_wahlkreise";
             d3.select("#svg_choropleth_counties").style("display", "none");
             d3.select("#svg_choropleth_municipalities").style("display", "none");
             d3.select("#svg_choropleth_wahlkreise").style("display", null);
             break;
+
         default:
             console.error("update failed. unexpected regionType: " + regionType);
             return;
     }
 
+    newData = newData[key];
+
     choropleth_updateFuns[id](newData, year);
     bar_update(barPlots[0].bars, barPlots[0].labels, mainBarChartArea, newData.reduced.mostVotedParty, 1000); // TODO
+
+    if (regionType !== lastRegionType) main_parallel(yearDataMap, key);
+
+    lastRegionType = regionType;
+}
+
+function main_parallel(yearDataMap, key) {
+    let parallelId = "parallel_coordinates_fptp";
+    let par = d3.select("#" + parallelId);
+    par.remove();
+
+    let yearPartiesMunicipalitiesMap = {};
+    for (let year in yearDataMap) {
+        yearPartiesMunicipalitiesMap[year] = yearDataMap[year][key].reduced;
+    }
+
+    let parallelCoordinatesDiv = d3.select("#parallel_coordinates_div");
+    parallel(yearPartiesMunicipalitiesMap, parallelId, parallelCoordinatesDiv);
 }
 
 main();

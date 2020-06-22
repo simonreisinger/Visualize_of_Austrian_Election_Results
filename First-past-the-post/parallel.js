@@ -15,6 +15,7 @@ function parallel(yearToDataMap, id, where, height=300) {
 
     let parG = where
         .append("svg")
+            .attr("id", id)
             .attr("class", "parallelSvg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
