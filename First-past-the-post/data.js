@@ -180,6 +180,7 @@ function data_preprocessRegions(manyRegions) {
         //value.entitledToVote = parseInt(oldValue["Wahlbe-rechtigte"].replace(".",""));
         value.votes = data_getVotesTotal(region);
 
+
         if (DEBUG) {
             let votesSum = 0;
             for (let key in value.partiesAll) votesSum += value.partiesAll[key];
@@ -465,10 +466,11 @@ function clacBarData(year) {
     var wkm = []
     wkm["SONST."] = 0;
     wkm["GRÜNE"] = 0;
-    for (var i in NRParties[year]){
-        console.log(NRParties[year][i])
-        if (partyNames.includes(NRParties[year][i])){
+    for (var i in NRParties[year]) {
+        if (partyNames.includes(NRParties[year][i])) {
             wkm[NRParties[year][i]] = 0;
+        } else {
+            wkm["SONST."] = 0;
         }
     }
     for (var currentWahlkreis in WahlkreiseDataSet[year]) {
@@ -477,7 +479,11 @@ function clacBarData(year) {
         }
         for (var currentBezirk in WahlkreiseMandate[year]) {
             if (currentBezirk === currentWahlkreis) {
-                wkm[WahlkreiseDataSet[year][currentWahlkreis].party] += WahlkreiseMandate[year][currentBezirk].Mandate;
+                if (partyNames.includes(WahlkreiseDataSet[year][currentWahlkreis].party) ){
+                    wkm[WahlkreiseDataSet[year][currentWahlkreis].party] += WahlkreiseMandate[year][currentBezirk].Mandate;
+                } else {
+                    wkm["SONST."] += WahlkreiseMandate[year][currentBezirk].Mandate;
+                }
                 break;
             }
         }
