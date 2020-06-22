@@ -33,7 +33,16 @@ function bar(data, id, where, area={width: 200, height: 150}) {
         .attr("height", function (d) {
             return area.height;
         })
-        .attr("fill", d => data_getPartyColor(d));
+        .attr("fill", d => data_getPartyColor(d))
+        .on("mouseover", function(d) {
+            if (d === SONST) {
+                //tooltip.style("opacity", 1);
+                // TODO show some information
+            }
+        })
+        .on("mouseout", function(d) {
+
+        });
 
     barG.append("g")
         .attr("transform", "translate(0," + area.height + ")")

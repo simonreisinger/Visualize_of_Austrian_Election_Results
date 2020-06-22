@@ -97,23 +97,16 @@ function parallel(yearToDataMap, id, where, mode, area={width: 450, height: 200}
                 return d;
             })
             .style("fill", "black");
-
-    parG.selectAll(".parallelAxisPartyLabel")
-        .data(parties)
-        .enter().append("g")
-        .attr("transform", function(d) {
-
-        })
 }
 
-function parallel_getMaxMainPercentage(yearToDataMap) {
+/*function parallel_getMaxMainPercentage(yearToDataMap) {
     let max = 0;
     for (let year in yearToDataMap) {
         let maxMain = yearToDataMap[year].percentages.maxMostVotedParty;
         if (maxMain > max) max = maxMain;
     }
     return max;
-}
+}*/
 
 function parallel_getFirstAndLastYears(years) {
     let first = Infinity;

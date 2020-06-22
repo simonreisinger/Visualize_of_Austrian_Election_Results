@@ -31,8 +31,6 @@ function data_getPartyColor(party) {
 }
 
 function data_initialize(data, year) {
-    data = data_encode(data, year);
-
     // Counties
     let counties = data_filterCounties(data);
     if (DEBUG && Object.keys(counties).length !== 116) {
@@ -64,6 +62,7 @@ function data_initialize(data, year) {
     wahlkreis = data_preprocessRegions(wahlkreis);
     //wahlkreis.reduced = {};
     wahlkreis.reduced.mostVotedParty = mostVotedParty;
+    wahlkreis.reduced.percentages.mostVotedParty = data_calculatePercentageFromMostVotedParty(mostVotedParty);
 
     var nationalResults = data.filter(function (value) {
         return value.GKZ.slice(-5) === "00000";
@@ -558,94 +557,18 @@ function data_filterCounties(data) {
     });
 }
 
-function data_encode(data, year) {
-    if (DEBUG && year < 2013) {
-        let stopHere = null;
+function data_calculatePercentageFromMostVotedParty(mostVotedParty) {
+    let total = 0;
+    for (let partyName in mostVotedParty) {
+        total += mostVotedParty[partyName];
     }
 
-    return data;
+    let percentages = {};
+    for (let partyName in mostVotedParty) {
+        let perc = mostVotedParty[partyName];
+        perc = Math.round(perc / total * 10000) / 100;
+        percentages[partyName] = perc;
+    }
+
+    return percentages;
 }
-
-/*function data_preprocessParties(manyPreprocessedRegions) {
-    let data = {};
-
-    let someRegion = manyPreprocessedRegions[Object.keys(manyPreprocessedRegions)[0]];
-
-    data.votes = 0;
-    data.partiesMain = {};
-    data.partiesAll = {};
-    data.percentages = {};
-    data.percentages.partiesMain = {};
-    data.percentages.partiesAll = {};
-
-    for (let partyName in someRegion.partiesMain) data.partiesMain[partyName] = 0;
-    for (let partyName in someRegion.partiesAll) data.partiesAll[partyName] = 0;
-    for (let partyName in someRegion.partiesMain) data.percentages.partiesMain[partyName] = 0;
-    for (let partyName in someRegion.partiesAll) data.percentages.partiesAll[partyName] = 0;
-
-    let votes_check = 0;
-    for (let iso in manyPreprocessedRegions) {
-        let regionData = manyPreprocessedRegions[iso];
-        for (let partyName in regionData.partiesMain) {
-            let v = regionData.partiesMain[partyName]; // votes
-            data.partiesMain[partyName] += v;
-            data.votes += v;
-        }
-        for (let partyName in regionData.partiesAll) {
-            let v = regionData.partiesAll[partyName]; // votes
-            data.partiesAll[partyName] += v;
-            if (DEBUG) votes_check += v;
-        }
-    }
-
-    if (DEBUG && data.votes !== votes_check) {
-        console.error("vote count mismatch between partiesMain and partiesAll (" + data.votes + " vs " + votes_check + ")");
-    }
-
-    let percMainMax = 0;
-    let sonst = 10000;
-    for (let partyName in data.partiesMain) {
-        if (partyName === SONST) continue;
-        // Range 0..100 with 2 decimal places at most
-        let v = Math.round(data.partiesMain[partyName] / data.votes * 10000);
-        sonst -= v;
-        v /= 100;
-        data.percentages.partiesMain[partyName] = v;
-        if (v > percMainMax) percMainMax = v;
-    }
-    data.percentages.partiesMain[SONST] = Math.round(sonst) / 100;
-    data.percentages.maxMain = percMainMax;
-
-    let percAllMax = 0;
-    let invalid = 10000;
-    for (let partyName in data.partiesAll) {
-        if (partyName === INVALID) continue;
-        // Range 0..100 with 2 decimal places at most
-        let v = Math.round(data.partiesAll[partyName] / data.votes * 10000);
-        invalid -= v;
-        v /= 100;
-        data.percentages.partiesAll[partyName] = v;
-        if (v > percAllMax) percMainMax = v;
-    }
-    data.percentages.partiesAll[INVALID] = Math.round(invalid) / 100;
-    data.percentages.maxAll = percAllMax;
-
-    if (DEBUG) {
-        let main = 0;
-        let all = 0;
-
-        for (let key in data.percentages.partiesMain) main += data.percentages.partiesMain[key];
-        for (let key in data.percentages.partiesAll) all += data.percentages.partiesAll[key];
-
-        main = Math.round(main * 100);
-        all = Math.round(all * 100);
-
-        let main2 = main / 100.0;
-        let all2 = all / 100.0;
-
-        if (main !== 10000) console.error("percentages of main parties do not amount to 100 but to " + main2);
-        if (all !== 10000) console.error("percentages of all parties do not amount to 100 but to " + all2);
-    }
-
-    return data;
-}*/
