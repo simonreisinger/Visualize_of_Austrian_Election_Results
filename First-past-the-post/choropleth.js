@@ -41,7 +41,7 @@ function choropleth(data, year, id, jsonUrl, rect = {width: 700, height: 400, x:
 }
 
 function choropleth_updatePath(choroPath, newData, year, id) {
-    choroPath.attr("fill", d => choropleth_computeRegionColor(d, newData, year));
+    choroPath.attr("fill", d => choropleth_computeRegionColor(d, newData, year, id));
 
     // Events
     choroPath
@@ -66,14 +66,9 @@ function choropleth_updatePath(choroPath, newData, year, id) {
                 .attr("type", "button")
                 .on("click", d => mainDiv.style("display", "none"))
                 .html("X");*/
-            var iso = 0;
-            if (id === "#svg_choropleth_wahlkreise"){
-                iso = data_processIso(d.properties.iso); // TODO
-            } else {
-                iso = data_processIso(d.properties.iso);
-            }
+            let iso = data_processIso(d.properties.iso);
             if (iso.toString().length < 5) iso *= 100; // Quick and Dirty
-            let region = newData[iso];
+            var region = newData[iso];
             if (region == null) {
                 iso = d.properties.iso;
                 if (DEBUG) console.error("unable to show details for " + year + " region " + name + " with iso " + iso + " because region data was null");
@@ -90,7 +85,7 @@ function choropleth_updatePath(choroPath, newData, year, id) {
         });
 }
 
-function choropleth_computeRegionColor(path, data, year) {
+function choropleth_computeRegionColor(path, data, year, id) {
     let iso = path.properties.iso;
     // TODO here i think
     iso = data_processIso(iso, year);
@@ -100,7 +95,13 @@ function choropleth_computeRegionColor(path, data, year) {
         console.error("unable to compute region color for " + year + " region " + path.properties.name + "  with iso " + path.properties.iso + " because region data was null");
         region = {mostVotedParty: "SONST."};
     }
-    let color = data_getPartyColor(region.mostVotedParty)
+    var color = "white"
+    if (id === "#svg_choropleth_wahlkreise"){
+
+    } else {
+        color = data_getPartyColor(region.mostVotedParty);
+    }
+
     return color;
 }
 
