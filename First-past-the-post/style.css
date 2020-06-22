@@ -111,3 +111,20 @@ body {
     border: 2px solid black;
     padding: 0 0.5em 0 0.5em;
 }
+
+#parallel_coordinates_div {
+    text-align: center;
+    font-size: 2em;
+}
+
+.parallelSvg .tick text {
+    font-size: 1.5em;
+}
+
+.parallelPath {
+
+}
+
+.parallelAxisLabel {
+    font-size: 2em;
+}

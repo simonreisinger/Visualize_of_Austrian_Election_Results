@@ -1,8 +1,12 @@
-let partyNames = ["ÖVP", "SPÖ", "FPÖ", "NEOS", "GRÜNE", "SONST."];
+const SONST = "SONST.";
+const INVALID = "invalid";
+const partyNames = ["ÖVP", "SPÖ", "FPÖ", "NEOS", "GRÜNE", SONST];
+
 let NRParties = []
 NRParties[2019] = ["ÖVP", "SPÖ", "FPÖ", "NEOS", "GRÜNE"];
 NRParties[2017] = ["ÖVP", "SPÖ", "FPÖ", "NEOS", "PILZ"];
 NRParties[2013] = ["ÖVP", "SPÖ", "FPÖ", "NEOS", "GRÜNE", "FRANK"];
+
 let _partyColors = {
     "ÖVP": "#63C3D0", // WE IGNORE THAT THEY CHANGED COLOR
     "SPÖ": "#ce000c",
@@ -22,7 +26,7 @@ function data_getPartyColor(party) {
     if (party in _partyColors) {
         return _partyColors[party];
     } else {
-        return _partyColors["SONST."];
+        return _partyColors[SONST];
     }
 }
 
@@ -67,6 +71,8 @@ function data_initialize(data, year) {
         return value.GKZ.slice(-5) === "00000";
     })[0];
     let thisYearsResults = getPRResults(nationalResults, year) // TODO
+    
+    
     return {
         counties,
         municipalities,
@@ -88,14 +94,14 @@ function getPRResults(nationalResults, year) {
     for (let p in _partyColors) {
         if (NRParties[year].includes(p)) {
             if (!partyNames.includes(p)) {
-                if (selectedParties["SONST."] === null || selectedParties["SONST."] === undefined) {
-                    selectedParties["SONST."] = 0
+                if (selectedParties[SONST] === null || selectedParties[SONST] === undefined) {
+                    selectedParties[SONST] = 0
                 }
-                selectedParties["SONST."] += Math.round(parseFloat(nationalResults[p].replace(/\./g, "")) / sumOfValidVotes * 183.0)
+                selectedParties[SONST] += Math.round(parseFloat(nationalResults[p].replace(/\./g, "")) / sumOfValidVotes * 183.0)
             } else {
                 selectedParties[p] = Math.round(parseFloat(nationalResults[p].replace(/\./g, "")) / sumOfValidVotes * 183.0)
             }
-        } else if (p === "SONST." || p === "GRÜNE") {
+        } else if (p === SONST || p === "GRÜNE") {
             selectedParties[p] = 0;
         }
     }
@@ -157,12 +163,12 @@ function data_preprocessRegions(manyRegions) {
         partiesOther.ODP = data_formatVotes(region.ODP);
         partiesOther.FRANK = data_formatVotes(region.FRANK);
         partiesOther.PIRAT = data_formatVotes(region.PIRAT);
-        partiesOther.invalid = data_formatVotes(region["Ungültige"]);
+        partiesOther[INVALID] = data_formatVotes(region["Ungültige"]);
 
         value.partiesAll = Object.assign({}, partiesMain, partiesOther);
 
-        partiesMain["SONST."] = 0;
-        for (let key in partiesOther) partiesMain["SONST."] += partiesOther[key];
+        partiesMain[SONST] = 0;
+        for (let key in partiesOther) partiesMain[SONST] += partiesOther[key];
         value.partiesMain = partiesMain;
 
         value.mostVotedParty = Object.keys(Object.assign(value.partiesAll)).reduce(function (keyA, keyB) {
@@ -183,12 +189,28 @@ function data_preprocessRegions(manyRegions) {
             }
         }
 
+        value.percentages = {};
+        for (let partyName in partyNames) {
+            if (partyName !== SONST) {
+                let partyVotes = value.partiesMain[partyName];
+                let percentage = partyVotes / value.votes // In range 0..1
+
+                // In range 0..100 with two decimal places at most
+                value.percentages[partyName] = Math.round(percentage * 10000) / 100;
+            }
+        }
+        value.percentages[SONST] = 100;
+        for (let partyName in value.percentages) {
+            value.percentages[SONST] -= value.percentages[partyName];
+        }
+
         data[value.iso] = value;
     }
 
     if (DEBUG) console.log(Object.keys(data).length + " values in data array");
 
-    data.reduced = data_reduce(data);
+    data.reduced = data_reduceRegions(data);
+
     return data;
 }
 
@@ -198,26 +220,63 @@ function data_getVotesTotal(region) {
         return data_formatVotes(region.Gültige) + data_formatVotes(region.Ungültige);
 }
 
-function data_reduce(manyPreprocessedRegions) {
+function data_reduceRegions(manyPreprocessedRegions) {
     let mostVotedParty = {};
     let proportionalRepresentation = {};
 
+    let data = {
+        mostVotedParty,
+        proportionalRepresentation
+    };
+    let percentages = {
+        mostVotedParty: {}
+    };
+    let maxMostVotedParty = 0;
+
     for (let partyName of partyNames) {
         mostVotedParty[partyName] = 0;
+        percentages.mostVotedParty[partyName] = 0;
         proportionalRepresentation[partyName] = 0;
     }
 
     for (let iso in manyPreprocessedRegions) {
         let preprocessedRegion = manyPreprocessedRegions[iso];
-        mostVotedParty[preprocessedRegion.mostVotedParty]++;
+
+        let mvp = preprocessedRegion.mostVotedParty;
+        if (mostVotedParty[mvp] === undefined) mostVotedParty[mvp] = 0;
+        if (percentages.mostVotedParty[mvp] === undefined) percentages.mostVotedParty[mvp] = 0;
+        mostVotedParty[mvp]++;
+
+        if (!partyNames.includes(mvp)) {
+            if (mostVotedParty[SONST] === undefined) mostVotedParty[SONST] = 0;
+            if (percentages.mostVotedParty[SONST] === undefined) percentages.mostVotedParty[SONST] = 0;
+            mostVotedParty[SONST] ++;
+        }
 
         // For each region (municipality or county or whatever)...
         // compute proportional representation for this region and accumulate it
     }
 
+    let numRegions = Object.keys(manyPreprocessedRegions).length;
+    for (let key in percentages) {
+        let max = 0;
+        for (let partyName in percentages[key]) {
+            let value = data[key][partyName];
+            let perc = value / numRegions;
+            perc = Math.round(perc * 10000) / 100;
+            percentages[key][partyName] = perc;
+            if (perc > max) max = perc;
+        }
+        if (key === "mostVotedParty") maxMostVotedParty = max;
+    }
+
+    percentages.maxMostVotedParty = maxMostVotedParty;
+
     return {
         mostVotedParty,
-        proportionalRepresentation
+        proportionalRepresentation,
+
+        percentages
     };
 }
 
@@ -479,3 +538,87 @@ function firstPassThePost(dataset, year) {
     }
     return mostVotes
 }
+
+/*function data_preprocessParties(manyPreprocessedRegions) {
+    let data = {};
+
+    let someRegion = manyPreprocessedRegions[Object.keys(manyPreprocessedRegions)[0]];
+
+    data.votes = 0;
+    data.partiesMain = {};
+    data.partiesAll = {};
+    data.percentages = {};
+    data.percentages.partiesMain = {};
+    data.percentages.partiesAll = {};
+
+    for (let partyName in someRegion.partiesMain) data.partiesMain[partyName] = 0;
+    for (let partyName in someRegion.partiesAll) data.partiesAll[partyName] = 0;
+    for (let partyName in someRegion.partiesMain) data.percentages.partiesMain[partyName] = 0;
+    for (let partyName in someRegion.partiesAll) data.percentages.partiesAll[partyName] = 0;
+
+    let votes_check = 0;
+    for (let iso in manyPreprocessedRegions) {
+        let regionData = manyPreprocessedRegions[iso];
+        for (let partyName in regionData.partiesMain) {
+            let v = regionData.partiesMain[partyName]; // votes
+            data.partiesMain[partyName] += v;
+            data.votes += v;
+        }
+        for (let partyName in regionData.partiesAll) {
+            let v = regionData.partiesAll[partyName]; // votes
+            data.partiesAll[partyName] += v;
+            if (DEBUG) votes_check += v;
+        }
+    }
+
+    if (DEBUG && data.votes !== votes_check) {
+        console.error("vote count mismatch between partiesMain and partiesAll (" + data.votes + " vs " + votes_check + ")");
+    }
+
+    let percMainMax = 0;
+    let sonst = 10000;
+    for (let partyName in data.partiesMain) {
+        if (partyName === SONST) continue;
+        // Range 0..100 with 2 decimal places at most
+        let v = Math.round(data.partiesMain[partyName] / data.votes * 10000);
+        sonst -= v;
+        v /= 100;
+        data.percentages.partiesMain[partyName] = v;
+        if (v > percMainMax) percMainMax = v;
+    }
+    data.percentages.partiesMain[SONST] = Math.round(sonst) / 100;
+    data.percentages.maxMain = percMainMax;
+
+    let percAllMax = 0;
+    let invalid = 10000;
+    for (let partyName in data.partiesAll) {
+        if (partyName === INVALID) continue;
+        // Range 0..100 with 2 decimal places at most
+        let v = Math.round(data.partiesAll[partyName] / data.votes * 10000);
+        invalid -= v;
+        v /= 100;
+        data.percentages.partiesAll[partyName] = v;
+        if (v > percAllMax) percMainMax = v;
+    }
+    data.percentages.partiesAll[INVALID] = Math.round(invalid) / 100;
+    data.percentages.maxAll = percAllMax;
+
+    if (DEBUG) {
+        let main = 0;
+        let all = 0;
+
+        for (let key in data.percentages.partiesMain) main += data.percentages.partiesMain[key];
+        for (let key in data.percentages.partiesAll) all += data.percentages.partiesAll[key];
+
+        main = Math.round(main * 100);
+        all = Math.round(all * 100);
+
+        let main2 = main / 100.0;
+        let all2 = all / 100.0;
+
+        if (main !== 10000) console.error("percentages of main parties do not amount to 100 but to " + main2);
+        if (all !== 10000) console.error("percentages of all parties do not amount to 100 but to " + all2);
+    }
+
+    return data;
+}*/
