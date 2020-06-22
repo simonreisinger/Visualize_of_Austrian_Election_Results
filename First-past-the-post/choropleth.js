@@ -1,6 +1,6 @@
 let choropleth_updateFuns = {};
 
-function choropleth(data, year, id, jsonUrl, rect={width:700, height:400, x: 0, y:0}) {
+function choropleth(data, year, id, jsonUrl, rect = {width: 700, height: 400, x: 0, y: 0}) {
 
     let svg = d3.select(id)
         .attr("width", rect.width)
@@ -75,6 +75,7 @@ function choropleth_computeRegionColor(path, data, year) {
 function choropleth_mousemoveFun(choroPath, d, data, year) {
     let iso_activePath = d.properties.iso;
     let iso = data_processIso(d.properties.iso, year);
+    let region = data[iso];
     let name = d.properties.name;
     let x = d3.event.pageX;
     let y = d3.event.pageY;
@@ -82,8 +83,6 @@ function choropleth_mousemoveFun(choroPath, d, data, year) {
         .style("left", x + "px")
         .style("top", y + "px");
     tooltipTitle.html(name);
-
-    let region = data[iso];
     if (region == null) {
         tooltipBars.style("opacity", 0);
         tooltipLabels.style("opacity", 0);
