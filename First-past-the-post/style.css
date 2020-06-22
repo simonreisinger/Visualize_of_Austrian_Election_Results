@@ -4,8 +4,16 @@ body {
     color: #222222;
     background-color: #fff;
 
-    margin-top: 5em;
+    margin-top: 8em;
     margin-bottom: 10em;
+}
+
+.introduction {
+    margin: 2em auto 2em auto;
+    width: 50em;
+
+    text-align: justify;
+    text-justify: inter-word;
 }
 
 .container {

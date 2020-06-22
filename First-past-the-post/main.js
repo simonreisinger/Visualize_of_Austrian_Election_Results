@@ -14,7 +14,7 @@ let tooltipBarChartArea = {width: 300, height: 150}
 let lastRegionType = null;
 
 const REGION_TYPE_MUNICIPALITY = "Municipalities (Gemeinden)";
-const REGION_TYPE_COUNTY = "Counties (Bezirke)";
+const REGION_TYPE_COUNTY = "Districts (Bezirke)";
 const REGION_TYPE_WAHLKREISE = "Wahlkreise";
 const REGION_TYPES = [REGION_TYPE_MUNICIPALITY, REGION_TYPE_COUNTY, REGION_TYPE_WAHLKREISE];
 
