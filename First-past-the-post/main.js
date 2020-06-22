@@ -139,7 +139,7 @@ function main_updateData(newData, regionType, year, barPlots) {
 
             break;
         case REGION_TYPE_WAHLKREISE:
-            newData = newData.counties;
+            newData = newData.wahlkreis; // TODO edit this line
             id = "#svg_choropleth_wahlkreise";
             d3.select("#svg_choropleth_counties").style("display", "none");
             d3.select("#svg_choropleth_municipalities").style("display", "none");

@@ -96,7 +96,7 @@ function choropleth_computeRegionColor(path, data, year, id) {
         region = {mostVotedParty: "SONST."};
     }
     var color = "white"
-    if (id === "#svg_choropleth_wahlkreise"){
+    if (id === "#svg_choropleth_wahlkreise") {
         let county_dataset = data_parseGebietsname(region.name);
         color = data_getPartyColor(WahlkreiseDataSet[year][wahlkreisNach[removeNonASCIICharacters(county_dataset)].Wahlkreis].party)
     } else {

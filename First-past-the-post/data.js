@@ -58,16 +58,19 @@ function data_initialize(data, year) {
     });
 
     WahlkreiseDataSet[year] = firstPassThePostWahlkreis(lol, year)
-    clacBarData(year); // TODO edit here
+    let mostVotedParty = clacBarData(year); // TODO edit here
+    var wahlkreis = counties;
+    wahlkreis.reduced = {};
+    wahlkreis.reduced.mostVotedParty = mostVotedParty
 
     var nationalResults = data.filter(function (value) {
         return value.GKZ.slice(-5) === "00000";
     })[0];
     let thisYearsResults = getPRResults(nationalResults, year) // TODO
-
     return {
         counties,
         municipalities,
+        wahlkreis,
         thisYearsResults
     };
 }
