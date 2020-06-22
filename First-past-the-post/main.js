@@ -1,4 +1,4 @@
-let DEBUG = true;
+const DEBUG = true;
 
 let tooltip = null;
 let tooltipTitle = null;
@@ -21,7 +21,7 @@ function main() {
 
     d3.dsv(";", "./data/NRW19.csv").then(data => {
 
-        let year = "2019";
+        let year = 2019;
 
         data = data_initialize(data);
 
@@ -37,12 +37,12 @@ function main() {
         d3.select("#svg_choropleth_counties").style("display", "none");
 
         let barFptpG = bar(data.municipalities.reduced.mostVotedParty,
-            "#svg_bar_fptp_municipalities",
+            "#svg_bar_fptp",
             d3.select("#FPTPdiv"),
             mainBarChartArea);
 
         let barPrG = bar(data.municipalities.reduced.mostVotedParty,
-            "#svg_bar_pr_municipalities",
+            "#svg_bar_pr",
             d3.select("#PRdiv"),
             mainBarChartArea);
 
@@ -89,6 +89,13 @@ function main() {
                 let year = "2013";
                 main_addYear(year);
                 yearDataMap[year] = data;
+
+                let yearPartiesMunicipalitiesMap = {};
+                for (let year in yearDataMap) {
+                    yearPartiesMunicipalitiesMap[year] = yearDataMap[year].partiesMunicipalities;
+                }
+                let parallelCoordinatesDiv = d3.select("#parallel_coordinates_div");
+                parallel(yearPartiesMunicipalitiesMap, "#parallel_coordinates", parallelCoordinatesDiv);
             });
         })
     });
@@ -109,15 +116,17 @@ function main_selectionChangeFun(yearDataMap, barPlots) {
 
 function main_updateData(newData, regionType, year, barPlots) {
     let id;
+    let yearDataMapOld = yearDataMap;
+    let yearDataMap = {};
     switch (regionType) {
         case REGION_TYPE_MUNICIPALITY:
-            newData = newData.municipalities;
+            newData = newData.partiesMunicipalities;
             id = "#svg_choropleth_municipalities";
             d3.select("#svg_choropleth_counties").style("display", "none");
             d3.select("#svg_choropleth_municipalities").style("display", null);
             break;
         case REGION_TYPE_COUNTY:
-            newData = newData.counties;
+            newData = newData.partiesCounties;
             id = "#svg_choropleth_counties";
             d3.select("#svg_choropleth_counties").style("display", null);
             d3.select("#svg_choropleth_municipalities").style("display", "none");
