@@ -1,4 +1,4 @@
-const DEBUG = true;
+const DEBUG = false;
 
 let tooltip = null;
 let tooltipTitle = null;
@@ -124,7 +124,7 @@ function main_selectionChangeFun(yearDataMap, barPlots) {
 }
 
 function main_updateData(newData, yearDataMap, regionType, year, barPlots) {
-    console.log(newData)
+    if (DEBUG) console.log(newData)
     bar_update(barPlots[1].bars, barPlots[1].labels, mainBarChartArea, newData.thisYearsResults, 1000); // TODO
 
     let id;
