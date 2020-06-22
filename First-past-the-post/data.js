@@ -1,6 +1,10 @@
 let partyNames = ["ÖVP", "SPÖ", "FPÖ", "NEOS", "GRÜNE", "SONST."];
+let NRParties = []
+NRParties[2019] = ["ÖVP", "SPÖ", "FPÖ", "NEOS", "GRÜNE"];
+NRParties[2017] = ["ÖVP", "SPÖ", "FPÖ", "NEOS", "PILZ"];
+NRParties[2013] = ["ÖVP", "SPÖ", "FPÖ", "NEOS", "GRÜNE", "FRANK"];
 let _partyColors = {
-    "ÖVP": "#63C3D0",
+    "ÖVP": "#63C3D0", // WE IGNORE THAT THEY CHANGED COLOR
     "SPÖ": "#ce000c",
     "FPÖ": "#0056A2",
     "NEOS": "#E3257B",
@@ -8,7 +12,9 @@ let _partyColors = {
     "SONST.": "#222",
 
     // Others
+    "BZÖ": "Orange",
     "JETZT": "#ADADAD",
+    "PILZ": "#ADADAD", // SAME PARTY DIFFERENT NAME
     "FRANK": "#F8D323"
 };
 
@@ -20,7 +26,7 @@ function data_getPartyColor(party) {
     }
 }
 
-function data_initialize(data) {
+function data_initialize(data, year) {
     // Counties
     let counties = data.filter(function (value) {
         let gkz = value.GKZ;
@@ -45,15 +51,56 @@ function data_initialize(data) {
     });
     municipalities = data_preprocessRegions(municipalities);
 
+
+    var nationalResults = data.filter(function (value) {
+        return value.GKZ.slice(-5) === "00000";
+    })[0];
+    let thisYearsResults = getPRResults(nationalResults, year) // TODO
+
+
     return {
         counties,
-        municipalities
+        municipalities,
+        thisYearsResults
     };
 }
 
+
+function getPRResults(nationalResults, year) {
+    let selectedParties = [];
+    let sumOfValidVotes = 0;
+    for (let p in _partyColors) {
+        if (NRParties[year].includes(p)) {
+            console.log(p)
+            console.log(nationalResults[p])
+            console.log(nationalResults)
+            sumOfValidVotes += parseInt(nationalResults[p].replace(/\./g, ""))
+        }
+    }
+
+    for (let p in _partyColors) {
+        if (NRParties[year].includes(p)) {
+            console.log(p)
+            if (!partyNames.includes(p)) {
+                if (selectedParties["SONST."] === null || selectedParties["SONST."] === undefined) {
+                    selectedParties["SONST."] = 0
+                }
+                selectedParties["SONST."] += Math.round(parseFloat(nationalResults[p].replace(/\./g, "")) / sumOfValidVotes * 183.0)
+                console.log(p)
+                console.log(selectedParties["SONST."])
+            } else {
+                console.log("else: p")
+                console.log(p)
+                selectedParties[p] = Math.round(parseFloat(nationalResults[p].replace(/\./g, "")) / sumOfValidVotes * 183.0)
+            }
+        } else if (p === "SONST." || p === "GRÜNE"){
+            selectedParties[p] = 0;
+        }
+    }
+    return selectedParties;
+}
+
 function firstPassThePoll(dataset) {
-    console.log(dataset)
-    console.log("---------------")
     let mostVotes = [];
     for (let selectedState in dataset) {
         selectedState = parseInt(selectedState);
@@ -186,7 +233,6 @@ function data_preprocessRegions(manyRegions) {
     if (DEBUG) console.log(Object.keys(data).length + " values in data array");
 
     data.reduced = data_reduce(data);
-
     return data;
 }
 
@@ -394,3 +440,54 @@ function data_processIso(iso, year) {
     }
     return iso;
 }
+
+var WahlkreiseDataSet = null;
+var weightedResult = [];
+var pieChartResults = null;
+
+function firstPassThePollWahlkreis(dataset) {
+    let mostVotes = [];
+    for (let selectedState in dataset) {
+        let wahlkreis = wahlkreisNach[removeNonASCIICharacters(dataset[selectedState].Gebietsname)].Wahlkreis
+        if (mostVotes[wahlkreis] === null || mostVotes[wahlkreis] === undefined) {
+            mostVotes[wahlkreis] = {};
+            mostVotes[wahlkreis].Gebietsname = wahlkreis;
+            WahlkreiseMandate[wahlkreis] = {}
+            WahlkreiseMandate[wahlkreis].Gebietsname = wahlkreis;
+            WahlkreiseMandate[wahlkreis].Mandate = wahlkreisNach[removeNonASCIICharacters(dataset[selectedState].Gebietsname)].Mandate;
+            for (let parties in colors) {
+                if (parties !== "SONST.") {
+                    let currentPartyVotes = dataset[selectedState][parties].replace(/\./g, "");
+                    mostVotes[wahlkreis][parties] = currentPartyVotes
+                }
+            }
+        } else {
+            for (let parties in colors) {
+                if (parties !== "SONST.") {
+                    let currentPartyVotes = parseInt(dataset[selectedState][parties].replace(/\./g, ""));
+                    mostVotes[wahlkreis][parties] = (parseInt(mostVotes[wahlkreis][parties]) + currentPartyVotes).toString();
+                }
+            }
+        }
+    }
+    return firstPassThePoll(mostVotes)
+}
+
+
+function clacBarData() {
+    var wkm = []
+    for (var currentWahlkreis in WahlkreiseDataSet) {
+        if (wkm[WahlkreiseDataSet[currentWahlkreis].party] === undefined || wkm[WahlkreiseDataSet[currentWahlkreis].party] === null) {
+            wkm[WahlkreiseDataSet[currentWahlkreis].party] = 0;
+        }
+        for (var currentBezirk in WahlkreiseMandate) {
+            if (currentBezirk === currentWahlkreis) {
+                wkm[WahlkreiseDataSet[currentWahlkreis].party] += WahlkreiseMandate[currentBezirk].Mandate;
+                break;
+            }
+        }
+    }
+    return wkm;
+}
+
+

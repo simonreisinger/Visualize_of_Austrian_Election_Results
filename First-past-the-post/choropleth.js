@@ -1,8 +1,9 @@
 let choropleth_updateFuns = {};
 let choropleth_lastShownRegion = null;
+var choropleth_id = "";
 
 function choropleth(data, year, id, jsonUrl, rect = {width: 700, height: 400, x: 0, y: 0}) {
-
+    choropleth_id = id;
     let svg = d3.select(id)
         .attr("width", rect.width)
         .attr("height", rect.height)
@@ -67,9 +68,13 @@ function choropleth_updatePath(choroPath, newData, year) {
                 .attr("type", "button")
                 .on("click", d => mainDiv.style("display", "none"))
                 .html("X");*/
-
-            let iso = data_processIso(d.properties.iso);
-            if (iso.toString().length < 5) iso += 100; // Quick and Dirty
+            var iso = 0;
+            if (choropleth_id === "#svg_choropleth_wahlkreise"){
+                iso = data_processIso(0); // TODO
+            } else {
+                iso = data_processIso(d.properties.iso);
+            }
+            if (iso.toString().length < 5) iso *= 100; // Quick and Dirty
             let region = newData[iso];
             if (region == null) {
                 iso = d.properties.iso;
@@ -89,7 +94,7 @@ function choropleth_updatePath(choroPath, newData, year) {
 
 function choropleth_computeRegionColor(path, data, year) {
     let iso = path.properties.iso;
-    console.log(path)
+    // TODO here i think
     iso = data_processIso(iso, year);
     if (iso.toString().length < 5) iso *= 100; // Quick and Dirty
     let region = data[iso];
@@ -105,6 +110,7 @@ function choropleth_mousemoveFun(choroPath, d, data, year) {
 
     let iso_activePath = d.properties.iso;
     let iso = data_processIso(d.properties.iso, year);
+    if (iso.toString().length < 5) iso *= 100; // Quick and Dirty
     let region = data[iso];
     let name = d.properties.name;
     let x = d3.event.pageX;
