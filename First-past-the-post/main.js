@@ -120,19 +120,19 @@ function main_selectionChangeFun(yearDataMap, barPlots) {
     let selectedYear = d3.select("#year_select").node().value;
     let selectedRegionType = d3.select("#region_select").node().value;
     let data = yearDataMap[selectedYear];
-    main_updateData(data, selectedRegionType, selectedYear, barPlots);
+    main_updateData(data, yearDataMap, selectedRegionType, selectedYear, barPlots);
 }
 
-function main_updateData(newData, regionType, year, barPlots) {
+function main_updateData(newData, yearDataMap, regionType, year, barPlots) {
     console.log(newData)
     bar_update(barPlots[1].bars, barPlots[1].labels, mainBarChartArea, newData.thisYearsResults, 1000); // TODO
 
     let id;
     let yearDataMapOld = yearDataMap;
-    let yearDataMap = {};
+    yearDataMap = {};
     switch (regionType) {
         case REGION_TYPE_MUNICIPALITY:
-            newData = newData.partiesMunicipalities;
+            newData = newData.municipalities;
             id = "#svg_choropleth_municipalities";
             d3.select("#svg_choropleth_counties").style("display", "none");
             d3.select("#svg_choropleth_municipalities").style("display", null);
@@ -140,7 +140,7 @@ function main_updateData(newData, regionType, year, barPlots) {
 
             break;
         case REGION_TYPE_COUNTY:
-            newData = newData.partiesCounties;
+            newData = newData.counties;
             id = "#svg_choropleth_counties";
             d3.select("#svg_choropleth_counties").style("display", null);
             d3.select("#svg_choropleth_municipalities").style("display", "none");

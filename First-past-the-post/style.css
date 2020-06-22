@@ -3,6 +3,9 @@ body {
     font-family: Calibri, Arial, Helvetica, sans-serif;
     color: #222222;
     background-color: #fff;
+
+    margin-top: 4em;
+    margin-bottom: 10em;
 }
 
 .container {
@@ -73,7 +76,14 @@ body {
 
 #top_bar {
     display: flex;
-    margin: 1em 0.5em 1em 0.5em;
+    /*margin: 1em 0.5em 1em 0.5em;*/
+
+    position: fixed;
+    padding: 1em 0 1em 0;
+    background-color: #444;
+    left: 0;
+    top: 0;
+    width: 100%;
 }
 
 #top_bar > * {
