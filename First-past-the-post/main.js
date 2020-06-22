@@ -14,7 +14,7 @@ let tooltipBarChartArea = {width: 300, height: 150}
 const REGION_TYPE_MUNICIPALITY = "Municipalities (Gemeinden)";
 const REGION_TYPE_COUNTY = "Counties (Bezirke)";
 const REGION_TYPE_WAHLKREISE = "Wahlkreise";
-const REGION_TYPES = [REGION_TYPE_MUNICIPALITY, REGION_TYPE_COUNTY]; // , REGION_TYPE_WAHLKREISE
+const REGION_TYPES = [REGION_TYPE_MUNICIPALITY, REGION_TYPE_COUNTY, REGION_TYPE_WAHLKREISE];
 
 function main() {
 
@@ -127,18 +127,20 @@ function main_updateData(newData, regionType, year, barPlots) {
             id = "#svg_choropleth_municipalities";
             d3.select("#svg_choropleth_counties").style("display", "none");
             d3.select("#svg_choropleth_municipalities").style("display", null);
-            // TODO ADD HERE
+            d3.select("#svg_choropleth_wahlkreise").style("display", "none");
+
             break;
         case REGION_TYPE_COUNTY:
             newData = newData.counties;
             id = "#svg_choropleth_counties";
             d3.select("#svg_choropleth_counties").style("display", null);
             d3.select("#svg_choropleth_municipalities").style("display", "none");
-            // TODO ADD HERE
+            d3.select("#svg_choropleth_wahlkreise").style("display", "none");
+
             break;
         case REGION_TYPE_WAHLKREISE:
             newData = newData.counties;
-            id = "#svg_choropleth_counties";
+            id = "#svg_choropleth_wahlkreise";
             d3.select("#svg_choropleth_counties").style("display", "none");
             d3.select("#svg_choropleth_municipalities").style("display", "none");
             d3.select("#svg_choropleth_wahlkreise").style("display", null);

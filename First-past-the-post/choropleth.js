@@ -1,9 +1,7 @@
 let choropleth_updateFuns = {};
 let choropleth_lastShownRegion = null;
-var choropleth_id = "";
 
 function choropleth(data, year, id, jsonUrl, rect = {width: 700, height: 400, x: 0, y: 0}) {
-    choropleth_id = id;
     let svg = d3.select(id)
         .attr("width", rect.width)
         .attr("height", rect.height)
@@ -36,13 +34,13 @@ function choropleth(data, year, id, jsonUrl, rect = {width: 700, height: 400, x:
         //.attr("fill", d => choropleth_computeRegionColor(data_processIso(d.properties.iso)));
         //.attr("id", d => d.properties.name);
 
-        choropleth_updatePath(choroPath, data, year);
+        choropleth_updatePath(choroPath, data, year, id);
 
-        choropleth_updateFuns[id] = (newData, year) => choropleth_updatePath(choroPath, newData, year);
+        choropleth_updateFuns[id] = (newData, year) => choropleth_updatePath(choroPath, newData, year, id);
     }); // End of d3.json(jsonUrl).then(function (geoJson) {...});
 }
 
-function choropleth_updatePath(choroPath, newData, year) {
+function choropleth_updatePath(choroPath, newData, year, id) {
     choroPath.attr("fill", d => choropleth_computeRegionColor(d, newData, year));
 
     // Events
@@ -69,8 +67,8 @@ function choropleth_updatePath(choroPath, newData, year) {
                 .on("click", d => mainDiv.style("display", "none"))
                 .html("X");*/
             var iso = 0;
-            if (choropleth_id === "#svg_choropleth_wahlkreise"){
-                iso = data_processIso(0); // TODO
+            if (id === "#svg_choropleth_wahlkreise"){
+                iso = data_processIso(d.properties.iso); // TODO
             } else {
                 iso = data_processIso(d.properties.iso);
             }
