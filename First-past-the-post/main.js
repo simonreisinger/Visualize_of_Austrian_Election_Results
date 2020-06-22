@@ -80,19 +80,19 @@ function main() {
 
         d3.dsv(";", "./data/NRW17.csv").then(data => {
             data = data_initialize(data);
-            let year = "2017";
+            let year = 2017;
             main_addYear(year);
             yearDataMap[year] = data;
 
             d3.dsv(";", "./data/NRW13.csv").then(data => {
                 data = data_initialize(data);
-                let year = "2013";
+                let year = 2013;
                 main_addYear(year);
                 yearDataMap[year] = data;
 
                 let yearPartiesMunicipalitiesMap = {};
                 for (let year in yearDataMap) {
-                    yearPartiesMunicipalitiesMap[year] = yearDataMap[year].partiesMunicipalities;
+                    yearPartiesMunicipalitiesMap[year] = yearDataMap[year].municipalities.reduced;
                 }
                 let parallelCoordinatesDiv = d3.select("#parallel_coordinates_div");
                 parallel(yearPartiesMunicipalitiesMap, "#parallel_coordinates", parallelCoordinatesDiv);

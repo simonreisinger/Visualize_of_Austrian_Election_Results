@@ -1,6 +1,6 @@
 const SONST = "SONST.";
 const INVALID = "invalid";
-let partyNames = ["ÖVP", "SPÖ", "FPÖ", "NEOS", "GRÜNE", SONST];
+const partyNames = ["ÖVP", "SPÖ", "FPÖ", "NEOS", "GRÜNE", SONST];
 let _partyColors = {
     "ÖVP": "#63C3D0",
     "SPÖ": "#ce000c",
@@ -47,14 +47,12 @@ function data_initialize(data) {
     municipalities = data_preprocessRegions(municipalities);
 
     // Party data
-    let partiesCounties = data_preprocessParties(counties);
-    let partiesMunicipalities = data_preprocessParties(municipalities);
+    //let partiesCounties = data_preprocessParties(counties);
+    //let partiesMunicipalities = data_preprocessParties(municipalities);
 
     return {
         counties,
         municipalities,
-        partiesCounties,
-        partiesMunicipalities
     };
 }
 
@@ -222,22 +220,59 @@ function data_reduceRegions(manyPreprocessedRegions) {
     let mostVotedParty = {};
     let proportionalRepresentation = {};
 
+    let data = {
+        mostVotedParty,
+        proportionalRepresentation
+    };
+    let percentages = {
+        mostVotedParty: {}
+    };
+    let maxMostVotedParty = 0;
+
     for (let partyName of partyNames) {
         mostVotedParty[partyName] = 0;
+        percentages.mostVotedParty[partyName] = 0;
         proportionalRepresentation[partyName] = 0;
     }
 
     for (let iso in manyPreprocessedRegions) {
         let preprocessedRegion = manyPreprocessedRegions[iso];
-        mostVotedParty[preprocessedRegion.mostVotedParty]++;
+
+        let mvp = preprocessedRegion.mostVotedParty;
+        if (mostVotedParty[mvp] === undefined) mostVotedParty[mvp] = 0;
+        if (percentages.mostVotedParty[mvp] === undefined) percentages.mostVotedParty[mvp] = 0;
+        mostVotedParty[mvp]++;
+
+        if (!partyNames.includes(mvp)) {
+            if (mostVotedParty[SONST] === undefined) mostVotedParty[SONST] = 0;
+            if (percentages.mostVotedParty[SONST] === undefined) percentages.mostVotedParty[SONST] = 0;
+            mostVotedParty[SONST] ++;
+        }
 
         // For each region (municipality or county or whatever)...
         // compute proportional representation for this region and accumulate it
     }
 
+    let numRegions = Object.keys(manyPreprocessedRegions).length;
+    for (let key in percentages) {
+        let max = 0;
+        for (let partyName in percentages[key]) {
+            let value = data[key][partyName];
+            let perc = value / numRegions;
+            perc = Math.round(perc * 10000) / 100;
+            percentages[key][partyName] = perc;
+            if (perc > max) max = perc;
+        }
+        if (key === "mostVotedParty") maxMostVotedParty = max;
+    }
+
+    percentages.maxMostVotedParty = maxMostVotedParty;
+
     return {
         mostVotedParty,
-        proportionalRepresentation
+        proportionalRepresentation,
+
+        percentages
     };
 }
 
@@ -258,7 +293,7 @@ function data_processIso(iso, year) {
     return iso;
 }
 
-function data_preprocessParties(manyPreprocessedRegions) {
+/*function data_preprocessParties(manyPreprocessedRegions) {
     let data = {};
 
     let someRegion = manyPreprocessedRegions[Object.keys(manyPreprocessedRegions)[0]];
@@ -340,4 +375,4 @@ function data_preprocessParties(manyPreprocessedRegions) {
     }
 
     return data;
-}
+}*/
