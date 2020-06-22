@@ -4,9 +4,12 @@ let _partyColors = {
     "SPÖ": "#ce000c",
     "FPÖ": "#0056A2",
     "NEOS": "#E3257B",
-    //"JETZT": "#ADADAD",
     "GRÜNE": "#88B626",
-    "SONST.": "#222"
+    "SONST.": "#222",
+
+    // Others
+    "JETZT": "#ADADAD",
+    "FRANK": "#F8D323"
 };
 
 function data_getPartyColor(party) {
@@ -254,7 +257,7 @@ function data_processIso(iso, year) {
         if (iso === 61627) iso = 61602;
         if (iso === 61628) iso = 61604; // + 61623
         if (iso === 61629) iso = 61607; // + 61616
-        if (iso === 61438) iso = 61400;
+        if (iso === 61438) iso = 61411;
         if (iso === 61630) iso = 61608;
         if (iso === 61632) iso = 61613;
         if (iso === 61437) iso = 61404; // 61405 // 61406
