@@ -98,6 +98,7 @@ function choropleth_computeRegionColor(path, data, year, id) {
     var color = "white"
     if (id === "#svg_choropleth_wahlkreise") {
         let county_dataset = data_parseGebietsname(region.name);
+        if (county_dataset === "Krems") county_dataset = "Krems an der Donau";
         color = data_getPartyColor(WahlkreiseDataSet[year][wahlkreisNach[removeNonASCIICharacters(county_dataset)].Wahlkreis].party)
     } else {
         color = data_getPartyColor(region.mostVotedParty);
