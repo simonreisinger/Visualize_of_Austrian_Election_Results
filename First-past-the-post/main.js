@@ -116,7 +116,7 @@ function main_addYear(year) {
 }
 
 function main_selectionChangeFun(yearDataMap, barPlots) {
-    let selectedYear = d3.select("#year_select").node().value;
+    let selectedYear = parseInt(d3.select("#year_select").node().value);
     let selectedRegionType = d3.select("#region_select").node().value;
     let data = yearDataMap[selectedYear];
     main_updateData(data, yearDataMap, selectedRegionType, selectedYear, barPlots);
