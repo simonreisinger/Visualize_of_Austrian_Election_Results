@@ -75,6 +75,8 @@ function choropleth_updatePath(choroPath, newData, year, id) {
                 return;
             }
 
+            d3.select("#detailed_bar_chart").remove();
+
             let area = tooltipBarChartArea;
             area.width = 700;
             bar_fromDict(region.partiesAll, tooltipBarChartDivSecondary, area);

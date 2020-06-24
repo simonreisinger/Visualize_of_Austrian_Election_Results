@@ -131,6 +131,7 @@ function bar_fromDict(dict, where, area={width: 200, height: 150}) {
         .domain(partyNames.map(d => d));
 
     let svg = where.append("svg")
+        .attr("id", "detailed_bar_chart")
         .attr("width", area.width)
         .attr("height", area.height + 40);
 

@@ -19,7 +19,9 @@ let _partyColors = {
     "BZÖ": "Orange",
     "JETZT": "#ADADAD",
     "PILZ": "#ADADAD", // SAME PARTY DIFFERENT NAME
-    "FRANK": "#F8D323"
+    "FRANK": "#F8D323",
+    "KPÖ": "#F00",
+    "PIRAT": "#4C2582"
 };
 
 function data_getPartyColor(party) {
