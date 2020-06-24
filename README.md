@@ -5,7 +5,7 @@ This project was created for the Course [Informationsvisualisierung](https://www
 ## Using the First-past-the-post voting system for Austrian Elections
 Visualization [here](https://ippon1.github.io/Visualize_of_Austrian_Election_Results/First-past-the-post/).
 For more information please look at the [presentation](https://github.com/ippon1/Visualize_of_Austrian_Election_Results/tree/master/presentation).
-This part received the [Best Assignment Award](https://www.cg.tuwien.ac.at/courses/InfoVis/HallOfFame/2019/index.html).
+This part received the [Best Assignment Award](https://www.cg.tuwien.ac.at/courses/InfoVis/HallOfFame/#Hall%20of%20Fame%202020).
 
 ### Sources:
 * [Verwaltungsgrenzen Österreich](https://data.opendataportal.at/dataset/geojson-daten-osterreich/resource/1a8718bb-18b1-47e1-b6a5-2af5190e087e)
