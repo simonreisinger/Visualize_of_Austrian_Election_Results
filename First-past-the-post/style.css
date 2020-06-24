@@ -8,10 +8,13 @@ body {
     /*margin-bottom: 10em;*/
 }
 
-.introduction {
+.section {
     margin: 2em auto 2em auto;
-    width: 50em;
+    width: 1200px;
+}
 
+.introduction {
+    width: 50em;
     text-align: justify;
     text-justify: inter-word;
 }
