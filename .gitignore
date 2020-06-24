@@ -5,3 +5,13 @@
 *.iml
 Data_Cleaning/.ipynb_checkpoints/*
 
+*.toc
+*.aux
+*.loc
+*.log
+*.nav
+*.out
+*.pdf
+*.snm
+*.soc
+*.gz
