@@ -1,10 +1,14 @@
-.idea/
+# Mac
 .DS_Store
 
-.ipynb_checkpoints/*
+# Intellij
+.idea/
 *.iml
-Data_Cleaning/.ipynb_checkpoints/*
 
+# The Jupyter Notebook
+*/.ipynb_checkpoints/*
+
+# Latex
 *.toc
 *.aux
 *.loc
