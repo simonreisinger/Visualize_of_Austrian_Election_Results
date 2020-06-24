@@ -8,6 +8,7 @@ let tooltipBarChartDivSecondary = null;
 let tooltipBars = null;
 let tooltipLabels = null;
 
+let choroplethMapArea = {width: 700, height: 400, x: 0, y: 0};
 let mainBarChartArea = {width: 400, height: 150}
 let tooltipBarChartArea = {width: 300, height: 150}
 
@@ -31,12 +32,14 @@ function main() {
         choropleth(data.municipalities,
             year,
             "#svg_choropleth_municipalities",
-            "./data/gemeinden_wien_bezirke_gross_geo.json");
+            "./data/gemeinden_wien_bezirke_gross_geo.json",
+            choroplethMapArea);
 
         choropleth(data.counties,
             year,
             "#svg_choropleth_counties",
-            "./data/bezirke_wien_gross_geo.json");
+            "./data/bezirke_wien_gross_geo.json",
+            choroplethMapArea);
         d3.select("#svg_choropleth_counties").style("display", "none");
 
 
@@ -103,8 +106,21 @@ function main() {
                 main_addYear(year);
                 yearDataMap[year] = data;
 
-                main_parallel(yearDataMap, "municipalities", "parallel_coordinates_fptp", "parallel_coordinates_fptp_div", PARALLEL_MODE_FPRP);
-                main_parallel(yearDataMap, "municipalities", "parallel_coordinates_pr", "parallel_coordinates_pr_div", PARALLEL_MODE_PR);
+                let pcArea = choroplethMapArea.width + mainBarChartArea.width;
+                d3.selectAll(".pc_master_div")
+                    .style("width", pcArea + "px");
+
+                main_parallel(yearDataMap,
+                    "municipalities",
+                    "parallel_coordinates_fptp",
+                    "parallel_coordinates_fptp_div",
+                    PARALLEL_MODE_FPRP);
+
+                main_parallel(yearDataMap,
+                    "municipalities",
+                    "parallel_coordinates_pr",
+                    "parallel_coordinates_pr_div",
+                    PARALLEL_MODE_PR);
             });
         })
     });
