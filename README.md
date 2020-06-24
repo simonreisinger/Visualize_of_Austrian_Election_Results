@@ -3,9 +3,8 @@ We will analyze and visualize the results of the national election 2019 in Austr
 This project was created for the Course [Informationsvisualisierung](https://www.cg.tuwien.ac.at/courses/InfoVis/ue.html) at [TU Wien](https://www.tuwien.at).
 
 ## Using the First-past-the-post voting system for Austrian Elections
-This 
-Visualization [here](https://ippon1.github.io/Visualize_of_Austrian_Election_Results/First-past-the-post/)
-
+This part received the [Best Assignment Award](https://www.cg.tuwien.ac.at/courses/InfoVis/HallOfFame/2019/index.html).
+Visualization [here](https://ippon1.github.io/Visualize_of_Austrian_Election_Results/First-past-the-post/).
 For more information please look at the [presentation](https://github.com/ippon1/Visualize_of_Austrian_Election_Results/tree/master/presentation).
 
 ### Sources:
