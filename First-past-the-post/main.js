@@ -16,7 +16,7 @@ let lastRegionType = null;
 
 const REGION_TYPE_MUNICIPALITY = "Municipalities (Gemeinden)";
 const REGION_TYPE_COUNTY = "Districts (Bezirke)";
-const REGION_TYPE_WAHLKREISE = "Wahlkreise";
+const REGION_TYPE_WAHLKREISE = "Electoral district (Wahlkreise) - Weighted"; // https://en.wikipedia.org/wiki/Electoral_district
 const REGION_TYPES = [REGION_TYPE_MUNICIPALITY, REGION_TYPE_COUNTY, REGION_TYPE_WAHLKREISE];
 
 function main() {
