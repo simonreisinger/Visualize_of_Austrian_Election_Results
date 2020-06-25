@@ -87,8 +87,6 @@ Mind that we are using d3.v5, which is no longer compatible to the more wide-spr
 
 ### TODOs
 * Keep the same order of parties (my idea)
-* File loading is not done via d3.csv but XMLHttPRequests. Data preprocessing is a bit complicated.
-* When linking the choropleth map with the pie chart, the pie chart is removed and redrawn for every hover operation instead of being updated.
 
 ## Static Charts with Python
 Visualization [here](https://ippon1.github.io/Visualize_of_Austrian_Election_Results/Static_Charts_with_Python)
@@ -116,20 +114,3 @@ For the first exercise, show the results of the election per state (Bundesland) 
 
 ### Resources
 Shape: https://www.eea.europa.eu/data-and-maps/data/eea-reference-grids-2/gis-files/austria-shapefile
-
-
-### Implementation hints
-
-Load the data using pandas and show the table in the notebook:
-
-    import pandas as pd
-    df = pd.read_csv("NRW2019_Bundeslaender.csv")
-    df
-
-Depending on your chosen visualization, you might want to use the Austrian official party colors. Depending on the chosen visualization library, you will need to use the Matplotlib colormap (cm) or the color list (colors).
-
-    from matplotlib.colors import LinearSegmentedColormap
-
-
-    colors = ['#63C3D0', '#ce000c', '#0056A2', '#E3257B', '#ADADAD', '#88B626', '#333333']
-    cm = LinearSegmentedColormap.from_list('austrianParties', colors, N=7)
