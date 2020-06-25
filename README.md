@@ -10,7 +10,7 @@ This part received the [Best Assignment Award](https://www.cg.tuwien.ac.at/cours
 ### Sources:
 * [Verwaltungsgrenzen Österreich](https://data.opendataportal.at/dataset/geojson-daten-osterreich/resource/1a8718bb-18b1-47e1-b6a5-2af5190e087e)
 * [Nationalratswahl results](https://bmi.gv.at/412/Nationalratswahlen/Nationalratswahl_2019/)
-* [Wahlkreiseinteilung](https://www.bmi.gv.at/412/Nationalratswahlen/Wahlkreiseinteilung.aspx)
+* [Austrian Electoral districts (Wahlkreiseinteilung)](https://www.bmi.gv.at/412/Nationalratswahlen/Wahlkreiseinteilung.aspx)
 
 ### Disclaimer
 We are clear that the districts of Austria variy wide in size but we can not change this...
