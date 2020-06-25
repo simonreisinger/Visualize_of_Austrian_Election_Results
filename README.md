@@ -133,10 +133,3 @@ Depending on your chosen visualization, you might want to use the Austrian offic
 
     colors = ['#63C3D0', '#ce000c', '#0056A2', '#E3257B', '#ADADAD', '#88B626', '#333333']
     cm = LinearSegmentedColormap.from_list('austrianParties', colors, N=7)
-
-
-### TODOs
-as we assign the final points during the submission talks at the end of the semester you get short written feedback regarding Exercise 1 here:
-You provided some interpretation of the data for the bar charts, but we also want a description of the insights from the provided data one can gain from the pie charts.
-We will not deduct a point here if you correct this during the submission talk.
-Apart from that everything that was required was done.
