@@ -33,7 +33,7 @@ function choropleth(data, year, id, jsonUrl, rect = {width: 700, height: 400, x:
             .attr("stroke", "black");
         //.attr("fill", d => choropleth_computeRegionColor(data_processIso(d.properties.iso)));
         //.attr("id", d => d.properties.name);
-
+        console.log(choroPath);
         choropleth_updatePath(choroPath, data, year, id);
 
         choropleth_updateFuns[id] = (newData, year) => choropleth_updatePath(choroPath, newData, year, id);
@@ -53,21 +53,8 @@ function choropleth_updatePath(choroPath, newData, year, id) {
         })
         .on("click", (d) => {
             let name = d.properties.name;
-
-            /*let mainDiv = d3.select("#DODdiv")
-                .style("display", null);
-            mainDiv.html(""); // Empty div
-
-            let div = mainDiv.append("div");
-
-            let spanText = div.append("span").html(name + " (" + year + ")");
-
-            let button = div.append("button")
-                .attr("type", "button")
-                .on("click", d => mainDiv.style("display", "none"))
-                .html("X");*/
             let iso = data_processIso(d.properties.iso);
-            if (iso.toString().length < 5) iso *= 100; // Quick and Dirty
+            // TODO edit here add two iso together
             var region = newData[iso];
             if (region == null) {
                 iso = d.properties.iso;
@@ -89,9 +76,8 @@ function choropleth_updatePath(choroPath, newData, year, id) {
 
 function choropleth_computeRegionColor(path, data, year, id) {
     let iso = path.properties.iso;
-    // TODO here i think
     iso = data_processIso(iso, year);
-    if (iso.toString().length < 5) iso *= 100; // Quick and Dirty
+    // TODO edit here add two iso together
     let region = data[iso];
     if (DEBUG && region == null) {
         console.error("unable to compute region color for " + year + " region " + path.properties.name + "  with iso " + path.properties.iso + " because region data was null");
