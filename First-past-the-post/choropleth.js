@@ -52,7 +52,8 @@ function choropleth_updatePath(choroPath, newData, year, id) {
         })
         .on("click", (d) => {
             let name = d.properties.name;
-            let iso = data_processIso(d.properties.iso);
+            let iso = d.properties.iso;
+            iso = data_processIso(iso);
             var region = getDatasetByISO(newData, iso);
             if (region == null) {
                 iso = d.properties.iso;
@@ -91,9 +92,8 @@ function choropleth_computeRegionColor(path, data, year, id) {
 
 function choropleth_mousemoveFun(choroPath, d, data, year) {
 
-    let iso_activePath = d.properties.iso;
-    let iso = data_processIso(d.properties.iso, year);
-    if (iso.toString().length < 5) iso *= 100; // Quick and Dirty
+    let iso = d.properties.iso;
+    iso = data_processIso(iso, year);
     let region = data[iso];
     let name = d.properties.name;
     let x = d3.event.pageX;
