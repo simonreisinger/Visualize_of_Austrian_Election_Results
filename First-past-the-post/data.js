@@ -456,7 +456,7 @@ function getDatasetByISO(data, iso, year) {
         // Peuerbach mit den Nachbargemeinden Bruck-Waasen
         if (iso === 40803 || iso === 40819) return getDataByISO(data,40835,40835,null);
     }
-    let xx = getDataByISO(data, iso, null);
+    let xx = getDataByISO(data, iso,iso, null);
     return xx;
 }
 
