@@ -53,8 +53,7 @@ function choropleth_updatePath(choroPath, newData, year, id) {
         .on("click", (d) => {
             let name = d.properties.name;
             let iso = d.properties.iso;
-            iso = data_processIso(iso);
-            var region = getDatasetByISO(newData, iso);
+            var region = getDatasetByISO(newData, iso, year);
             if (region == null) {
                 iso = d.properties.iso;
                 if (DEBUG) console.error("unable to show details for " + year + " region " + name + " with iso " + iso + " because region data was null");
@@ -73,8 +72,7 @@ function choropleth_updatePath(choroPath, newData, year, id) {
 
 function choropleth_computeRegionColor(path, data, year, id) {
     let iso = path.properties.iso;
-    iso = data_processIso(iso, year);
-    var region = getDatasetByISO(data, iso);
+    var region = getDatasetByISO(data, iso, year);
     if (DEBUG && region == null) {
         console.error("unable to compute region color for " + year + " region " + path.properties.name + "  with iso " + path.properties.iso + " because region data was null");
         region = {mostVotedParty: SONST};
@@ -93,8 +91,7 @@ function choropleth_computeRegionColor(path, data, year, id) {
 function choropleth_mousemoveFun(choroPath, d, data, year) {
 
     let iso = d.properties.iso;
-    iso = data_processIso(iso, year);
-    let region = data[iso];
+    var region = getDatasetByISO(data, iso, year)
     let name = d.properties.name;
     let x = d3.event.pageX;
     let y = d3.event.pageY;

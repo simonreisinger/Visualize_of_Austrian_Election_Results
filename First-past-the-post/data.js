@@ -40,7 +40,6 @@ function data_initialize(data, year) {
         console.error(year + " counties length was " + len + " but it should be 116");
     }
     counties = data_preprocessRegions(counties);
-
     // Municipalities (Gemeinde)
     let municipalities = data.filter(function (value) {
         let gkz = value.GKZ;
@@ -49,8 +48,6 @@ function data_initialize(data, year) {
             && gkz_lastTwo !== "00";
     });
     municipalities = data_preprocessRegions(municipalities);
-
-
 
     let countiesXX = data_filterCounties(data);
     let lol = countiesXX.map(function (value) {
@@ -70,8 +67,8 @@ function data_initialize(data, year) {
         return value.GKZ.slice(-5) === "00000";
     })[0];
     let thisYearsResults = getPRResults(nationalResults, year) // TODO
-    
-    
+
+
     return {
         counties,
         municipalities,
@@ -284,190 +281,192 @@ function data_reduceRegions(manyPreprocessedRegions) {
     };
 }
 
-function data_processIso(iso, year) {
+function getDatasetByISO(data, iso, year) {
     if (year === 2013) {
-        if (iso === 62268) iso = 62213;
+        if (iso === 62268) return getDataByISO(data, 62213, null);
         // Rohrbach --> Rohrbach an der Lafnitz
-        if (iso === 62277) iso = 62240;
-        if (iso === 32144) iso = 32408;
-        if (iso === 30735) iso = 32410;
-        if (iso === 30738) iso = 32417;
-        if (iso === 30741) iso = 32424;
-        if (iso === 30736) iso = 32411;
-        if (iso === 30739) iso = 32418;
-        if (iso === 31952) iso = 32416;
-        if (iso === 31950) iso = 32412;
-        if (iso === 31951) iso = 32415;
-        if (iso === 31235) iso = 32404;
-        if (iso === 30740) iso = 32419;
-        if (iso === 30731) iso = 32405;
-        if (iso === 30732) iso = 32406;
-        if (iso === 31953) iso = 32421;
-        if (iso === 30733) iso = 32407;
-        if (iso === 30737) iso = 32413;
-        if (iso === 30729) iso = 32401;
-        if (iso === 31954) iso = 32423;
-        if (iso === 30730) iso = 32402;
-        if (iso === 31949) iso = 32403;
-        if (iso === 30734) iso = 32409;
+        if (iso === 62277) return getDataByISO(data, 62240, null);
+        if (iso === 32144) return getDataByISO(data, 32408, null);
+        if (iso === 30735) return getDataByISO(data, 32410, null);
+        if (iso === 30738) return getDataByISO(data, 32417, null);
+        if (iso === 30741) return getDataByISO(data, 32424, null);
+        if (iso === 30736) return getDataByISO(data, 32411, null);
+        if (iso === 30739) return getDataByISO(data, 32418, null);
+        if (iso === 31952) return getDataByISO(data, 32416, null);
+        if (iso === 31950) return getDataByISO(data, 32412, null);
+        if (iso === 31951) return getDataByISO(data, 32415, null);
+        if (iso === 31235) return getDataByISO(data, 32404, null);
+        if (iso === 30740) return getDataByISO(data, 32419, null);
+        if (iso === 30731) return getDataByISO(data, 32405, null);
+        if (iso === 30732) return getDataByISO(data, 32406, null);
+        if (iso === 31953) return getDataByISO(data, 32421, null);
+        if (iso === 30733) return getDataByISO(data, 32407, null);
+        if (iso === 30737) return getDataByISO(data, 32413, null);
+        if (iso === 30729) return getDataByISO(data, 32401, null);
+        if (iso === 31954) return getDataByISO(data, 32423, null);
+        if (iso === 30730) return getDataByISO(data, 32402, null);
+        if (iso === 31949) return getDataByISO(data, 32403, null);
+        if (iso === 30734) return getDataByISO(data, 32409, null);
         // Ab 1. Jänner 2015 ist die Stadtgemeinde im Rahmen der steiermärkischen Gemeindestrukturreform mit den Gemeinden Oberwölz Umgebung, Schönberg-Lachtal und Winklern bei Oberwölz zusammengeschlossen, die neue Gemeinde führt den Namen „Oberwölz“ weiter.
-        if (iso === 61440) iso = 61414; // + 61415 + 61434
-        if (iso === 61445) iso = 61417; // + 61430
-        if (iso === 61441) iso = 61418;
-        if (iso === 61442) iso = 61421;
-        if (iso === 61443) iso = 61422;
-        if (iso === 61444) iso = 61427;
-        if (iso === 62377) iso = 62309;
-        if (iso === 61439) iso = 61412;
-        if (iso === 61627) iso = 61602;
-        if (iso === 61628) iso = 61604; // + 61623
-        if (iso === 61629) iso = 61607; // + 61616
-        if (iso === 61438) iso = 61411;
-        if (iso === 61630) iso = 61608;
-        if (iso === 61632) iso = 61613;
-        if (iso === 61437) iso = 61404; // 61405 // 61406
-        if (iso === 61446) iso = 61432;
-        if (iso === 62144) iso = 62122;
-        if (iso === 62143) iso = 62121;
-        if (iso === 61756) iso = 61702;
-        if (iso === 61757) iso = 61705;
-        if (iso === 61758) iso = 62317;
-        if (iso === 62145) iso = 62118; // + 62136 + 62137
-        if (iso === 61759) iso = 61712;
-        if (iso === 61760) iso = 61713;
-        if (iso === 61761) iso = 61715; // 61749
-        if (iso === 62266) iso = 61718; // https://de.wikipedia.org/wiki/Feistritztal
-        if (iso === 61762) iso = 61721;
-        if (iso === 62141) iso = 62114;
-        if (iso === 61267) iso = 61244;
-        if (iso === 61764) iso = 61737;
-        if (iso === 61265) iso = 61242;
-        if (iso === 61261) iso = 61225;
-        if (iso === 61264) iso = 61239;
-        if (iso === 61263) iso = 61238;
-        if (iso === 61765) iso = 61436;
-        if (iso === 61766) iso = 61755;
-        if (iso === 61260) iso = 61224; // 61234
-        if (iso === 61262) iso = 61228;
-        if (iso === 61255) iso = 61226;
-        if (iso === 61259) iso = 61223;
-        if (iso === 62048) iso = 62037;
-        if (iso === 62042) iso = 62016;
-        if (iso === 61258) iso = 61221;
+        if (iso === 61440) return getDataByISO(data, 61414, [61415, 61434]);
+        if (iso === 61445) return getDataByISO(data, 61417, [61430]);
+        if (iso === 61441) return getDataByISO(data, 61418, null);
+        if (iso === 61442) return getDataByISO(data, 61421, null);
+        if (iso === 61443) return getDataByISO(data, 61422, null);
+        if (iso === 61444) return getDataByISO(data, 61427, null);
+        if (iso === 62377) return getDataByISO(data, 62309, null);
+        if (iso === 61439) return getDataByISO(data, 61412, null);
+        if (iso === 61627) return getDataByISO(data, 61602, null);
+        if (iso === 61628) return getDataByISO(data, 61604, [61623]);
+        if (iso === 61629) return getDataByISO(data, 61607, [61616]);
+        if (iso === 61438) return getDataByISO(data, 61411, null);
+        if (iso === 61630) return getDataByISO(data, 61608, null);
+        if (iso === 61632) return getDataByISO(data, 61613, null);
+        if (iso === 61437) return getDataByISO(data, 61404, [61405, 61406]);
+        if (iso === 61446) return getDataByISO(data, 61432, null);
+        if (iso === 62144) return getDataByISO(data, 62122, null);
+        if (iso === 62143) return getDataByISO(data, 62121, null);
+        if (iso === 61756) return getDataByISO(data, 61702, null);
+        if (iso === 61757) return getDataByISO(data, 61705, null);
+        if (iso === 61758) return getDataByISO(data, 62317, null);
+        if (iso === 62145) return getDataByISO(data, 62118, [62136, 62137]);
+        if (iso === 61759) return getDataByISO(data, 61712, null);
+        if (iso === 61760) return getDataByISO(data, 61713, null);
+        if (iso === 61761) return getDataByISO(data, 61715, [61749]);
+        // https://de.wikipedia.org/wiki/Feistritztal
+        if (iso === 62266) return getDataByISO(data, 61718, null);
+        if (iso === 61762) return getDataByISO(data, 61721, null);
+        if (iso === 62141) return getDataByISO(data, 62114, null);
+        if (iso === 61267) return getDataByISO(data, 61244, null);
+        if (iso === 61764) return getDataByISO(data, 61737, null);
+        if (iso === 61265) return getDataByISO(data, 61242, null);
+        if (iso === 61264) return getDataByISO(data, 61239, null);
+        if (iso === 61263) return getDataByISO(data, 61238, null);
+        if (iso === 61765) return getDataByISO(data, 61436, null);
+        if (iso === 61766) return getDataByISO(data, 61755, null);
+        if (iso === 61260) return getDataByISO(data, 61224, [61234]);
+        if (iso === 61262) return getDataByISO(data, 61228, null);
+        if (iso === 61255) return getDataByISO(data, 61226, null);
+        if (iso === 61259) return getDataByISO(data, 61223, null);
+        if (iso === 62048) return getDataByISO(data, 62037, null);
+        if (iso === 62042) return getDataByISO(data, 62016, null);
+        if (iso === 61258) return getDataByISO(data, 61221, null);
         //  Großsölk, Kleinsölk and Sankt Nikolai im Sölktal
-        if (iso === 61266) iso = 61214; // 61220 // 61241
-        if (iso === 62046) iso = 62030;
+        if (iso === 61266) return getDataByISO(data, 61214, [61220, 61241]);
+        if (iso === 62046) return getDataByISO(data, 62030, null);
         // Oberzeiring, Bretstein, Sankt Johann am Tauern and Sankt Oswald-Möderbrugg
-        if (iso === 62044) iso = 62019;
-        if (iso === 61256) iso = 61210;
-        if (iso === 61257) iso = 61218;
-        if (iso === 61055) iso = 61031;
-        if (iso === 61059) iso = 61047;
-        if (iso === 61254) iso = 61202;
-        if (iso === 61253) iso = 61201;
-        if (iso === 61058) iso = 61039;
-        if (iso === 61056) iso = 61036;
-        if (iso === 61057) iso = 61048; // + 62364
-        if (iso === 61054) iso = 61023;
-        if (iso === 61053) iso = 61022;
-        if (iso === 61052) iso = 61015;
-        if (iso === 61051) iso = 61011;
-        if (iso === 61050) iso = 61009;
-        if (iso === 61049) iso = 61005;
-        if (iso === 62264) iso = 62203;
-        if (iso === 62278) iso = 62259;
-        if (iso === 62276) iso = 62239;
-        if (iso === 62275) iso = 62234;
-        if (iso === 62274) iso = 62231;
-        if (iso === 62279) iso = 62261; // 62229
-        if (iso === 62272) iso = 62225;
-        if (iso === 62270) iso = 62221;
-        if (iso === 60660) iso = 60604; // 60658
-        if (iso === 60670) iso = 60652; // 60657
-        if (iso === 60669) iso = 60644; // 60633
-        if (iso === 60668) iso = 60640;
-        if (iso === 60667) iso = 60635; // 60612
-        if (iso === 60666) iso = 60631;
-        if (iso === 60665) iso = 60620;
-        if (iso === 60664) iso = 60614;
-        if (iso === 60663) iso = 60610;
-        if (iso === 60662) iso = 60609; // 60630
-        if (iso === 60661) iso = 60606;
-        if (iso === 60659) iso = 60603;
-        if (iso === 62273) iso = 62228;
-        if (iso === 62271) iso = 62223;
-        if (iso === 62269) iso = 62217;
-        if (iso === 62267) iso = 62212;
-        if (iso === 62389) iso = 62363;
-        if (iso === 62387) iso = 62361;
-        if (iso === 62386) iso = 62360;
-        if (iso === 62384) iso = 62350;
-        if (iso === 62382) iso = 62334;
-        if (iso === 62381) iso = 62333;
-        if (iso === 62380) iso = 62321;
-        if (iso === 62385) iso = 62354;
-        if (iso === 62379) iso = 62316;
-        if (iso === 62378) iso = 62315;
-        if (iso === 62375) iso = 62303;
-        if (iso === 60351) iso = 60343;
-        if (iso === 60350) iso = 60333;
-        if (iso === 60349) iso = 60331;
-        if (iso === 60348) iso = 60330;
-        if (iso === 60347) iso = 60327;
-        if (iso === 60346) iso = 60312;
-        if (iso === 60345) iso = 60303;
-        if (iso === 60344) iso = 60302;
-        if (iso === 62147) iso = 62133;
-        if (iso === 62142) iso = 62117;
-        if (iso === 62146) iso = 62029;
-        if (iso === 62148) iso = 62134; // 62127
-        if (iso === 62140) iso = 62113;
-        if (iso === 62139) iso = 62106; // 62123
-        if (iso === 62138) iso = 62101; // 62101
-        if (iso === 62390) iso = 62366;
-        if (iso === 62388) iso = 62362; // 62307 // 62310
-        if (iso === 62376) iso = 62357;
-        if (iso === 62383) iso = 62346;
-        if (iso === 61626) iso = 61601;
-        if (iso === 61631) iso = 61609;
-        if (iso === 61633) iso = 61622; // + 61620
-        if (iso === 61763) iso = 61736;
-        if (iso === 62039) iso = 62009;
-        if (iso === 62040) iso = 62011;
-        if (iso === 62041) iso = 62013;
-        if (iso === 62043) iso = 62020; // + 62017
-        if (iso === 62045) iso = 62129; // + 62005
-        if (iso === 62047) iso = 62035;
-        if (iso === 62265) iso = 62207;
+        if (iso === 62044) return getDataByISO(data, 62019, null);
+        if (iso === 61256) return getDataByISO(data, 61210, null);
+        if (iso === 61257) return getDataByISO(data, 61218, null);
+        if (iso === 61055) return getDataByISO(data, 61031, null);
+        if (iso === 61059) return getDataByISO(data, 61047, null);
+        if (iso === 61254) return getDataByISO(data, 61202, null);
+        if (iso === 61253) return getDataByISO(data, 61201, null);
+        if (iso === 61058) return getDataByISO(data, 61039, null);
+        if (iso === 61056) return getDataByISO(data, 61036, null);
+        if (iso === 61057) return getDataByISO(data, 61048, [62364]);
+        if (iso === 61054) return getDataByISO(data, 61023, null);
+        if (iso === 61053) return getDataByISO(data, 61022, null);
+        if (iso === 61052) return getDataByISO(data, 61015, null);
+        if (iso === 61051) return getDataByISO(data, 61011, null);
+        if (iso === 61050) return getDataByISO(data, 61009, null);
+        if (iso === 61049) return getDataByISO(data, 61005, null);
+        if (iso === 62264) return getDataByISO(data, 62203, null);
+        if (iso === 62278) return getDataByISO(data, 62259, null);
+        if (iso === 62276) return getDataByISO(data, 62239, null);
+        if (iso === 62275) return getDataByISO(data, 62234, null);
+        if (iso === 62274) return getDataByISO(data, 62231, null);
+        if (iso === 62279) return getDataByISO(data, 62261, [62229]);
+        if (iso === 62272) return getDataByISO(data, 62225, null);
+        if (iso === 62270) return getDataByISO(data, 62221, null);
+        if (iso === 60660) return getDataByISO(data, 60604, [60658]);
+        if (iso === 60670) return getDataByISO(data, 60652, [60657]);
+        if (iso === 60669) return getDataByISO(data, 60644, [60633]);
+        if (iso === 60668) return getDataByISO(data, 60640, null);
+        if (iso === 60667) return getDataByISO(data, 60635, [60612]);
+        if (iso === 60666) return getDataByISO(data, 60631, null);
+        if (iso === 60665) return getDataByISO(data, 60620, null);
+        if (iso === 60664) return getDataByISO(data, 60614, null);
+        if (iso === 60663) return getDataByISO(data, 60610, null);
+        if (iso === 60662) return getDataByISO(data, 60609, [60630]);
+        if (iso === 60661) return getDataByISO(data, 60606, null);
+        if (iso === 60659) return getDataByISO(data, 60603, null);
+        if (iso === 62273) return getDataByISO(data, 62228, null);
+        if (iso === 62271) return getDataByISO(data, 62223, null);
+        if (iso === 62269) return getDataByISO(data, 62217, null);
+        if (iso === 62267) return getDataByISO(data, 62212, null);
+        if (iso === 62389) return getDataByISO(data, 62363, null);
+        if (iso === 62387) return getDataByISO(data, 62361, null);
+        if (iso === 62386) return getDataByISO(data, 62360, null);
+        if (iso === 62384) return getDataByISO(data, 62350, null);
+        if (iso === 62382) return getDataByISO(data, 62334, null);
+        if (iso === 62381) return getDataByISO(data, 62333, null);
+        if (iso === 62380) return getDataByISO(data, 62321, null);
+        if (iso === 62385) return getDataByISO(data, 62354, null);
+        if (iso === 62379) return getDataByISO(data, 62316, null);
+        if (iso === 62378) return getDataByISO(data, 62315, null);
+        if (iso === 62375) return getDataByISO(data, 62303, null);
+        if (iso === 60351) return getDataByISO(data, 60343, null);
+        if (iso === 60350) return getDataByISO(data, 60333, null);
+        if (iso === 60349) return getDataByISO(data, 60331, null);
+        if (iso === 60348) return getDataByISO(data, 60330, null);
+        if (iso === 60347) return getDataByISO(data, 60327, null);
+        if (iso === 60346) return getDataByISO(data, 60312, null);
+        if (iso === 60345) return getDataByISO(data, 60303, null);
+        if (iso === 60344) return getDataByISO(data, 60302, null);
+        if (iso === 62147) return getDataByISO(data, 62133, null);
+        if (iso === 62142) return getDataByISO(data, 62117, null);
+        if (iso === 62146) return getDataByISO(data, 62029, null);
+        if (iso === 62148) return getDataByISO(data, 62134, [62127]);
+        if (iso === 62140) return getDataByISO(data, 62113, null);
+        if (iso === 62139) return getDataByISO(data, 62106, [62123]);
+        if (iso === 62138) return getDataByISO(data, 62101, [62101]);
+        if (iso === 62390) return getDataByISO(data, 62366, null);
+        if (iso === 62388) return getDataByISO(data, 62362, [ 62307, 62310]);
+        if (iso === 62376) return getDataByISO(data, 62357, null);
+        if (iso === 62383) return getDataByISO(data, 62346, null);
+        if (iso === 61626) return getDataByISO(data, 61601, null);
+        if (iso === 61631) return getDataByISO(data, 61609, null);
+        if (iso === 61633) return getDataByISO(data, 61622, [61620]);
+        if (iso === 61763) return getDataByISO(data, 61736, null);
+        if (iso === 62039) return getDataByISO(data, 62009, null);
+        if (iso === 62040) return getDataByISO(data, 62011, null);
+        if (iso === 62041) return getDataByISO(data, 62013, null);
+        if (iso === 62043) return getDataByISO(data, 62020, [62017]);
+        if (iso === 62045) return getDataByISO(data, 62129, [62005]);
+        if (iso === 62047) return getDataByISO(data, 62035, null);
+        if (iso === 62265) return getDataByISO(data, 62207, null);
         // The municipality was formed on 1 May 2015 by merging two municipalities,
         // Rohrbach in Oberösterreich and Berg bei Rohrbach.
-        if (iso === 41344) iso = 41330; // + 41308
-        if (iso === 41343) iso = 41303; // + 41339
-        if (iso === 62268) iso = 62213;
+        if (iso === 41344) return getDataByISO(data, 41330, [41308]);
+        // Mitterberg-Sankt Martin ist seit Jahresbeginn 2015 eine Gemeinde
+        if (iso === 61261) return getDataByISO(data, 61225, [61712, 61240]);
+        if (iso === 41343) return getDataByISO(data, 41303, [41339]);
+        if (iso === 62268) return getDataByISO(data, 62213, null);
 
 
     } else if (year === 2019) {
-        // 3 Gemeinden zusammengelegt
+        //TODO 3 Gemeinden muessen zusammengelegt
         // Mit 1. Jänner 2019 wurden die Gemeinden St. Stefan am Walde und Afiesl zur neuen Gemeinde St. Stefan-Afiesl fusioniert
-        if (iso === 41301 || iso === 41335) iso = 41346;
+        if (iso === 41301 || iso === 41335) return getDataByISO(data, 41346, null);
         // Mit 1. Jänner 2019 wurde die Gemeinde Ahorn nach Helfenberg eingemeindet
-        if (iso === 41302 || iso === 41310) iso = 41345;
+        if (iso === 41302 || iso === 41310) return getDataByISO(data, 41345, null);
         // Mit 1. Jänner 2018 wurde die Gemeinde Schönegg Teil der Gemeinde Vorderweißenbach, das ehemalige Gemeindegebiet wurde damit Teil des Bezirks Urfahr-Umgebung
-        if (iso === 41340 || iso === 41625) iso = 41628;
+        if (iso === 41340 || iso === 41625) return getDataByISO(data, 41628, null);
         // Peuerbach mit den Nachbargemeinden Bruck-Waasen
-        if (iso === 40803 || iso === 40819) iso = 40835;
+        if (iso === 40803 || iso === 40819) return getDataByISO(data, 40835, null);
     }
-    return iso;
+    let xx = getDataByISO(data, iso, null);
+    return xx;
 }
 
-function getDatasetByISO(dataset, iso1){
-    // TODO add here two together
-    if (iso1 === 0) return addTwoISODatasetsTogether(dataset, iso1, 0)
-    return dataset[iso1]
-}
-
-function addTwoISODatasetsTogether(dataset, iso1, iso2) {
-    return dataset[iso1]
+function getDataByISO(data, iso1, iso2) {
+    if (iso2 === null) return data[iso1]
+    let dataResult = data[iso1];
+    for (var iso in iso2){
+        // TODO edit here
+    }
+    return data[iso1];
 }
 
 var WahlkreiseMandate = [];
