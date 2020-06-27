@@ -460,6 +460,16 @@ function data_processIso(iso, year) {
     return iso;
 }
 
+function getDatasetByISO(dataset, iso1){
+    // TODO add here two together
+    if (iso1 === 0) return addTwoISODatasetsTogether(dataset, iso1, 0)
+    return dataset[iso1]
+}
+
+function addTwoISODatasetsTogether(dataset, iso1, iso2) {
+    return dataset[iso1]
+}
+
 var WahlkreiseMandate = [];
 var WahlkreiseDataSet = [];
 var weightedResult = [];

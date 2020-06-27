@@ -33,7 +33,6 @@ function choropleth(data, year, id, jsonUrl, rect = {width: 700, height: 400, x:
             .attr("stroke", "black");
         //.attr("fill", d => choropleth_computeRegionColor(data_processIso(d.properties.iso)));
         //.attr("id", d => d.properties.name);
-        console.log(choroPath);
         choropleth_updatePath(choroPath, data, year, id);
 
         choropleth_updateFuns[id] = (newData, year) => choropleth_updatePath(choroPath, newData, year, id);
@@ -54,16 +53,13 @@ function choropleth_updatePath(choroPath, newData, year, id) {
         .on("click", (d) => {
             let name = d.properties.name;
             let iso = data_processIso(d.properties.iso);
-            // TODO edit here add two iso together
-            var region = newData[iso];
+            var region = getDatasetByISO(newData, iso);
             if (region == null) {
                 iso = d.properties.iso;
                 if (DEBUG) console.error("unable to show details for " + year + " region " + name + " with iso " + iso + " because region data was null");
                 return;
             }
-
             d3.select("#detailed_bar_chart").remove();
-
             let area = tooltipBarChartArea;
             area.width = 700;
             bar_fromDict(region.partiesAll, tooltipBarChartDivSecondary, area);
@@ -77,8 +73,7 @@ function choropleth_updatePath(choroPath, newData, year, id) {
 function choropleth_computeRegionColor(path, data, year, id) {
     let iso = path.properties.iso;
     iso = data_processIso(iso, year);
-    // TODO edit here add two iso together
-    let region = data[iso];
+    var region = getDatasetByISO(data, iso);
     if (DEBUG && region == null) {
         console.error("unable to compute region color for " + year + " region " + path.properties.name + "  with iso " + path.properties.iso + " because region data was null");
         region = {mostVotedParty: SONST};
