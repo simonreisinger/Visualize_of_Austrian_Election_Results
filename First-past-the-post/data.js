@@ -55,6 +55,7 @@ function data_initialize(data, year) {
         return value;
     });
 
+
     WahlkreiseDataSet[year] = firstPassThePostWahlkreis(lol, year)
     let mostVotedParty = clacBarData(year); // TODO edit here
     var wahlkreis = data_filterCounties(data);
@@ -67,7 +68,8 @@ function data_initialize(data, year) {
         return value.GKZ.slice(-5) === "00000";
     })[0];
     let thisYearsResults = getPRResults(nationalResults, year) // TODO
-
+    console.log(thisYearsResults);
+    let [validVotesPR, unvalidVotesPR] = VierProzentHuerde(nationalResults);
 
     return {
         counties,
@@ -75,6 +77,26 @@ function data_initialize(data, year) {
         wahlkreis,
         thisYearsResults
     };
+}
+
+function VierProzentHuerde(results) {
+    var notParty = ["GKZ", "Gebietsname", "Wahlberechtigte", "Abgegebene", "Ungültige", "Gültige"]
+    console.log(results);
+    var unvalidVotes = 0;
+    var validVotes = 0;
+    for (var i in results) {
+        if (!notParty.includes(i)) {
+            if (100.0 * results[i] / results["Abgegebene"] < 4.0) {
+                unvalidVotes += results[i];
+            } else {
+                validVotes += results[i];
+            }
+        }
+        if (r)
+            console.log(i);
+        console.log(results[i]);
+    }
+    return [validVotes, unvalidVotes];
 }
 
 function getPRResults(nationalResults, year) {
@@ -455,11 +477,10 @@ function getDatasetByISO(data, iso, year) {
         // Peuerbach mit den Nachbargemeinden Bruck-Waasen
         if (iso === 40803 || iso === 40819) return getDataByISO(data, 40835, 40835, null);
     }
-    let xx = getDataByISO(data, iso, iso, null);
-    return xx;
+    return getDataByISO(data, iso, iso, null);
 }
 
-function getDataByISO(data, originalISO, iso1, iso2) { // TODO iso
+function getDataByISO(data, originalISO, iso1, iso2) {
     if (iso2 === null) return data[iso1]
     var maxPartyName = data[iso1].mostVotedParty;
     var maxPartyVotes = data[iso1].partiesAll[maxPartyName];
