@@ -193,7 +193,7 @@ function main_parallel(yearDataMap, key, id, divId, mode) {
     par.remove();
 
     let yearPartiesMap;
-    if (mode == PARALLEL_MODE_FPRP) {
+    if (mode === PARALLEL_MODE_FPRP) {
         yearPartiesMap = {};
         for (let year in yearDataMap) {
             yearPartiesMap[year] = yearDataMap[year][key].reduced;
