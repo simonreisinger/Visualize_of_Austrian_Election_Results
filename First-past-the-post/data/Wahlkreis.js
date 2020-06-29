@@ -120,9 +120,9 @@ var wahlkreisNach = {
     "Rudolfsheim-Fuenfhaus": {Wahlkreis: "Wien Süd-West", Number: "9E", Mandate: 6},
     "Liesing": {Wahlkreis: "Wien Süd-West", Number: "9E", Mandate: 6},
     "Ottakring": {Wahlkreis: "Wien Nord-West", Number: "9F", Mandate: 5},
-    "Hernals": {Wahlkreis: "Wien Süd-West", Number: "9E", Mandate: 6},
-    "Waehring": {Wahlkreis: "Wien Süd-West", Number: "9E", Mandate: 6},
-    "Doebling": {Wahlkreis: "Wien Süd-West", Number: "9E", Mandate: 6},
+    "Hernals": {Wahlkreis: "Wien Nord-West", Number: "9E", Mandate: 6},
+    "Waehring": {Wahlkreis: "Wien Nord-West", Number: "9E", Mandate: 6},
+    "Doebling": {Wahlkreis: "Wien Nord-West", Number: "9E", Mandate: 6},
     "Floridsdorf": {Wahlkreis: "Wien Nord", Number: "9G", Mandate: 6},
     "Donaustadt": {Wahlkreis: "Wien Nord", Number: "9G", Mandate: 6}
 }
