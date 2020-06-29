@@ -24,11 +24,6 @@ let _partyColors = {
     "PIRAT": "#4C2582"
 };
 
-var WahlkreiseMandate = [];
-var WahlkreiseDataSet = [];
-var weightedResult = [];
-var pieChartResults = null;
-
 function data_getPartyColor(party) {
     if (party in _partyColors) {
         return _partyColors[party];
@@ -97,9 +92,9 @@ function VierProzentHuerde(results) {
                 validVotes += results[i];
             }
         }
-        if (r)
-            console.log(i);
-        console.log(results[i]);
+        //if (i)
+        //    console.log(i);
+        //    console.log(results[i]);
     }
     return [validVotes, unvalidVotes];
 }
@@ -521,6 +516,12 @@ function getDataByISO(data, originalISO, iso1, iso2) {
     data[originalISO] = dataResult;
     return dataResult;
 }
+
+var WahlkreiseMandate = [];
+var WahlkreiseDataSet = [];
+var weightedResult = [];
+var pieChartResults = null;
+
 
 function clacBarData(year) {
     var wkm = []
