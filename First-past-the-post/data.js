@@ -92,9 +92,6 @@ function VierProzentHuerde(results) {
                 validVotes += results[i];
             }
         }
-        //if (i)
-        //    console.log(i);
-        //    console.log(results[i]);
     }
     return [validVotes, unvalidVotes];
 }
