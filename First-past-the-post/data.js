@@ -24,6 +24,11 @@ let _partyColors = {
     "PIRAT": "#4C2582"
 };
 
+var WahlkreiseMandate = [];
+var WahlkreiseDataSet = [];
+var weightedResult = [];
+var pieChartResults = null;
+
 function data_getPartyColor(party) {
     if (party in _partyColors) {
         return _partyColors[party];
@@ -235,6 +240,8 @@ function data_preprocessRegions(manyRegions) {
 
     return data;
 }
+
+
 
 function data_getVotesTotal(region) {
     if (region.Stimmen !== undefined) return data_formatVotes(region.Stimmen);
@@ -514,11 +521,6 @@ function getDataByISO(data, originalISO, iso1, iso2) {
     data[originalISO] = dataResult;
     return dataResult;
 }
-
-var WahlkreiseMandate = [];
-var WahlkreiseDataSet = [];
-var weightedResult = [];
-var pieChartResults = null;
 
 function clacBarData(year) {
     var wkm = []
