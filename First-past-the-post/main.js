@@ -60,6 +60,12 @@ function main() {
             d3.select("#PRdiv"),
             mainBarChartArea);
 
+        // PIE CHARTS
+        // TODO here
+        //updatePieChart({imp: data.importatantVotesFPTP, notimp: data.notimportatantVotes_WinningPartyFPTP, notimpX: data.notimportatantVotes_LoosingPartiesFPTP}, {imp: "green", notimp: "red", notimpX: "blue"}, "#svg_pie_Suppressed_fptp")
+        //updatePieChart({imp: data.importatantVotesPR, notimp: data.notimportatantVotesPR}, {imp: "green", notimp: "red"}, "#svg_pie_Suppressed_pr")
+        ///////////////////////////
+
         // Tooltip
         tooltip = d3.select("body")
             .append("div")

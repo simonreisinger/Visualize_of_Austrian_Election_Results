@@ -1,7 +1,10 @@
 // D3 pie chart example: https://observablehq.com/@d3/pie-chart
 let svg_pie = {};
 
-function updatePieChart(data, id, width=150, height=150) {
+function updatePieChart(data, colorSchema, id, width=150, height=150) {
+    console.log(data);
+    console.log(colorSchema);
+
     // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
     let radius = Math.min(width, height) / 2;
 
@@ -29,7 +32,7 @@ function updatePieChart(data, id, width=150, height=150) {
         .attr('d', arcGenerator
         )
         .attr('fill', function (d) {
-            return _partyColors[d.data.key]
+            return colorSchema[d.data.key]
         })
         .attr("stroke", "black")
         .style("stroke-width", "0.5px")

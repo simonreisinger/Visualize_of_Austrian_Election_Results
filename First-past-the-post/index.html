@@ -51,12 +51,6 @@
         <svg id="svg_choropleth_wahlkreise"></svg>
     </div>
 
-    <!--TODO Suppressed is the wrong word-->
-    <!--Voting Does Not Make a Difference
-    <svg id="svg_pie_Suppressed_fptp"></svg>
-    <svg id="svg_pie_Suppressed_pr"></svg>
-    -->
-
     <div class="container">
         <div id="FPTPdiv">
             <p id="FPTP" style="min-width: 300px">First Past The Post (used in the English-speaking world)</p>
@@ -66,25 +60,33 @@
             <p id="PR" style="min-width: 300px">Proportional Representation (currently used system)</p>
         </div>
     </div>
+
+    <!--TODO Suppressed is the wrong word-->
+    <!--Voting Does Not Make a Difference
+    <svg id="svg_pie_Suppressed_fptp"></svg>
+    <svg id="svg_pie_Suppressed_pr"></svg>
+    -->
+    <!-- TODO add slider here-->
+
 </div>
 
 <div class="section introduction">
     <h2>Evaluating the Austrian NR elections using the First-Past-The-Post</h2>
     <p>
-        With the US election coming up this November, we were interested to see how the election results and the distribution of members in the lower house of the parliament and the Government of Austria would look like if we used the <b>first-past-the-post</b> electoral system.
-        We wanted to see if the structure of the results would be similar that of the the USA.
+        With the US election coming up this November, we were interested to see how the election results and the distribution of members in the lower house of the parliament and the Government of Austria could look like if we used the <a href="https://en.wikipedia.org/wiki/Plurality_voting">first-past-the-post</a> electoral system.
+        This election system was uWe wanted to see if the structure of the results would be similar that of the the USA.
     </p>
     <p>
         We took a special look at some of the most popular points of <a href="https://en.wikipedia.org/wiki/First-past-the-post_voting#Criticisms">critique</a> and tried to find out if these points would hold true for Austria as well.
-        For this, we mainly focus on the maps of the Districts (Bezirke) and Wahlkreis levels.
-        The map of Municipalities (Gemeinden is manly for references and providing a closer look on the results).
+        For this, we mainly focus on the maps of the Districts and Wahlkreis levels.
+        The map of municipalities is manly for references and providing a closer look on the results.
     </p>
 
     <h2>About the visualizations</h2>
     <h3>Parallel Coordinates</h3>
     <p>
-        "First Past The Post" shows the percentage of regions (district/municipality/Wahlkreis) where a certain party won (each line represents a party).
-        "Proportional Representation" shows the percentage of seats in the Nationalrat won by the parties.
+        "<a href="https://en.wikipedia.org/wiki/Plurality_voting">First-past-the-post</a>" shows the percentage of regions (municipality/district/electoral district) where a certain party won (each line represents a party).
+        "<a href="https://en.wikipedia.org/wiki/Proportional_representation">Proportional Representation</a>" shows the percentage of seats in the National Council won by the parties. So how the National Council actually look like.
     </p>
     <h3>Choropleth Map</h3>
     <p>
@@ -92,12 +94,12 @@
     </p>
     <h3>Bar Charts</h3>
     <p>
-        The bar charts on the right-hand side show, in numbers, equivalent data to that shown by the Parallel Coordinates.
+        The bar charts on the right-hand side show, in numbers, equivalent data to that shown by the parallel coordinates.
         "First Past The Post" shows the number of regions where a certain party won in the selected year.
-        "Proportional Representation" shows the number of sets in the Nationalrat won by the parties in the selected year.
+        "Proportional Representation" shows the number of sets in the National Council won by the parties in the selected year.
     </p>
     <p>
-        The bar charts that arise on a hover interaction on the Choropleh Map show the number of votes for each party in the hovered region.
+        The bar charts that arise on a hover interaction on the choropleh map show the number of votes for each party in the hovered region.
     </p>
 
     <h2>Interesting findings</h2>
@@ -105,7 +107,7 @@
         <li>Fairness</li>
         <ul>
             <li>Largest parties receive an "unfair" "seat bonus": In the 2019 election, the ÖVP won at least 80 percent of the seats.</li>
-            <li>Smaller parties are disadvantaged: On the District and Wahlkreis level the NEOS, BZÖ, JETZT, FRANK did not get a single seat.</li>
+            <li>Smaller parties are disadvantaged: On the District and Wahlkreis level the NEOS, BZÖ, JETZT, FRANK did not get a single seat in any of the elections analysed.</li>
             <li>For smaller parties, it is more important to focus on a few areas instead of spreading their resources across the whole country: does NOT apply as we do not have local parties</li>
             <li>Parties with similar political orientation hurt each other much more than with the Proportional Representation: In the 2013 election, the BZÖ and the FPÖ (both right-wing parties) would have been able to win more districts if they would have worked together.</li>
         </ul>
