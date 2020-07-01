@@ -22,6 +22,7 @@ We are clear that the districts of Austria variy wide in size but we can not cha
 * Compare Austrian presidential elections to US presidential elections
 * Check how many votes the winning party could lose and still govern alone (50% + 1) and/or change the constitution on their own (66,67%).
 * Bar plot: make extra bars for each small party
+* Sum Up similar Parties (LEFT vs RIGHT)
 
 ## Data Cleaning & Interactive Bokeh Charts
 Visualization [here](https://ippon1.github.io/Visualize_of_Austrian_Election_Results/Data_Cleaning)
