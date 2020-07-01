@@ -12,9 +12,6 @@ This part received the [Best Assignment Award](https://www.cg.tuwien.ac.at/cours
 * [Nationalratswahl results](https://bmi.gv.at/412/Nationalratswahlen/Nationalratswahl_2019/)
 * [Austrian Electoral districts (Wahlkreiseinteilung)](https://www.bmi.gv.at/412/Nationalratswahlen/Wahlkreiseinteilung.aspx)
 
-### Disclaimer
-We are clear that the districts of Austria variy wide in size but we can not change this...
-
 ### TODOs
 * Add Wahlkarten
 * Make graphics more user mobile-friendly
