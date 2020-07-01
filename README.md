@@ -24,6 +24,7 @@ We are clear that the districts of Austria variy wide in size but we can not cha
 * Bar plot: make extra bars for each small party
 * Sum Up similar Parties (LEFT vs RIGHT)
 * make transitions for pie chart
+* link graphics in text
 
 ## Data Cleaning & Interactive Bokeh Charts
 Visualization [here](https://ippon1.github.io/Visualize_of_Austrian_Election_Results/Data_Cleaning)
