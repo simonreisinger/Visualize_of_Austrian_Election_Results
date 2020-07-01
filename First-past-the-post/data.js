@@ -34,6 +34,9 @@ function data_getPartyColor(party) {
 }
 
 function data_initialize(data, year) {
+    //console.log("--------------------------")
+    //console.log(year)
+    //console.log(data)
     // Counties
     let counties = data_filterCounties(data);
     if (DEBUG && Object.keys(counties).length !== 116) {
@@ -88,11 +91,12 @@ function data_initialize(data, year) {
     })[0];
     let thisYearsResults = getPRResults(nationalResults, year) // TODO
 
-
+    let importantPR = VierProzentHuerde(nationalResults);
+    let importantFPTP = {}
+    importantFPTP.Municipalities = findTooManyVotersOf(municipalities, 1);
+    importantFPTP.Districts = findTooManyVotersOf(counties, 1);
+    importantFPTP.ElectoralDistrict = findTooManyVotersOf(wahlkreis, 1);
     // TODO edit here
-    let [importatantVotesPR, notimportatantVotesPR] = VierProzentHuerde(nationalResults);
-    let [importatantVotesFPTP, notimportatantVotes_WinningPartyFPTP, notimportatantVotes_LoosingPartiesFPTP] = findTooManyVotersOf(counties, 0);
-    //let [validVotesFPTP_weighted, unvalidVotesFPTP_weighted] = findTooManyVotersOf(wahlkreis); // TODO edit here
 
     return {
         counties,
@@ -100,8 +104,8 @@ function data_initialize(data, year) {
         wahlkreis,
         thisYearsResults,
 
-        importatantVotesPR, notimportatantVotesPR,
-        importatantVotesFPTP, notimportatantVotes_WinningPartyFPTP, notimportatantVotes_LoosingPartiesFPTP
+        importantPR,
+        importantFPTP
     };
 }
 
@@ -124,6 +128,7 @@ function findTooManyVotersOf(voting_data, margin) {
             let secondPartyVotes = list[loosingParties[0]];
             let diff = winningPartyVotes - (secondPartyVotes + margin);
             unvalidVotes_WinningParty += diff > 0 ? diff : 0;
+            //console.log(loosingParties)
             for (let party in loosingParties) {
                 if (list[loosingParties[party]] !== null && list[loosingParties[party]] !== undefined && party !== "invalid") {
                     allVotes += list[loosingParties[party]];
@@ -131,15 +136,16 @@ function findTooManyVotersOf(voting_data, margin) {
                 }
             }
             validVotes += secondPartyVotes + margin; //  TODO think if this is right
+        } else {
+            //console.log(i)
         }
     }
     //console.log(allVotes)
-    return [validVotes, unvalidVotes_WinningParty, unvalidVotes_LoosingParties];
+    return {imp: validVotes, notimp: unvalidVotes_WinningParty, notimpX: unvalidVotes_LoosingParties};
 }
 
 // works
 function VierProzentHuerde(results) {
-    console.log(results);
     var notParty = ["GKZ", "Gebietsname", "Wahlberechtigte", "Abgegebene", "Ungültige", "Gültige", "%", "", "Stimmen"]
     var unvalidVotes = 0;
     var validVotes = 0;
@@ -157,7 +163,7 @@ function VierProzentHuerde(results) {
             //console.log(i);
         }
     }
-    return [validVotes, unvalidVotes];
+    return {imp: validVotes, notimp: unvalidVotes};
 }
 
 function getPRResults(nationalResults, year) {
@@ -303,7 +309,6 @@ function data_preprocessRegions(manyRegions) {
     if (DEBUG) console.log(Object.keys(data).length + " values in data array");
 
     data.reduced = data_reduceRegions(data);
-
     return data;
 }
 
@@ -598,18 +603,18 @@ function clacBarData(year) {
     var wkm = []
     wkm["SONST"] = 0;
     wkm["GRÜNE"] = 0;
-    for (var i in NRParties[year]) {
+    for (let i in NRParties[year]) {
         if (partyNames.includes(NRParties[year][i])) {
             wkm[NRParties[year][i]] = 0;
         } else {
             wkm["SONST"] = 0;
         }
     }
-    for (var currentWahlkreis in WahlkreiseDataSet[year]) {
+    for (let currentWahlkreis in WahlkreiseDataSet[year]) {
         if (wkm[WahlkreiseDataSet[year][currentWahlkreis].party] === undefined || wkm[WahlkreiseDataSet[year][currentWahlkreis].party] === null) {
             wkm[WahlkreiseDataSet[year][currentWahlkreis].party] = 0;
         }
-        for (var currentBezirk in WahlkreiseMandate[year]) {
+        for (let currentBezirk in WahlkreiseMandate[year]) {
             if (currentBezirk === currentWahlkreis) {
                 if (partyNames.includes(WahlkreiseDataSet[year][currentWahlkreis].party)) {
                     wkm[WahlkreiseDataSet[year][currentWahlkreis].party] += WahlkreiseMandate[year][currentBezirk].Mandate;
@@ -619,7 +624,9 @@ function clacBarData(year) {
                 break;
             }
         }
+        console.log(WahlkreiseDataSet)
     }
+    console.log(WahlkreiseDataSet)
     return wkm;
 }
 

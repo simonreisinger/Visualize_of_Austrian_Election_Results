@@ -14,9 +14,9 @@ let tooltipBarChartArea = {width: 300, height: 150}
 
 let lastRegionType = null;
 
-const REGION_TYPE_MUNICIPALITY = "Municipalities (Gemeinden)";
-const REGION_TYPE_COUNTY = "Districts (Bezirke)";
-const REGION_TYPE_WAHLKREISE = "Electoral district (Wahlkreise) - Weighted"; // https://en.wikipedia.org/wiki/Electoral_district
+const REGION_TYPE_MUNICIPALITY = "Municipalities"; // (Gemeinden)
+const REGION_TYPE_COUNTY = "Districts"; // (Bezirke)
+const REGION_TYPE_WAHLKREISE = "Electoral district"; //  (Wahlkreise) - Weighted https://en.wikipedia.org/wiki/Electoral_district
 const REGION_TYPES = [REGION_TYPE_MUNICIPALITY, REGION_TYPE_COUNTY, REGION_TYPE_WAHLKREISE];
 
 function main() {
@@ -60,10 +60,11 @@ function main() {
             d3.select("#PRdiv"),
             mainBarChartArea);
 
+        console.log(data.importantFPTP)
+        console.log(data.importantPR)
         // PIE CHARTS
-        // TODO here
-        //updatePieChart({imp: data.importatantVotesFPTP, notimp: data.notimportatantVotes_WinningPartyFPTP, notimpX: data.notimportatantVotes_LoosingPartiesFPTP}, {imp: "green", notimp: "red", notimpX: "blue"}, "#svg_pie_Suppressed_fptp")
-        //updatePieChart({imp: data.importatantVotesPR, notimp: data.notimportatantVotesPR}, {imp: "green", notimp: "red"}, "#svg_pie_Suppressed_pr")
+        updatePieChart(data.importantFPTP.Municipalities, {imp: "green", notimp: "blue", notimpX: "red"}, "#svg_pie_Suppressed_fptp")
+        updatePieChart(data.importantPR, {imp: "green", notimp: "red"}, "#svg_pie_Suppressed_pr")
         ///////////////////////////
 
         // Tooltip
@@ -142,12 +143,21 @@ function main_selectionChangeFun(yearDataMap, barPlots) {
     let selectedYear = parseInt(d3.select("#year_select").node().value);
     let selectedRegionType = d3.select("#region_select").node().value;
     let data = yearDataMap[selectedYear];
+    console.log(yearDataMap)
+    console.log(barPlots)
     main_updateData(data, yearDataMap, selectedRegionType, selectedYear, barPlots);
 }
 
 function main_updateData(newData, yearDataMap, regionType, year, barPlots) {
     if (DEBUG) console.log(newData)
     bar_update(barPlots[1].bars, barPlots[1].labels, mainBarChartArea, newData.thisYearsResults, 1000); // TODO
+
+    // Update Pie
+    // PIE CHARTS
+    updatePieChart(newData.importantFPTP[regionType.replace(" ", "")], {imp: "green", notimp: "red", notimpX: "blue"}, "#svg_pie_Suppressed_fptp")
+    updatePieChart(newData.importantPR, {imp: "green", notimp: "red"}, "#svg_pie_Suppressed_pr")
+    ///////////////////////////
+
 
     let id;
     let key;
@@ -169,7 +179,7 @@ function main_updateData(newData, yearDataMap, regionType, year, barPlots) {
             break;
 
         case REGION_TYPE_WAHLKREISE:
-            key = "wahlkreis"; // TODO edit this line
+            key = "Wahlkreis"; // TODO edit this line
             id = "#svg_choropleth_wahlkreise";
             d3.select("#svg_choropleth_counties").style("display", "none");
             d3.select("#svg_choropleth_municipalities").style("display", "none");

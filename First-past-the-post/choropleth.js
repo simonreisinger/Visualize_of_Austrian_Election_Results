@@ -72,7 +72,7 @@ function choropleth_updatePath(choroPath, newData, year, id) {
 
 function choropleth_computeRegionColor(path, data, year, id) {
     let iso = path.properties.iso;
-    var region = getDatasetByISO(data, iso, year);
+    let region = getDatasetByISO(data, iso, year);
     if (DEBUG && region == null) {
         console.error("unable to compute region color for " + year + " region " + path.properties.name + "  with iso " + path.properties.iso + " because region data was null");
         region = {mostVotedParty: SONST};

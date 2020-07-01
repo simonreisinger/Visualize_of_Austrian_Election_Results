@@ -1,7 +1,7 @@
 // D3 pie chart example: https://observablehq.com/@d3/pie-chart
 let svg_pie = {};
 
-function updatePieChart(data, colorSchema, id, width=150, height=150) {
+function updatePieChart(data, colorSchema, id, width = 150, height = 150) {
     console.log(data);
     console.log(colorSchema);
 
@@ -17,7 +17,7 @@ function updatePieChart(data, colorSchema, id, width=150, height=150) {
     // Compute the position of each group on the pie:
     let pie = d3.pie().value(function (d) {
         return d.value;
-    });
+    }); // .sortParts() // TODO edit here
     let data_ready = pie(d3.entries(data));
 
     // shape helper to build arcs:
@@ -36,12 +36,6 @@ function updatePieChart(data, colorSchema, id, width=150, height=150) {
         })
         .attr("stroke", "black")
         .style("stroke-width", "0.5px")
-        //.on('mousemove', function (d) {
-    //    updateMap(d.data.key);
-        //  })
-    //.on('mouseout', function (d) {
-    //      updateMap("allParties");
-    //  });
 
     svg_pie[id].selectAll("path")
         .attr("stroke", "white");
@@ -79,3 +73,10 @@ function updatePieChart(data, colorSchema, id, width=150, height=150) {
                 }
             }))
 }
+
+function sortParts() {
+    // TODO edit here
+    return 0;
+}
+//        updatePieChart({imp: data.importatantVotesFPTP, notimp: data.notimportatantVotes_WinningPartyFPTP, notimpX: data.notimportatantVotes_LoosingPartiesFPTP}, {imp: "green", notimp: "red", notimpX: "blue"}, "#svg_pie_Suppressed_fptp")
+//         updatePieChart({imp: data.importatantVotesPR, notimp: data.notimportatantVotesPR}, {imp: "green", notimp: "red"}, "#svg_pie_Suppressed_pr")
