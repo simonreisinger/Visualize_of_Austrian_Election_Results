@@ -80,7 +80,7 @@ function data_initialize(data, year) {
     });
 
     WahlkreiseDataSet[year] = firstPassThePostWahlkreis(lol, year)
-    let mostVotedParty = clacBarData(year); // TODO edit here
+    let mostVotedParty = calculateBarData(year); // TODO edit here
     var wahlkreis = data_filterCounties(data);
     wahlkreis = data_preprocessRegions(wahlkreis);
     //wahlkreis.reduced = {};
@@ -599,7 +599,7 @@ var weightedResult = [];
 var pieChartResults = null;
 
 
-function clacBarData(year) {
+function calculateBarData(year) {
     var wkm = []
     wkm["SONST"] = 0;
     wkm["GRÜNE"] = 0;
