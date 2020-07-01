@@ -2,7 +2,7 @@ const PARALLEL_MODE_FPRP = 0; // First Past The Post
 const PARALLEL_MODE_PR = 1; // Proportional Representation
 
 function parallel(yearToDataMap, id, where, mode, area={width: 450, height: 200}) {
-
+// TODO are the values right?
     let parallelData = parallel_preprocess(yearToDataMap, mode);
     yearToDataMap = parallelData.data;
     let parties = parallelData.partyNames;

@@ -1,5 +1,5 @@
 // Source: https://www.bmi.gv.at/412/Nationalratswahlen/Wahlkreiseinteilung.aspx
-const electoralDistrictNach = {
+const districtsByEelectoralDistrict = {
     "Eisenstadt": {ElectoralDistrict: "Burgenland Nord", Number: "1A", Mandate: 4},
     "Rust": {ElectoralDistrict: "Burgenland Nord", Number: "1A", Mandate: 4},
     "Eisenstadt-Umgebung": {ElectoralDistrict: "Burgenland Nord", Number: "1A", Mandate: 4},
