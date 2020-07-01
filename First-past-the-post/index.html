@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>InfoVis UE 2020 - Exercise 4</title>
-    <link href="style.css" rel="stylesheet" type="text/css" >
+    <link href="style.css" rel="stylesheet" type="text/css">
 
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://d3js.org/d3-dsv.v1.min.js"></script>
@@ -25,12 +25,14 @@
 <div id="top_bar">
     <span>
         <h1>InfoVis UE 2020 - Exercise 4</h1>
-        <p><a href="https://www.simonreisinger.com" class="header">Simon Reisinger</a>, <a href="https://github.com/Welko" class="header">Lucas da Cunha Melo</a></p>
+        <p><a href="https://www.simonreisinger.com" class="header">Simon Reisinger</a>, <a
+                href="https://github.com/Welko" class="header">Lucas da Cunha Melo</a></p>
     </span>
-    <a href="https://www.github.com/ippon1/Visualize_of_Austrian_Election_Results" target="_blank"><i class="fab fa-github-square" style="font-size:28px; color: white"></i></a>
+    <a href="https://www.github.com/ippon1/Visualize_of_Austrian_Election_Results" target="_blank"><i
+            class="fab fa-github-square" style="font-size:28px; color: white"></i></a>
     <span>
-        <select id="region_select"></select>
-        <select id="year_select"></select>
+        <label for="region_select"></label><select id="region_select"></select>
+        <label for="year_select"></label><select id="year_select"></select>
     </span>
 </div>
 
@@ -73,11 +75,15 @@
 <div class="section introduction">
     <h2>Evaluating the Austrian NR elections using the First-Past-The-Post</h2>
     <p>
-        With the US election coming up this November, we were interested to see how the election results and the distribution of members in the lower house of the parliament and the Government of Austria could look like if we used the <a href="https://en.wikipedia.org/wiki/Plurality_voting">first-past-the-post</a> electoral system.
+        With the US election coming up this November, we were interested to see how the election results and the
+        distribution of members in the lower house of the parliament and the Government of Austria could look like if we
+        used the <a href="https://en.wikipedia.org/wiki/Plurality_voting">first-past-the-post</a> electoral system.
         This election system was uWe wanted to see if the structure of the results would be similar that of the the USA.
     </p>
     <p>
-        We took a special look at some of the most popular points of <a href="https://en.wikipedia.org/wiki/First-past-the-post_voting#Criticisms">critique</a> and tried to find out if these points would hold true for Austria as well.
+        We took a special look at some of the most popular points of <a
+            href="https://en.wikipedia.org/wiki/First-past-the-post_voting#Criticisms">critique</a> and tried to find
+        out if these points would hold true for Austria as well.
         For this, we mainly focus on the maps of the districts and electoral district levels.
         The map of municipalities is manly for references and providing a closer look on the results.
     </p>
@@ -85,8 +91,10 @@
     <h2>About the visualizations</h2>
     <h3>Parallel Coordinates</h3>
     <p>
-        "<a href="https://en.wikipedia.org/wiki/Plurality_voting">First-past-the-post</a>" shows the percentage of regions (municipality/district/electoral district) where a certain party won (each line represents a party).
-        "<a href="https://en.wikipedia.org/wiki/Proportional_representation">Proportional Representation</a>" shows the percentage of seats in the National Council won by the parties. So how the National Council actually look like.
+        "<a href="https://en.wikipedia.org/wiki/Plurality_voting">First-past-the-post</a>" shows the percentage of
+        regions (municipality/district/electoral district) where a certain party won (each line represents a party).
+        "<a href="https://en.wikipedia.org/wiki/Proportional_representation">Proportional Representation</a>" shows the
+        percentage of seats in the National Council won by the parties. So how the National Council actually look like.
     </p>
     <h3>Choropleth Map</h3>
     <p>
@@ -94,26 +102,45 @@
     </p>
     <h3>Bar Charts</h3>
     <p>
-        The bar charts on the right-hand side show, in numbers, equivalent data to that shown by the parallel coordinates.
+        The bar charts on the right-hand side show, in numbers, equivalent data to that shown by the parallel
+        coordinates.
         "First Past The Post" shows the number of regions where a certain party won in the selected year.
-        "Proportional Representation" shows the number of sets in the National Council won by the parties in the selected year.
+        "Proportional Representation" shows the number of sets in the National Council won by the parties in the
+        selected year.
     </p>
     <p>
-        The bar charts that arise on a hover interaction on the choropleh map show the number of votes for each party in the hovered region.
+        The bar charts that arise on a hover interaction on the choropleh map show the number of votes for each party in
+        the hovered region.
     </p>
 
     <h2>Interesting findings</h2>
     <ul>
         <li>Fairness</li>
         <ul>
-            <li>Largest parties receive an "unfair" "seat bonus": In the 2019 election, the ÖVP won at least 80 percent of the seats.</li>
-            <li>Smaller parties are disadvantaged: On the district and voting district level the NEOS, BZÖ, JETZT, FRANK did not get a single seat in any of the elections analysed.</li>
-            <li>For smaller parties, it is more important to focus on a few areas instead of spreading their resources across the whole country: does NOT apply as we do not have local parties</li>
-            <li>Parties with similar political orientation hurt each other much more than with the Proportional Representation: In the 2013 election, the BZÖ and the FPÖ (both right-wing parties) would have been able to win more districts if they would have worked together.</li>
+            <li>Largest parties receive an "unfair" "seat bonus": In the 2019 election, the ÖVP won at least 80 percent
+                of the seats.
+            </li>
+            <li>Smaller parties are disadvantaged: On the district and voting district level the NEOS, BZÖ, JETZT, FRANK
+                did not get a single seat in any of the elections analysed.
+            </li>
+            <li>For smaller parties, it is more important to focus on a few areas instead of spreading their resources
+                across the whole country: does NOT apply as we do not have local parties
+            </li>
+            <li>Parties with similar political orientation hurt each other much more than with the Proportional
+                Representation: In the 2013 election, the BZÖ and the FPÖ (both right-wing parties) would have been able
+                to win more districts if they would have worked together.
+            </li>
         </ul>
-        <li>Coalitions are less likely: In all but one (Districts + 2013) configuration of the nine possible examples, a coalition was necessary to have a majority.</li>
-        <li><a href="https://en.wikipedia.org/wiki/Swing_state">View swing seats</a> change election results (and many "safe seats" for large parties): In the last three elections, there were many states where not only one party won. With the analysis of more elections, we suspect there could be a trend.</li>
-        <li><a href="https://en.wikipedia.org/wiki/Gerrymandering">Gerrymandering</a>: Unrelated but we kind of did this after WWI (<a href="https://de.wikipedia.org/wiki/Trennungsgesetz">Trennungsgesetz</a>)</li>
+        <li>Coalitions are less likely: In all but one (Districts + 2013) configuration of the nine possible examples, a
+            coalition was necessary to have a majority.
+        </li>
+        <li><a href="https://en.wikipedia.org/wiki/Swing_state">View swing seats</a> change election results (and many
+            "safe seats" for large parties): In the last three elections, there were many states where not only one
+            party won. With the analysis of more elections, we suspect there could be a trend.
+        </li>
+        <li><a href="https://en.wikipedia.org/wiki/Gerrymandering">Gerrymandering</a>: Unrelated but we kind of did this
+            after WWI (<a href="https://de.wikipedia.org/wiki/Trennungsgesetz">Trennungsgesetz</a>)
+        </li>
     </ul>
 
     <h2>Data</h2>

@@ -71,6 +71,8 @@ function updatePieChart(data, colorSchema, id, width = 150, height = 150) {
             }))
 }
 
+// TODO make transition
+
 function sortParts() {
     // TODO edit here
     return 0;
