@@ -81,11 +81,11 @@ function data_initialize(data, year) {
 
     WahlkreiseDataSet[year] = firstPassThePostWahlkreis(lol, year)
     let mostVotedParty = calculateBarData(year); // TODO edit here
-    var wahlkreis = data_filterCounties(data);
-    wahlkreis = data_preprocessRegions(wahlkreis);
-    //wahlkreis.reduced = {};
-    wahlkreis.reduced.mostVotedParty = mostVotedParty;
-    wahlkreis.reduced.percentages.mostVotedParty = data_calculatePercentageFromMostVotedParty(mostVotedParty);
+    var electoralDistrict = data_filterCounties(data);
+    electoralDistrict = data_preprocessRegions(electoralDistrict);
+    //electoralDistrict.reduced = {};
+    electoralDistrict.reduced.mostVotedParty = mostVotedParty;
+    electoralDistrict.reduced.percentages.mostVotedParty = data_calculatePercentageFromMostVotedParty(mostVotedParty);
     var nationalResults = data.filter(function (value) {
         return value.GKZ.slice(-5) === "00000";
     })[0];
@@ -95,13 +95,13 @@ function data_initialize(data, year) {
     let importantFPTP = {}
     importantFPTP.Municipalities = findTooManyVotersOf(municipalities, 1);
     importantFPTP.Districts = findTooManyVotersOf(counties, 1);
-    importantFPTP.ElectoralDistrict = findTooManyVotersOf(wahlkreis, 1);
+    importantFPTP.ElectoralDistrict = findTooManyVotersOf(electoralDistrict, 1);
     // TODO edit here
 
     return {
         counties,
         municipalities,
-        wahlkreis,
+        electoralDistrict,
         thisYearsResults,
 
         importantPR,
@@ -624,9 +624,7 @@ function calculateBarData(year) {
                 break;
             }
         }
-        console.log(WahlkreiseDataSet)
     }
-    console.log(WahlkreiseDataSet)
     return wkm;
 }
 
