@@ -40,6 +40,11 @@ function choropleth(data, year, id, jsonUrl, rect = {width: 700, height: 400, x:
 }
 
 function choropleth_updatePath(choroPath, newData, year, id) {
+    if (newData === null ||newData === undefined) {
+        console.error("Year: " + year + " newData is " + newData);
+        return;
+    }
+
     choroPath.attr("fill", d => choropleth_computeRegionColor(d, newData, year, id));
 
     // Events
@@ -77,11 +82,11 @@ function choropleth_computeRegionColor(path, data, year, id) {
         console.error("unable to compute region color for " + year + " region " + path.properties.name + "  with iso " + path.properties.iso + " because region data was null");
         region = {mostVotedParty: SONST};
     }
-    var color = "white"
-    if (id === "#svg_choropleth_wahlkreise") {
+    var color = "white";
+    if (id === "#svg_choropleth_electoralDistrict") {
         let county_dataset = data_parseGebietsname(region.name);
         if (county_dataset === "Krems") county_dataset = "Krems an der Donau";
-        color = data_getPartyColor(WahlkreiseDataSet[year][wahlkreisNach[removeNonASCIICharacters(county_dataset)].Wahlkreis].party)
+        color = data_getPartyColor(WahlkreiseDataSet[year][electoralDistrictNach[removeNonASCIICharacters(county_dataset)].ElectoralDistrict].party)
     } else {
         color = data_getPartyColor(region.mostVotedParty);
     }
@@ -89,6 +94,10 @@ function choropleth_computeRegionColor(path, data, year, id) {
 }
 
 function choropleth_mousemoveFun(choroPath, d, data, year) {
+    if (data === null ||data === undefined) {
+        console.error("data is " + data)
+        return;
+    }
 
     let iso = d.properties.iso;
     var region = getDatasetByISO(data, iso, year)

@@ -16,8 +16,8 @@ let lastRegionType = null;
 
 const REGION_TYPE_MUNICIPALITY = "Municipalities"; // (Gemeinden)
 const REGION_TYPE_COUNTY = "Districts"; // (Bezirke)
-const REGION_TYPE_WAHLKREISE = "Electoral district"; //  (Wahlkreise) - Weighted https://en.wikipedia.org/wiki/Electoral_district
-const REGION_TYPES = [REGION_TYPE_MUNICIPALITY, REGION_TYPE_COUNTY, REGION_TYPE_WAHLKREISE];
+const REGION_TYPE_ELECTORALDISTRICT = "Electoral district"; //  (Wahlkreise) - Weighted https://en.wikipedia.org/wiki/Electoral_district
+const REGION_TYPES = [REGION_TYPE_MUNICIPALITY, REGION_TYPE_COUNTY, REGION_TYPE_ELECTORALDISTRICT];
 
 function main() {
 
@@ -45,9 +45,9 @@ function main() {
 
         choropleth(data.counties,
             year,
-            "#svg_choropleth_wahlkreise",
+            "#svg_choropleth_electoralDistrict",
             "./data/bezirke_wien_gross_geo.json");
-        d3.select("#svg_choropleth_wahlkreise").style("display", "none");
+        d3.select("#svg_choropleth_electoralDistrict").style("display", "none");
 
 
         let barFptpG = bar(data.municipalities.reduced.mostVotedParty,
@@ -143,8 +143,6 @@ function main_selectionChangeFun(yearDataMap, barPlots) {
     let selectedYear = parseInt(d3.select("#year_select").node().value);
     let selectedRegionType = d3.select("#region_select").node().value;
     let data = yearDataMap[selectedYear];
-    console.log(yearDataMap)
-    console.log(barPlots)
     main_updateData(data, yearDataMap, selectedRegionType, selectedYear, barPlots);
 }
 
@@ -156,8 +154,6 @@ function main_updateData(newData, yearDataMap, regionType, year, barPlots) {
     // PIE CHARTS
     updatePieChart(newData.importantFPTP[regionType.replace(" ", "")], {imp: "green", notimp: "red", notimpX: "blue"}, "#svg_pie_Suppressed_fptp")
     updatePieChart(newData.importantPR, {imp: "green", notimp: "red"}, "#svg_pie_Suppressed_pr")
-    ///////////////////////////
-
 
     let id;
     let key;
@@ -167,7 +163,7 @@ function main_updateData(newData, yearDataMap, regionType, year, barPlots) {
             id = "#svg_choropleth_municipalities";
             d3.select("#svg_choropleth_counties").style("display", "none");
             d3.select("#svg_choropleth_municipalities").style("display", null);
-            d3.select("#svg_choropleth_wahlkreise").style("display", "none");
+            d3.select("#svg_choropleth_electoralDistrict").style("display", "none");
             break;
 
         case REGION_TYPE_COUNTY:
@@ -175,15 +171,15 @@ function main_updateData(newData, yearDataMap, regionType, year, barPlots) {
             id = "#svg_choropleth_counties";
             d3.select("#svg_choropleth_counties").style("display", null);
             d3.select("#svg_choropleth_municipalities").style("display", "none");
-            d3.select("#svg_choropleth_wahlkreise").style("display", "none");
+            d3.select("#svg_choropleth_electoralDistrict").style("display", "none");
             break;
 
-        case REGION_TYPE_WAHLKREISE:
-            key = "Wahlkreis"; // TODO edit this line
-            id = "#svg_choropleth_wahlkreise";
+        case REGION_TYPE_ELECTORALDISTRICT:
+            key = "electoralDistricts"; // TODO edit this line
+            id = "#svg_choropleth_electoralDistrict";
             d3.select("#svg_choropleth_counties").style("display", "none");
             d3.select("#svg_choropleth_municipalities").style("display", "none");
-            d3.select("#svg_choropleth_wahlkreise").style("display", null);
+            d3.select("#svg_choropleth_electoralDistrict").style("display", null);
             break;
 
         default:

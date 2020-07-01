@@ -55,9 +55,9 @@ function data_initialize(data, year) {
         return gkz_last2 === "99" && gkz_last4 !== "0099" && /[0-9]/.test(gkz_3rd);
     });
 
-    for (var i in counties_wahlkarten) {
-        var new_GKZ = counties_wahlkarten[i].GKZ.substring(4, 1) + "00";
-        for (var party in counties_wahlkarten[i]) {
+    for (let i in counties_wahlkarten) {
+        let new_GKZ = counties_wahlkarten[i].GKZ.substring(4, 1) + "00";
+        for (let party in counties_wahlkarten[i]) {
             if (!notParty.includes(party)) {
                 counties[new_GKZ][party] = counties_wahlkarten[i][party]
             }
@@ -72,38 +72,35 @@ function data_initialize(data, year) {
 
     municipalities = data_preprocessRegions(municipalities);
 
-
     let countiesXX = data_filterCounties(data);
     let lol = countiesXX.map(function (value) {
         value.Gebietsname = data_parseGebietsname(value.Gebietsname);
         return value;
     });
 
-    WahlkreiseDataSet[year] = firstPassThePostWahlkreis(lol, year)
+    WahlkreiseDataSet[year] = firstPassThePostElectoralDistrict(lol, year)
     let mostVotedParty = calculateBarData(year); // TODO edit here
-    var electoralDistrict = data_filterCounties(data);
-    electoralDistrict = data_preprocessRegions(electoralDistrict);
-    //electoralDistrict.reduced = {};
-    electoralDistrict.reduced.mostVotedParty = mostVotedParty;
-    electoralDistrict.reduced.percentages.mostVotedParty = data_calculatePercentageFromMostVotedParty(mostVotedParty);
-    var nationalResults = data.filter(function (value) {
+    let electoralDistricts = data_preprocessRegions(data_filterCounties(data));
+    electoralDistricts.reduced.mostVotedParty = mostVotedParty;
+    electoralDistricts.reduced.percentages.mostVotedParty = data_calculatePercentageFromMostVotedParty(mostVotedParty);
+    let nationalResults = data.filter(function (value) {
         return value.GKZ.slice(-5) === "00000";
     })[0];
-    let thisYearsResults = getPRResults(nationalResults, year) // TODO
+
+    let thisYearsResults = getPRResults(nationalResults, year)
 
     let importantPR = VierProzentHuerde(nationalResults);
     let importantFPTP = {}
-    importantFPTP.Municipalities = findTooManyVotersOf(municipalities, 1);
-    importantFPTP.Districts = findTooManyVotersOf(counties, 1);
-    importantFPTP.ElectoralDistrict = findTooManyVotersOf(electoralDistrict, 1);
-    // TODO edit here
+    let margin = 1; // TODO make this flexible
+    importantFPTP.Municipalities = findTooManyVotersOf(municipalities, margin);
+    importantFPTP.Districts = findTooManyVotersOf(counties, margin);
+    importantFPTP.Electoraldistrict = findTooManyVotersOf(counties, margin); // TODO edit here
 
     return {
         counties,
         municipalities,
-        electoralDistrict,
+        electoralDistricts,
         thisYearsResults,
-
         importantPR,
         importantFPTP
     };
@@ -381,6 +378,10 @@ function data_reduceRegions(manyPreprocessedRegions) {
 }
 
 function getDatasetByISO(data, iso, year) {
+    if (data === null || data === undefined) {
+        console.error(year)
+        return null
+    }
     if (year === 2013) {
         if (iso === 62268) return getDataByISO(data, 62268, 62213, null);
         // Rohrbach --> Rohrbach an der Lafnitz
@@ -560,8 +561,8 @@ function getDatasetByISO(data, iso, year) {
 
 function getDataByISO(data, originalISO, iso1, iso2) {
     if (iso2 === null) return data[iso1]
-    var maxPartyName = data[iso1].mostVotedParty;
-    var maxPartyVotes = data[iso1].partiesAll[maxPartyName];
+    let maxPartyName = data[iso1].mostVotedParty;
+    let maxPartyVotes = data[iso1].partiesAll[maxPartyName];
 
     let dataResult = {}
     dataResult.iso = originalISO;
@@ -569,22 +570,22 @@ function getDataByISO(data, originalISO, iso1, iso2) {
     dataResult.votes = data[iso1].votes;
     dataResult.partiesAll = {};
     dataResult.partiesMain = {};
-    for (var party in data[iso1].partiesAll) {
+    for (let party in data[iso1].partiesAll) {
         dataResult.partiesAll[party] = data[iso1].partiesAll[party]
     }
-    for (var party in data[iso1].partiesMain) {
+    for (let party in data[iso1].partiesMain) {
         dataResult.partiesMain[party] = data[iso1].partiesMain[party]
     }
-    for (var iso in iso2) {
+    for (let iso in iso2) {
         dataResult.votes += data[iso2[iso]].votes;
-        for (var party in dataResult.partiesAll) {
+        for (let party in dataResult.partiesAll) {
             dataResult.partiesAll[party] += data[iso2[iso]].partiesAll[party]
             if (dataResult.partiesAll[party] > maxPartyVotes) {
                 maxPartyName = party;
                 maxPartyVotes = dataResult.partiesAll[party];
             }
         }
-        for (var party in dataResult.partiesMain) {
+        for (let party in dataResult.partiesMain) {
             dataResult.partiesMain[party] += data[iso2[iso]].partiesMain[party]
         }
     }
@@ -614,12 +615,12 @@ function calculateBarData(year) {
         if (wkm[WahlkreiseDataSet[year][currentWahlkreis].party] === undefined || wkm[WahlkreiseDataSet[year][currentWahlkreis].party] === null) {
             wkm[WahlkreiseDataSet[year][currentWahlkreis].party] = 0;
         }
-        for (let currentBezirk in WahlkreiseMandate[year]) {
-            if (currentBezirk === currentWahlkreis) {
+        for (let currentCounty in WahlkreiseMandate[year]) {
+            if (currentCounty === currentWahlkreis) {
                 if (partyNames.includes(WahlkreiseDataSet[year][currentWahlkreis].party)) {
-                    wkm[WahlkreiseDataSet[year][currentWahlkreis].party] += WahlkreiseMandate[year][currentBezirk].Mandate;
+                    wkm[WahlkreiseDataSet[year][currentWahlkreis].party] += WahlkreiseMandate[year][currentCounty].Mandate;
                 } else {
-                    wkm["SONST"] += WahlkreiseMandate[year][currentBezirk].Mandate;
+                    wkm["SONST"] += WahlkreiseMandate[year][currentCounty].Mandate;
                 }
                 break;
             }
@@ -628,31 +629,31 @@ function calculateBarData(year) {
     return wkm;
 }
 
-function firstPassThePostWahlkreis(dataset, year) {
+function firstPassThePostElectoralDistrict(dataset, year) {
     WahlkreiseMandate[year] = []
     let mostVotes = [];
     for (let selectedState in dataset) {
         let xxxx = data_parseGebietsname(removeNonASCIICharacters(dataset[selectedState].Gebietsname))
         if (xxxx === "Krems") xxxx = "Krems an der Donau"
         if (xxxx === "Wien-Umgebung") xxxx = "Korneuburg"
-        let wahlkreis = wahlkreisNach[xxxx].Wahlkreis
-        if (mostVotes[wahlkreis] === null || mostVotes[wahlkreis] === undefined) {
-            mostVotes[wahlkreis] = {};
-            mostVotes[wahlkreis].Gebietsname = wahlkreis;
-            WahlkreiseMandate[year][wahlkreis] = {}
-            WahlkreiseMandate[year][wahlkreis].Gebietsname = wahlkreis;
-            WahlkreiseMandate[year][wahlkreis].Mandate = wahlkreisNach[removeNonASCIICharacters(dataset[selectedState].Gebietsname)].Mandate;
+        let electoralDistrict = electoralDistrictNach[xxxx].ElectoralDistrict
+        if (mostVotes[electoralDistrict] === null || mostVotes[electoralDistrict] === undefined) {
+            mostVotes[electoralDistrict] = {};
+            mostVotes[electoralDistrict].Gebietsname = electoralDistrict;
+            WahlkreiseMandate[year][electoralDistrict] = {}
+            WahlkreiseMandate[year][electoralDistrict].Gebietsname = electoralDistrict;
+            WahlkreiseMandate[year][electoralDistrict].Mandate = electoralDistrictNach[removeNonASCIICharacters(dataset[selectedState].Gebietsname)].Mandate;
             for (let parties in NRParties[year]) {
                 if (parties !== "SONST") {
                     let currentPartyVotes = dataset[selectedState][NRParties[year][parties]].replace(/\./g, "");
-                    mostVotes[wahlkreis][NRParties[year][parties]] = currentPartyVotes
+                    mostVotes[electoralDistrict][NRParties[year][parties]] = currentPartyVotes
                 }
             }
         } else {
             for (let parties in NRParties[year]) {
                 if (parties !== "SONST") {
                     let currentPartyVotes = parseInt(dataset[selectedState][NRParties[year][parties]].replace(/\./g, ""));
-                    mostVotes[wahlkreis][NRParties[year][parties]] = (parseInt(mostVotes[wahlkreis][NRParties[year][parties]]) + currentPartyVotes).toString();
+                    mostVotes[electoralDistrict][NRParties[year][parties]] = (parseInt(mostVotes[electoralDistrict][NRParties[year][parties]]) + currentPartyVotes).toString();
                 }
             }
         }

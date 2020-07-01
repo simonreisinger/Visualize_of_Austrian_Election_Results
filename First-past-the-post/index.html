@@ -11,7 +11,7 @@
     <script src="https://d3js.org/topojson.v1.min.js"></script>
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
-    <script src="./data/Wahlkreis.js"></script>
+    <script src="./data/ElectoralDistricts.js"></script>
 
     <script src="./data.js"></script>
     <script src="./choropleth.js"></script>
@@ -25,7 +25,7 @@
 <div id="top_bar">
     <span>
         <h1>InfoVis UE 2020 - Exercise 4</h1>
-        <p><a href="https://www.simonreisinger.com" style="color: #ccc; text-decoration: none;">Simon Reisinger</a> (01426220), <a href="https://github.com/Welko" style="color: #ccc; text-decoration: none;">Lucas da Cunha Melo</a> (01429462)</p>
+        <p><a href="https://www.simonreisinger.com" class="header">Simon Reisinger</a>, <a href="https://github.com/Welko" class="header">Lucas da Cunha Melo</a></p>
     </span>
     <a href="https://www.github.com/ippon1/Visualize_of_Austrian_Election_Results" target="_blank"><i class="fab fa-github-square" style="font-size:28px; color: white"></i></a>
     <span>
@@ -48,7 +48,7 @@
         <div id="DODdiv"></div> <!-- Details On Demand div -->
         <svg id="svg_choropleth_municipalities"></svg>
         <svg id="svg_choropleth_counties"></svg>
-        <svg id="svg_choropleth_wahlkreise"></svg>
+        <svg id="svg_choropleth_electoralDistrict"></svg>
     </div>
 
     <div class="container">
@@ -78,7 +78,7 @@
     </p>
     <p>
         We took a special look at some of the most popular points of <a href="https://en.wikipedia.org/wiki/First-past-the-post_voting#Criticisms">critique</a> and tried to find out if these points would hold true for Austria as well.
-        For this, we mainly focus on the maps of the Districts and Wahlkreis levels.
+        For this, we mainly focus on the maps of the districts and electoral district levels.
         The map of municipalities is manly for references and providing a closer look on the results.
     </p>
 

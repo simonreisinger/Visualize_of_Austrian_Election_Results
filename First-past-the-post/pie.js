@@ -2,9 +2,6 @@
 let svg_pie = {};
 
 function updatePieChart(data, colorSchema, id, width = 150, height = 150) {
-    console.log(data);
-    console.log(colorSchema);
-
     // The radius of the pieplot is half the width or half the height (smallest one). I subtract a bit of margin.
     let radius = Math.min(width, height) / 2;
 
