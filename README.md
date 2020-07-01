@@ -22,6 +22,7 @@ This part received the [Best Assignment Award](https://www.cg.tuwien.ac.at/cours
 * Sum Up similar Parties (LEFT vs RIGHT)
 * make transitions for pie chart
 * link graphics in text
+* Add slider to pie chart
 
 ## Data Cleaning & Interactive Bokeh Charts
 Visualization [here](https://ippon1.github.io/Visualize_of_Austrian_Election_Results/Data_Cleaning)
