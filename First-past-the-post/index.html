@@ -29,7 +29,7 @@
                 href="https://github.com/Welko" class="header">Lucas da Cunha Melo</a></p>
     </span>
     <a href="https://www.github.com/ippon1/Visualize_of_Austrian_Election_Results" target="_blank"><i
-            class="fab fa-github-square" style="font-size:28px; color: white"></i></a>
+            class="fab fa-github-square" id="github-logo"></i></a>
     <span>
         <label for="region_select"></label><select id="region_select"></select>
         <label for="year_select"></label><select id="year_select"></select>
@@ -55,11 +55,11 @@
 
     <div class="container">
         <div id="FPTPdiv">
-            <p id="FPTP" style="min-width: 300px">First Past The Post (used in the English-speaking world)</p>
+            <p id="FPTP" class="barchart">First Past The Post</p>
         </div>
 
         <div id="PRdiv">
-            <p id="PR" style="min-width: 300px">Proportional Representation (currently used system)</p>
+            <p id="PR" class="barchart">Proportional Representation (currently used system)</p>
         </div>
     </div>
 
@@ -90,12 +90,15 @@
 
     <h2>About the visualizations</h2>
     <h3>Parallel Coordinates</h3>
-    <p>
-        "<a href="https://en.wikipedia.org/wiki/Plurality_voting">First-past-the-post</a>" shows the percentage of
-        regions (municipality/district/electoral district) where a certain party won (each line represents a party).
-        "<a href="https://en.wikipedia.org/wiki/Proportional_representation">Proportional Representation</a>" shows the
-        percentage of seats in the National Council won by the parties. So how the National Council actually look like.
-    </p>
+    <ul>
+        <li>"<a href="https://en.wikipedia.org/wiki/Plurality_voting">First-past-the-post</a>" shows the percentage of
+            regions (municipality/district/electoral district) where a certain party won (each line represents a party).
+        </li>
+        <li>"<a href="https://en.wikipedia.org/wiki/Proportional_representation">Proportional Representation</a>" shows
+            the percentage of seats in the National Council won by the parties. So how the National Council actually
+            look like.
+        </li>
+    </ul>
     <h3>Choropleth Map</h3>
     <p>
         Provides geographical context for the data and details-on-demand on hover and click.
@@ -109,7 +112,8 @@
         selected year.
     </p>
     <p>
-        The bar charts that arise on a hover interaction on the choropleh map show the number of votes for each party in
+        The bar charts that arise on a hover interaction on the choropleth map show the number of votes for each party
+        in
         the hovered region.
     </p>
 
@@ -134,7 +138,7 @@
                 would have been able to win more districts if they would have worked together.
             </li>
         </ul>
-        <li>Coalitions are less likely: In all but one (<a href="#">Districts + 2013</a>) configuration of the nine
+        <li>Coalitions are less likely: In all but one (<a href="#">Districts, 2013</a>) configuration of the nine
             possible examples, a coalition was necessary to have a majority.
         </li>
         <li><a href="https://en.wikipedia.org/wiki/Swing_state">View swing seats</a> change election results (and many

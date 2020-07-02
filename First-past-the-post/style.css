@@ -8,15 +8,24 @@ body {
     /*margin-bottom: 10em;*/
 }
 
+.barchart {
+    min-width: 300px;
+}
+
+#github-logo {
+    font-size: 28px;
+    color: white;
+}
+
 a.header {
     color: #eee;
     text-decoration: none;
 }
 
 a {
-     color: #555555;
-     text-decoration: none;
- }
+    color: #555555;
+    text-decoration: none;
+}
 
 .section {
     margin: 2em auto 2em auto;
