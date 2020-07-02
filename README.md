@@ -25,6 +25,7 @@ This part received the [Best Assignment Award](https://www.cg.tuwien.ac.at/cours
 * Add slider to pie chart
 * Change to Bootstrap
 * Make header sticky
+* Check if all values are correct
 
 ## Data Cleaning & Interactive Bokeh Charts
 Visualization [here](https://ippon1.github.io/Visualize_of_Austrian_Election_Results/Data_Cleaning)
