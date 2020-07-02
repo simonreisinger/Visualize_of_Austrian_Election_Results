@@ -19,7 +19,7 @@ This part received the [Best Assignment Award](https://www.cg.tuwien.ac.at/cours
 * Compare Austrian presidential elections to US presidential elections
 * Check how many votes the winning party could lose and still govern alone (50% + 1) and/or change the constitution on their own (66,67%).
 * Bar plot: make extra bars for each small party
-* Sum Up similar Parties (LEFT vs RIGHT)
+* Sum Up similar leaning parties (LEFT vs RIGHT)
 * make transitions for pie chart
 * link graphics in text
 * Add slider to pie chart
