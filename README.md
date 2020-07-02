@@ -23,6 +23,8 @@ This part received the [Best Assignment Award](https://www.cg.tuwien.ac.at/cours
 * make transitions for pie chart
 * link graphics in text
 * Add slider to pie chart
+* Change to Bootstrap
+* Make header sticky
 
 ## Data Cleaning & Interactive Bokeh Charts
 Visualization [here](https://ippon1.github.io/Visualize_of_Austrian_Election_Results/Data_Cleaning)
