@@ -8,6 +8,10 @@ body {
     /*margin-bottom: 10em;*/
 }
 
+.piechart {
+    width: 160px;
+}
+
 .barchart {
     min-width: 300px;
 }

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>InfoVis UE 2020 - Exercise 4</title>
+    <title>First-past-the-post vs Proportional Representation</title>
     <link href="style.css" rel="stylesheet" type="text/css">
 
     <script src="https://d3js.org/d3.v5.min.js"></script>
@@ -24,7 +24,7 @@
 
 <div id="top_bar">
     <span>
-        <h1>InfoVis UE 2020 - Exercise 4</h1>
+        <h1>First-past-the-post vs Proportional Representation</h1>
         <p><a href="https://www.simonreisinger.com" class="header">Simon Reisinger</a>, <a
                 href="https://github.com/Welko" class="header">Lucas da Cunha Melo</a></p>
     </span>
@@ -65,15 +65,23 @@
 
     <!--TODO Suppressed is the wrong word-->
     <!--Voting Does Not Make a Difference-->
-    <svg id="svg_pie_Suppressed_fptp"></svg>
-    <svg id="svg_pie_Suppressed_pr"></svg>
+    <div class="container">
+        <p>effectively unrepresented voters</p>
+        <p>First Past The Post</p>
+        <svg id="svg_pie_Suppressed_fptp" class="piechart"> </svg>
+        <p>Proportional Representation</p>
+        <svg id="svg_pie_Suppressed_pr" class="piechart"> </svg>
+    </div>
+
+    <!--<svg id="svg_pie_Suppressed_fptp"></svg>
+    <svg id="svg_pie_Suppressed_pr"></svg>-->
 
     <!-- TODO add slider here-->
 
 </div>
 
 <div class="section introduction">
-    <h2>Evaluating the Austrian NR elections using the First-Past-The-Post</h2>
+    <h2>Evaluating the Austrian NR election data using the First-Past-The-Post</h2>
     <p>
         With the US election coming up this November, we were interested to see how the election results and the
         distribution of members in the lower house of the parliament and the Government of Austria could look like if we

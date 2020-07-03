@@ -25,8 +25,8 @@ let _partyColors = {
     "PIRAT": "#4C2582"
 };
 
-let WahlkreiseMandate = [];
-let WahlkreiseDataSet = [];
+let electoralDistrictMandate = [];
+let electoralDistrictDataSet = [];
 
 function data_getPartyColor(party) {
     if (party in _partyColors) {
@@ -38,8 +38,6 @@ function data_getPartyColor(party) {
 
 function data_initialize(data, year) {
     //console.log("--------------------------")
-    //console.log(year)
-    //console.log(data)
     // Counties
     let counties = data_filterCounties(data);
     if (DEBUG && Object.keys(counties).length !== 116) {
@@ -48,9 +46,9 @@ function data_initialize(data, year) {
     }
     counties = data_preprocessRegions(counties);
 
-    // Add Wahlkarten to Counties
+    // Add electoral district to Counties
 
-    let counties_wahlkarten = data.filter(function (value) {
+    let countiesElectoralDistrict = data.filter(function (value) {
         let gkz = value.GKZ;
         let gkz_last2 = gkz.substring(4);
         let gkz_last4 = gkz.substring(2);
@@ -58,11 +56,11 @@ function data_initialize(data, year) {
         return gkz_last2 === "99" && gkz_last4 !== "0099" && /[0-9]/.test(gkz_3rd);
     });
 
-    for (let i in counties_wahlkarten) {
-        let new_GKZ = counties_wahlkarten[i].GKZ.substring(4, 1) + "00";
-        for (let party in counties_wahlkarten[i]) {
+    for (let i in countiesElectoralDistrict) {
+        let new_GKZ = countiesElectoralDistrict[i].GKZ.substring(4, 1) + "00";
+        for (let party in countiesElectoralDistrict[i]) {
             if (!notParty.includes(party)) {
-                counties[new_GKZ][party] = counties_wahlkarten[i][party]
+                counties[new_GKZ][party] = countiesElectoralDistrict[i][party]
             }
         }
     }
@@ -81,7 +79,7 @@ function data_initialize(data, year) {
         return value;
     });
     let resultsByElectoralDistricts = firstPassThePostElectoralDistrict(lol, year);
-    WahlkreiseDataSet[year] = firstPassThePost(resultsByElectoralDistricts, year);
+    electoralDistrictDataSet[year] = firstPassThePost(resultsByElectoralDistricts, year);
     let mostVotedParty = calculateBarData(year); // TODO edit here
     let electoralDistricts = data_preprocessRegions(data_filterCounties(data));
     electoralDistricts.reduced.mostVotedParty = mostVotedParty;
@@ -89,15 +87,18 @@ function data_initialize(data, year) {
     let nationalResults = data.filter(function (value) {
         return value.GKZ.slice(-5) === "00000";
     })[0];
+    console.log(electoralDistricts)
 
     let thisYearsResults = getPRResults(nationalResults, year)
 
     let importantPR = VierProzentHuerde(nationalResults);
     let importantFPTP = {}
     let margin = 1; // TODO make this flexible
-    importantFPTP.Municipalities = findTooManyVotersOf(municipalities, margin);
-    importantFPTP.Districts = findTooManyVotersOf(counties, margin);
-    importantFPTP.Electoraldistrict = findTooManyVotersOf(resultsByElectoralDistricts, margin); // TODO edit here
+    importantFPTP.Municipalities = findTooManyVotersOfDistrict(municipalities, margin);
+    //importantFPTP.Districts = findTooManyVotersOf(counties, margin); // TODO einblenden
+    importantFPTP.Electoraldistrict = findTooManyVotersOfElectoralDistrict(resultsByElectoralDistricts, margin + 1); // TODO edit here
+    console.log(resultsByElectoralDistricts)
+    console.log(importantFPTP.Electoraldistrict)
     return {
         counties,
         municipalities,
@@ -107,40 +108,70 @@ function data_initialize(data, year) {
         importantFPTP
     };
 }
+// number)
+function findTooManyVotersOfElectoralDistrict(voting_data, margin) {
+    let validVotes = 0;
+    let invalidVotes_WinningParty = 0;
+    let invalidVotes_LoosingParties = 0;
+    let allVotes = 0;
+    console.log(voting_data["Burgenland Nord"]);
+    for (let i in voting_data) {
+        let list = voting_data[i];
+        let loosingParties = Object.keys(list).sort(function (a, b) {
+            return (list[a] === null) - (list[b] === null) || list[b] - list[a]
+        })
+        loosingParties.shift(); // areaName
+        let winner = loosingParties.shift();
+        let winningPartyVotes = convertStringToNumber(list[winner]);
+        let secondPartyVotes = convertStringToNumber(list[loosingParties[0]]);
+        console.log(winner)
+        console.log(winningPartyVotes)
+        console.log(secondPartyVotes)
+        allVotes += winningPartyVotes;
+        let diff = winningPartyVotes - (secondPartyVotes + margin);
+        invalidVotes_WinningParty += diff > 0 ? diff : 0;
+        for (let party in loosingParties) {
+            if (list[loosingParties[party]] !== null && list[loosingParties[party]] !== undefined && party !== "invalid") {
+                allVotes += convertStringToNumber(list[loosingParties[party]]);
+                invalidVotes_LoosingParties += convertStringToNumber(list[loosingParties[party]]);
+            }
+        }
+        validVotes += secondPartyVotes + margin; //  TODO think if this is right
 
-function findTooManyVotersOf(voting_data, margin) {
-    var validVotes = 0;
-    var unvalidVotes_WinningParty = 0;
-    var unvalidVotes_LoosingParties = 0;
-    var allVotes = 0;
-    var xxx = 0
-    for (var i in voting_data) {
+        // TODO edit here
+    }
+    console.log({imp: validVotes, notimp: invalidVotes_WinningParty, notimpX: invalidVotes_LoosingParties})
+    return {imp: validVotes, notimp: invalidVotes_WinningParty, notimpX: invalidVotes_LoosingParties};
+}
+
+
+function findTooManyVotersOfDistrict(voting_data, margin) {
+    let validVotes = 0;
+    let invalidVotes_WinningParty = 0;
+    let invalidVotes_LoosingParties = 0;
+    let allVotes = 0;
+    for (let i in voting_data) {
         if (!Number.isNaN(parseInt(i))) {
-            xxx += voting_data[i].votes
-            var list = voting_data[i].partiesAll;
-            var loosingParties = Object.keys(list).sort(function (a, b) {
+            let list = voting_data[i].partiesAll;
+            let loosingParties = Object.keys(list).sort(function (a, b) {
                 return (list[a] === null) - (list[b] === null) || list[b] - list[a]
             })
-            var xxx = loosingParties.shift()
+            loosingParties.shift()
+            let secondPartyVotes = list[loosingParties[0]];
             let winningPartyVotes = voting_data[i].partiesAll[voting_data[i].mostVotedParty];
             allVotes += winningPartyVotes;
-            let secondPartyVotes = list[loosingParties[0]];
             let diff = winningPartyVotes - (secondPartyVotes + margin);
-            unvalidVotes_WinningParty += diff > 0 ? diff : 0;
-            //console.log(loosingParties)
+            invalidVotes_WinningParty += diff > 0 ? diff : 0;
             for (let party in loosingParties) {
                 if (list[loosingParties[party]] !== null && list[loosingParties[party]] !== undefined && party !== "invalid") {
                     allVotes += list[loosingParties[party]];
-                    unvalidVotes_LoosingParties += list[loosingParties[party]];
+                    invalidVotes_LoosingParties += list[loosingParties[party]];
                 }
             }
             validVotes += secondPartyVotes + margin; //  TODO think if this is right
-        } else {
-            //console.log(i)
         }
     }
-    //console.log(allVotes)
-    return {imp: validVotes, notimp: unvalidVotes_WinningParty, notimpX: unvalidVotes_LoosingParties};
+    return {imp: validVotes, notimp: invalidVotes_WinningParty, notimpX: invalidVotes_LoosingParties};
 }
 
 // works
@@ -148,21 +179,25 @@ function VierProzentHuerde(results) {
     var notParty = ["GKZ", "Gebietsname", "Wahlberechtigte", "Abgegebene", "Ungültige", "Gültige", "%", "", "Stimmen"]
     var unvalidVotes = 0;
     var validVotes = 0;
-    var totalVotes = parseInt(results.Abgegebene.replace(".", "").replace(".", ""))
+    var totalVotes = convertStringToNumber(results.Abgegebene);
     for (var i in results) {
         // console.log(i);
         if (!notParty.includes(i)) {
-            var currentPartyVotes = parseInt(results[i].replace(".", "").replace(".", ""))
+            var currentPartyVotes = convertStringToNumber(results[i]);
             if (100.0 * currentPartyVotes / totalVotes < 4.0) {
-                unvalidVotes += parseInt(results[i].replace(".", "").replace(".", ""));
+                unvalidVotes += convertStringToNumber(results[i]);
             } else {
-                validVotes += parseInt(results[i].replace(".", "").replace(".", ""));
+                validVotes += convertStringToNumber(results[i]);
             }
         } else {
             //console.log(i);
         }
     }
     return {imp: validVotes, notimp: unvalidVotes};
+}
+
+function convertStringToNumber(number) {
+    return parseInt(number.replace(".", "").replace(".", ""));
 }
 
 function getPRResults(nationalResults, year) {
@@ -605,16 +640,16 @@ function calculateBarData(year) {
             wkm["SONST"] = 0;
         }
     }
-    for (let currentWahlkreis in WahlkreiseDataSet[year]) {
-        if (wkm[WahlkreiseDataSet[year][currentWahlkreis].party] === undefined || wkm[WahlkreiseDataSet[year][currentWahlkreis].party] === null) {
-            wkm[WahlkreiseDataSet[year][currentWahlkreis].party] = 0;
+    for (let currentWahlkreis in electoralDistrictDataSet[year]) {
+        if (wkm[electoralDistrictDataSet[year][currentWahlkreis].party] === undefined || wkm[electoralDistrictDataSet[year][currentWahlkreis].party] === null) {
+            wkm[electoralDistrictDataSet[year][currentWahlkreis].party] = 0;
         }
-        for (let currentCounty in WahlkreiseMandate[year]) {
+        for (let currentCounty in electoralDistrictMandate[year]) {
             if (currentCounty === currentWahlkreis) {
-                if (partyNames.includes(WahlkreiseDataSet[year][currentWahlkreis].party)) {
-                    wkm[WahlkreiseDataSet[year][currentWahlkreis].party] += WahlkreiseMandate[year][currentCounty].Mandate;
+                if (partyNames.includes(electoralDistrictDataSet[year][currentWahlkreis].party)) {
+                    wkm[electoralDistrictDataSet[year][currentWahlkreis].party] += electoralDistrictMandate[year][currentCounty].Mandate;
                 } else {
-                    wkm["SONST"] += WahlkreiseMandate[year][currentCounty].Mandate;
+                    wkm["SONST"] += electoralDistrictMandate[year][currentCounty].Mandate;
                 }
                 break;
             }
@@ -624,7 +659,7 @@ function calculateBarData(year) {
 }
 
 function firstPassThePostElectoralDistrict(dataset, year) {
-    WahlkreiseMandate[year] = [];
+    electoralDistrictMandate[year] = [];
     let mostVotes = [];
     for (let selectedState in dataset) {
         let xxxx = data_parseGebietsname(removeNonASCIICharacters(dataset[selectedState].Gebietsname))
@@ -635,9 +670,9 @@ function firstPassThePostElectoralDistrict(dataset, year) {
         if (mostVotes[electoralDistrict] === null || mostVotes[electoralDistrict] === undefined) {
             mostVotes[electoralDistrict] = {};
             mostVotes[electoralDistrict].Gebietsname = electoralDistrict;
-            WahlkreiseMandate[year][electoralDistrict] = {}
-            WahlkreiseMandate[year][electoralDistrict].Gebietsname = electoralDistrict;
-            WahlkreiseMandate[year][electoralDistrict].Mandate = districtsByEelectoralDistrict[removeNonASCIICharacters(dataset[selectedState].Gebietsname)].Mandate;
+            electoralDistrictMandate[year][electoralDistrict] = {}
+            electoralDistrictMandate[year][electoralDistrict].Gebietsname = electoralDistrict;
+            electoralDistrictMandate[year][electoralDistrict].Mandate = districtsByEelectoralDistrict[removeNonASCIICharacters(dataset[selectedState].Gebietsname)].Mandate;
             for (let parties in NRParties[year]) {
                 if (parties !== "SONST") {
                     let currentPartyVotes = dataset[selectedState][NRParties[year][parties]].replace(/\./g, "");
