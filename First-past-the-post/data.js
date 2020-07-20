@@ -87,7 +87,7 @@ function data_initialize(data, year) {
     let nationalResults = data.filter(function (value) {
         return value.GKZ.slice(-5) === "00000";
     })[0];
-    console.log(electoralDistricts)
+    //console.log(electoralDistricts)
 
     let thisYearsResults = getPRResults(nationalResults, year)
 
@@ -97,8 +97,8 @@ function data_initialize(data, year) {
     importantFPTP.Municipalities = findTooManyVotersOfDistrict(municipalities, margin);
     //importantFPTP.Districts = findTooManyVotersOf(counties, margin); // TODO einblenden
     importantFPTP.Electoraldistrict = findTooManyVotersOfElectoralDistrict(resultsByElectoralDistricts, margin + 1); // TODO edit here
-    console.log(resultsByElectoralDistricts)
-    console.log(importantFPTP.Electoraldistrict)
+    //console.log(resultsByElectoralDistricts)
+    //console.log(importantFPTP.Electoraldistrict)
     return {
         counties,
         municipalities,
@@ -114,7 +114,7 @@ function findTooManyVotersOfElectoralDistrict(voting_data, margin) {
     let invalidVotes_WinningParty = 0;
     let invalidVotes_LoosingParties = 0;
     let allVotes = 0;
-    console.log(voting_data["Burgenland Nord"]);
+    //console.log(voting_data["Burgenland Nord"]);
     for (let i in voting_data) {
         let list = voting_data[i];
         let loosingParties = Object.keys(list).sort(function (a, b) {
@@ -124,9 +124,9 @@ function findTooManyVotersOfElectoralDistrict(voting_data, margin) {
         let winner = loosingParties.shift();
         let winningPartyVotes = convertStringToNumber(list[winner]);
         let secondPartyVotes = convertStringToNumber(list[loosingParties[0]]);
-        console.log(winner)
-        console.log(winningPartyVotes)
-        console.log(secondPartyVotes)
+        //console.log(winner)
+        //console.log(winningPartyVotes)
+        //console.log(secondPartyVotes)
         allVotes += winningPartyVotes;
         let diff = winningPartyVotes - (secondPartyVotes + margin);
         invalidVotes_WinningParty += diff > 0 ? diff : 0;
@@ -140,7 +140,7 @@ function findTooManyVotersOfElectoralDistrict(voting_data, margin) {
 
         // TODO edit here
     }
-    console.log({imp: validVotes, notimp: invalidVotes_WinningParty, notimpX: invalidVotes_LoosingParties})
+    //console.log({imp: validVotes, notimp: invalidVotes_WinningParty, notimpX: invalidVotes_LoosingParties})
     return {imp: validVotes, notimp: invalidVotes_WinningParty, notimpX: invalidVotes_LoosingParties};
 }
 

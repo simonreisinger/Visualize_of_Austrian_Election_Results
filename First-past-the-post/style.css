@@ -8,12 +8,21 @@ body {
     /*margin-bottom: 10em;*/
 }
 
-.piechart {
-    width: 160px;
+.pieChart {
+    text-align: center;
+    width: 30%;
 }
 
-.barchart {
+.parallel_coordinates_div {
+    text-align: center;
+    width: 50%;
+}
+
+.barChart {
     min-width: 300px;
+    margin-left: auto;
+    margin-right: auto
+    display: block;
 }
 
 #github-logo {
@@ -175,12 +184,6 @@ h3 {
 
 .pc_master_div {
     display: flex;
-}
-
-.parallel_coordinates_div {
-    text-align: center;
-    font-size: 1.5em;
-    width: 50%;
 }
 
 .parallelSvg .tick text {

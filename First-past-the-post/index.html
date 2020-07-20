@@ -37,15 +37,6 @@
 </div>
 
 <div class="section">
-    <div class="pc_master_div">
-        <span id="parallel_coordinates_fptp_div" class="parallel_coordinates_div">
-            <p>First Past The Post</p>
-        </span>
-        <span id="parallel_coordinates_pr_div" class="parallel_coordinates_div">
-            <p>Proportional Representation</p>
-        </span>
-    </div>
-
     <div class="container">
         <div id="DODdiv"></div> <!-- Details On Demand div -->
         <svg id="svg_choropleth_municipalities"></svg>
@@ -55,22 +46,37 @@
 
     <div class="container">
         <div id="FPTPdiv">
-            <p id="FPTP" class="barchart">First Past The Post</p>
+            <p id="FPTP" class="barChart">First Past The Post</p>
         </div>
 
         <div id="PRdiv">
-            <p id="PR" class="barchart">Proportional Representation (currently used system)</p>
+            <p id="PR" class="barChart">Proportional Representation (currently used system)</p>
         </div>
     </div>
 
+    <h1>Results over time</h1>
+    <div class="pc_master_div">
+        <span id="parallel_coordinates_fptp_div" class="parallel_coordinates_div">
+            <h2>First Past The Post</h2>
+        </span>
+        <span id="parallel_coordinates_pr_div" class="parallel_coordinates_div">
+            <h2>Proportional Representation</h2>
+        </span>
+    </div>
+
+
     <!--TODO Suppressed is the wrong word-->
-    <!--Voting Does Not Make a Difference-->
-    <div class="container">
-        <p>effectively unrepresented voters</p>
-        <p>First Past The Post</p>
-        <svg id="svg_pie_Suppressed_fptp" class="piechart"> </svg>
-        <p>Proportional Representation</p>
-        <svg id="svg_pie_Suppressed_pr" class="piechart"> </svg>
+    <!--Voting Does Not Make a Difference
+    <h1>Effectively unrepresented voters</h1>-->
+
+    <div class="pc_master_div">
+
+        <span id="svg_pie_Suppressed_fptp" class="pieChart">
+            <h2>First Past The Post</h2>
+        </span>
+        <span id="svg_pie_Suppressed_pr" class="pieChart">
+            <h2>Proportional Representation</h2>
+        </span>
     </div>
 
     <!--<svg id="svg_pie_Suppressed_fptp"></svg>
@@ -85,8 +91,12 @@
     <p>
         With the US election coming up this November, we were interested to see how the election results and the
         distribution of members in the lower house of the parliament and the Government of Austria could look like if we
-        used the <a href="https://en.wikipedia.org/wiki/Plurality_voting">first-past-the-post</a> electoral system.
-        This election system was uWe wanted to see if the structure of the results would be similar that of the the USA.
+        used the <a href="https://en.wikipedia.org/wiki/First-past-the-post_voting">first-past-the-post</a> electoral
+        system. This election system is used by many English-speaking countries.
+        We wanted to see if the structure of the results would be similar that of the the USA.
+
+        Therefore we used <a href="https://en.wikipedia.org/wiki/Problem-oriented_development">Problem-oriented
+        development</a>. This is a top-down approach.
     </p>
     <p>
         We took a special look at some of the most popular points of <a
@@ -99,8 +109,9 @@
     <h2>About the visualizations</h2>
     <h3>Parallel Coordinates</h3>
     <ul>
-        <li>"<a href="https://en.wikipedia.org/wiki/Plurality_voting">First-past-the-post</a>" shows the percentage of
-            regions (municipality/district/electoral district) where a certain party won (each line represents a party).
+        <li>"<a href="https://en.wikipedia.org/wiki/First-past-the-post_voting">First-past-the-post</a>" shows the
+            percentage of regions (municipality/district/electoral district) where a certain party won (each line
+            represents a party).
         </li>
         <li>"<a href="https://en.wikipedia.org/wiki/Proportional_representation">Proportional Representation</a>" shows
             the percentage of seats in the National Council won by the parties. So how the National Council actually
@@ -121,8 +132,7 @@
     </p>
     <p>
         The bar charts that arise on a hover interaction on the choropleth map show the number of votes for each party
-        in
-        the hovered region.
+        in the hovered region.
     </p>
 
     <h2>Interesting findings</h2>
