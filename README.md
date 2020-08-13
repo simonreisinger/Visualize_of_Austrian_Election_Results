@@ -26,5 +26,5 @@ For more information please look at the [presentation](https://github.com/ippon1
 
 
 ## Acknowledgment
-This project was created for the Course [Informationsvisualisierung](https://www.cg.tuwien.ac.at/courses/InfoVis/ue.html) at [TU Wien](https://www.tuwien.at).
+This project was created for the course [Informationsvisualisierung](https://www.cg.tuwien.ac.at/courses/InfoVis/ue.html) at [TU Wien](https://www.tuwien.at).
 It received the [Best Assignment Award](https://www.cg.tuwien.ac.at/courses/InfoVis/HallOfFame/#Hall%20of%20Fame%202020).
