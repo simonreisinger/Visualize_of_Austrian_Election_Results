@@ -108,6 +108,7 @@ function data_initialize(data, year) {
         importantFPTP
     };
 }
+
 // number)
 function findTooManyVotersOfElectoralDistrict(voting_data, margin) {
     let validVotes = 0;
@@ -579,7 +580,6 @@ function getDatasetByISO(data, iso, year) {
         if (iso === 41343) return getDataByISO(data, 41343, 41303, [41339]);
         if (iso === 62268) return getDataByISO(data, 62268, 62213, null);
 
-
     } else if (year === 2019) {
         //TODO 3 Gemeinden muessen zusammengelegt
         // Mit 1. Jänner 2019 wurden die Gemeinden St. Stefan am Walde und Afiesl zur neuen Gemeinde St. Stefan-Afiesl fusioniert
@@ -688,7 +688,6 @@ function firstPassThePostElectoralDistrict(dataset, year) {
             }
         }
     }
-
     return mostVotes;
 }
 
@@ -739,6 +738,5 @@ function data_calculatePercentageFromMostVotedParty(mostVotedParty) {
         perc = Math.round(perc / total * 10000) / 100;
         percentages[partyName] = perc;
     }
-
     return percentages;
 }
