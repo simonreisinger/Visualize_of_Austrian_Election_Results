@@ -7,7 +7,8 @@ For more information please look at the [presentation](https://github.com/ippon1
 ## Sources:
 <!--* [Verwaltungsgrenzen Österreich](https://data.opendataportal.at/dataset/geojson-daten-osterreich/resource/1a8718bb-18b1-47e1-b6a5-2af5190e087e)-->
 * [Verwaltungsgrenzen Österreich](https://www.data.gv.at/katalog/dataset/d960f393-0a19-43f7-b2f1-2a79d9fc6fdd)
-* [Nationalratswahl results](https://www.data.gv.at/katalog/dataset/f3a1c18ea3a038fa13e7b3c89454ed280d16ef0c)
+* [Nationalratswahl results](https://bmi.gv.at/412/Nationalratswahlen/Nationalratswahl_2019/)
+* [Nationalratswahl results - Tyrol 1994-2019](https://www.data.gv.at/katalog/dataset/f3a1c18ea3a038fa13e7b3c89454ed280d16ef0c)
 * [Austrian Electoral districts (Wahlkreiseinteilung)](https://www.bmi.gv.at/412/Nationalratswahlen/Wahlkreiseinteilung.aspx)
 
 ## TODOs
