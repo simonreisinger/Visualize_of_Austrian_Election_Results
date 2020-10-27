@@ -6,24 +6,12 @@ let NRParties = []
 NRParties[2019] = ["ÖVP", "SPÖ", "FPÖ", "NEOS", "GRÜNE"];
 NRParties[2017] = ["ÖVP", "SPÖ", "FPÖ", "NEOS", "PILZ"];
 NRParties[2013] = ["ÖVP", "SPÖ", "FPÖ", "NEOS", "GRÜNE", "FRANK"];
+NRParties[2008] = ["ÖVP", "SPÖ", "FPÖ", "BZÖ", "GRÜNE"];
+NRParties[2002] = ["ÖVP", "SPÖ", "FPÖ", "BZÖ", "GRÜNE"];
+NRParties[1999] = ["ÖVP", "SPÖ", "FPÖ", "GRÜNE"];
+NRParties[1995] = ["ÖVP", "SPÖ", "FPÖ", "LIF", "GRÜNE"];
+NRParties[1994] = ["ÖVP", "SPÖ", "FPÖ", "LIF", "GRÜNE"];
 let notParty = ["%", "Abgegebene", "GKZ", "Gebietsname", "Gültige", "Ungültige", "Wahlberechtigte"];
-
-let _partyColors = {
-    "ÖVP": "#63C3D0", // WE IGNORE THAT THEY CHANGED COLOR
-    "SPÖ": "#ce000c",
-    "FPÖ": "#0056A2",
-    "NEOS": "#E3257B",
-    "GRÜNE": "#88B626",
-    "SONST": "#222",
-
-    // Others
-    "BZÖ": "Orange",
-    "JETZT": "#ADADAD",
-    "PILZ": "#ADADAD", // SAME PARTY DIFFERENT NAME
-    "FRANK": "#F8D323",
-    "KPÖ": "#F00",
-    "PIRAT": "#4C2582"
-};
 
 let electoralDistrictMandate = [];
 let electoralDistrictDataSet = [];
@@ -692,8 +680,6 @@ function firstPassThePostElectoralDistrict(dataset, year) {
 }
 
 function firstPassThePost(dataset, year) {
-    console.log(dataset)
-    console.log(year)
     let mostVotes = [];
     for (let selectedState in dataset) {
         mostVotes[dataset[selectedState].Gebietsname] = {party: "", votes: 0};

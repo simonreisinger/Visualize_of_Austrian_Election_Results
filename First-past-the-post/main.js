@@ -60,8 +60,6 @@ function main() {
             d3.select("#PRdiv"),
             mainBarChartArea);
 
-        console.log(data.importantFPTP)
-        console.log(data.importantPR)
         // PIE CHARTS
         //updatePieChart(data.importantFPTP.Municipalities, {imp: "green", notimp: "lightgrey", notimpX: "grey"}, "#svg_pie_Suppressed_fptp")
         //updatePieChart(data.importantPR, {imp: "green", notimp: "grey"}, "#svg_pie_Suppressed_pr")
