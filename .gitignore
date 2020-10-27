@@ -6,7 +6,7 @@
 *.iml
 
 # The Jupyter Notebook
-*/.ipynb_checkpoints/*
+.ipynb_checkpoints/
 
 # Latex
 *.toc
