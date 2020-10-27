@@ -25,6 +25,7 @@ For more information please look at the [presentation](https://github.com/ippon1
 * Change to Bootstrap
 * Make header sticky
 * Check if all values are correct
+* Precalculate some results so they do not have to be calculated again.
 <!--* https://www.data.gv.at/katalog/dataset/6d731e6e-7dcf-4bde-8061-d0e195f62f6c -->
 
 
