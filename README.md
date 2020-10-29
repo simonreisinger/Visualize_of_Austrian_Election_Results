@@ -10,8 +10,6 @@ For more information please look at the [presentation](https://github.com/ippon1
 * [Nationalratswahl results 2013](https://www.data.gv.at/katalog/dataset/09716341-2bea-4298-9525-e936d8247d19)
 * [Nationalratswahl results 2017](https://www.data.gv.at/katalog/dataset/3179c5b2-9bb5-4a7f-a573-5491ccb0110b)
 * [Nationalratswahl results 2019](https://www.data.gv.at/katalog/dataset/8becadda-124e-43f3-900e-f1ab685574e5)
-* [Nationalratswahl results - Tyrol 1994-2019](https://www.data.gv.at/katalog/dataset/f3a1c18ea3a038fa13e7b3c89454ed280d16ef0c)
-* [Nationalratswahl results - Upper_Austria 2002-2019](https://www.data.gv.at/katalog/dataset/ba75e945-b775-43c6-b8a5-b3833216f206)
 * [Austrian Electoral districts (Wahlkreiseinteilung)](https://www.bmi.gv.at/412/Nationalratswahlen/Wahlkreiseinteilung.aspx)
 
 ## TODOs
