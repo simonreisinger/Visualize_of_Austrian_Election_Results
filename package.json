@@ -1,0 +1,33 @@
+{
+  "name": "visualize-of-austrian-election-results",
+  "version": "1.0.0",
+  "description": "We will analyze and visualize the results of the national election 2019 in Austria.",
+  "authors": [
+    {
+      "name": "Simon Reisinger",
+      "email": "mail@simonreisinger.com",
+      "homepage": "https://simonreisinger.com",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+    "email": "mail@simonreisinger.com",
+    "issues": "https://github.com/ippon1/Visualize_of_Austrian_Election_Results/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ippon1/Visualize_of_Austrian_Election_Results"
+  },
+  "keywords": [
+    "election",
+    "visualization"
+  ],
+  "devDependencies": {
+    "husky": "^6.0.0",
+    "lint-staged": "^10.5.4",
+    "prettier": "2.2.1"
+  },
+  "scripts": {
+    "prepare": "husky install"
+  }
+}

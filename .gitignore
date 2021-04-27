@@ -19,3 +19,4 @@
 *.snm
 *.soc
 *.gz
+node_modules/
