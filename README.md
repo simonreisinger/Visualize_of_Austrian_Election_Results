@@ -36,3 +36,6 @@ For more information please look at the [presentation](https://github.com/ippon1
 ## Acknowledgment
 This project was created for the course [Informationsvisualisierung](https://www.cg.tuwien.ac.at/courses/InfoVis/ue.html) at [TU Wien](https://www.tuwien.at).
 It received the [Best Assignment Award](https://www.cg.tuwien.ac.at/courses/InfoVis/HallOfFame/#Hall%20of%20Fame%202020).
+
+<!-- https://twitter.com/datagvat/status/1321374875194445824 -->
+<!-- https://www.reddit.com/r/dataisbeautiful/comments/j218fi/comparing_electoral_system_for_the_last_three_of/ -->
