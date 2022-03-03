@@ -3,7 +3,7 @@
 
 We will analyze and visualize the results of the national election 2019 in Austria.
 
-Visualization [here](https://ippon1.github.io/Visualize_of_Austrian_Election_Results/First-past-the-post/).
+Visualization [here](https://simonreisinger.github.io/Visualize_of_Austrian_Election_Results/First-past-the-post/).
 For more information please look at the [presentation](https://github.com/ippon1/Visualize_of_Austrian_Election_Results/tree/master/presentation).
 
 ## Sources:
