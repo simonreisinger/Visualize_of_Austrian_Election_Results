@@ -26,7 +26,7 @@ const REGION_TYPES = [
 function main() {
   let yearDataMap = {};
 
-  d3.dsv(";", "./data/NRW19.csv").then((data) => {
+  d3.dsv(";", "./data/NRW19.tsv").then((data) => {
     let year = 2019;
 
     data = data_initialize(data, year);
@@ -116,13 +116,13 @@ function main() {
 
     lastRegionType = REGION_TYPE_MUNICIPALITY;
 
-    d3.dsv(";", "./data/NRW17.csv").then((data) => {
+    d3.dsv(";", "./data/NRW17.tsv").then((data) => {
       let year = 2017;
       data = data_initialize(data, year);
       main_addYear(year);
       yearDataMap[year] = data;
 
-      d3.dsv(";", "./data/NRW13.csv").then((data) => {
+      d3.dsv(";", "./data/NRW13.tsv").then((data) => {
         let year = 2013;
         data = data_initialize(data, year);
         main_addYear(year);
