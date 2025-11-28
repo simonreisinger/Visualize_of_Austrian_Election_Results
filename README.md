@@ -14,25 +14,6 @@ For more information please look at the [presentation](https://github.com/ippon1
 * [Nationalratswahl results 2019](https://www.data.gv.at/katalog/dataset/8becadda-124e-43f3-900e-f1ab685574e5)
 * [Austrian Electoral districts (Wahlkreiseinteilung)](https://www.bmi.gv.at/412/Nationalratswahlen/Wahlkreiseinteilung.aspx)
 
-## TODOs
-* Add Wahlkarten
-* Make graphics more user mobile-friendly
-* Compare more years
-* Compare Austrian presidential elections to US presidential elections
-* Check how many votes the winning party could lose and still govern alone (50% + 1) and/or change the constitution on their own (66,67%).
-* Bar plot: make extra bars for each small party
-* Sum Up similar leaning parties (LEFT vs RIGHT)
-* make transitions for pie chart
-* link graphics in text
-* Add slider to pie chart
-* Change to Bootstrap
-* Make header sticky
-* Check if all values are correct
-* Precalculate some results so they do not have to be calculated again.
-<!--* https://www.data.gv.at/katalog/dataset/6d731e6e-7dcf-4bde-8061-d0e195f62f6c -->
-<!--* https://data.opendataportal.at/dataset/geojson-daten-osterreich/resource/36c082c7-f11c-4c93-a8cf-0e41406c76c9?inner_span=True -->
-
-
 ## Acknowledgment
 This project was created for the course [Informationsvisualisierung](https://www.cg.tuwien.ac.at/courses/InfoVis/ue.html) at [TU Wien](https://www.tuwien.at).
 It received the [Best Assignment Award](https://www.cg.tuwien.ac.at/courses/InfoVis/HallOfFame/#Hall%20of%20Fame%202020).
